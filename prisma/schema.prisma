@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SurveyQuestionType {
+  TEXT
+  TEXTAREA
+  NUMBER
+  DROPDOWN
+  RADIO
+  CHECKBOX
+  DATE
+  EMAIL
+}
+
+model User {
+  id                  String           @id @default(cuid())
+  name                String
+  email               String           @unique
+  emailVerified       Boolean          @default(false)
+  image               String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  phoneNumber         String?          @unique
+  phoneNumberVerified Boolean?         @default(false)
+  role                String?          @default("user")
+  banned              Boolean?         @default(false)
+  banReason           String?
+  banExpires          DateTime?
+  accounts            Account[]
+  sessions            Session[]
+  surveyResponses     SurveyResponse[]
+
+  @@map("user")
+}
+
+model Session {
+  id             String    @id @default(cuid())
+  expiresAt      DateTime
+  token          String    @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  impersonatedBy String?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model SurveyQuestion {
+  id            String                      @id @default(cuid())
+  prompt        String
+  type          SurveyQuestionType
+  createdAt     DateTime                    @default(now())
+  updatedAt     DateTime                    @updatedAt
+  comboOptions  SurveyQuestionComboOption[]
+  surveyResponses SurveyResponse[]
+
+  @@map("survey_questions")
+}
+
+model SurveyQuestionComboOption {
+  id         String         @id @default(cuid())
+  questionId String
+  label      String
+  value      String
+  sortOrder  Int            @default(0)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@unique([questionId, value])
+  @@map("survey_question_combo_options")
+}
+
+model SurveyResponse {
+  id         String         @id @default(cuid())
+  userId     String
+  questionId String
+  answer     String
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([questionId])
+  @@map("survey_responses")
+}
