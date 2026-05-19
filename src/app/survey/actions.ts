@@ -13,6 +13,7 @@ const selectableQuestionTypes = new Set([
   SurveyQuestionType.RADIO,
   SurveyQuestionType.CHECKBOX,
 ]);
+const booleanQuestionValues = new Set(["yes", "no"]);
 
 export async function submitSurveyResponses(formData: FormData) {
   const session = await requireSurveySession();
@@ -56,6 +57,12 @@ export async function submitSurveyResponses(formData: FormData) {
       fieldName: `Response for "${question.prompt}"`,
       maxLength: 5000,
     });
+
+    if (question.type === SurveyQuestionType.BOOLEAN) {
+      if (!booleanQuestionValues.has(answer)) {
+        throw new Error(`An invalid option was submitted for "${question.prompt}".`);
+      }
+    }
 
     if (selectableQuestionTypes.has(question.type)) {
       const allowedValues = new Set(question.comboOptions.map((option) => option.value));

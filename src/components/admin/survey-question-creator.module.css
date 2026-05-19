@@ -1,0 +1,65 @@
+.creatorForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.choicePanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.choiceHeader {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.choiceHeader p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.choiceList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.choiceRow {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.choiceInput {
+  width: 100%;
+  border: 1px solid rgba(20, 33, 61, 0.16);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  color: var(--foreground);
+  padding: 0.875rem 1rem;
+  font: inherit;
+}
+
+.choiceInput:focus {
+  outline: 2px solid rgba(255, 107, 53, 0.26);
+  outline-offset: 2px;
+}
+
+.choiceActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.removeButton {
+  justify-self: start;
+}
+
+@media (min-width: 768px) {
+  .choiceRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}

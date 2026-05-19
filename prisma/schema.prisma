@@ -12,17 +12,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum SurveyQuestionType {
-  TEXT
-  TEXTAREA
-  NUMBER
-  DROPDOWN
-  RADIO
-  CHECKBOX
-  DATE
-  EMAIL
-}
-
 model User {
   id                  String           @id @default(cuid())
   name                String
@@ -77,6 +66,7 @@ model Account {
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@unique([providerId, accountId])
   @@map("account")
 }
 
@@ -92,13 +82,25 @@ model Verification {
   @@map("verification")
 }
 
+enum SurveyQuestionType {
+  TEXT
+  TEXTAREA
+  NUMBER
+  DROPDOWN
+  RADIO
+  CHECKBOX
+  BOOLEAN
+  DATE
+  EMAIL
+}
+
 model SurveyQuestion {
-  id            String                      @id @default(cuid())
-  prompt        String
-  type          SurveyQuestionType
-  createdAt     DateTime                    @default(now())
-  updatedAt     DateTime                    @updatedAt
-  comboOptions  SurveyQuestionComboOption[]
+  id              String                      @id @default(cuid())
+  prompt          String
+  type            SurveyQuestionType
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+  comboOptions    SurveyQuestionComboOption[]
   surveyResponses SurveyResponse[]
 
   @@map("survey_questions")

@@ -16,6 +16,7 @@ export const SurveyQuestionType = {
   DROPDOWN: 'DROPDOWN',
   RADIO: 'RADIO',
   CHECKBOX: 'CHECKBOX',
+  BOOLEAN: 'BOOLEAN',
   DATE: 'DATE',
   EMAIL: 'EMAIL'
 } as const

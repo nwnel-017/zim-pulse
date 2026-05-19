@@ -179,6 +179,22 @@ export function SurveyFlow({
             This question has no options yet. Ask an admin to finish configuring it.
           </p>
         );
+      case "BOOLEAN":
+        return (
+          <label className={styles.field}>
+            <span>Select one option</span>
+            <select
+              name={`question-${question.id}`}
+              onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+              required
+              value={typeof answer === "string" ? answer : ""}
+            >
+              <option value="">Choose an option</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+        );
       case "RADIO":
         return question.comboOptions.length ? (
           <div className={styles.optionList}>

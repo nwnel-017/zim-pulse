@@ -1,4 +1,4 @@
-import { SurveyQuestionType } from "@/generated/prisma/enums";
+import { SurveyQuestionCreator } from "@/components/admin/survey-question-creator";
 import { SurveyQuestionEditor } from "@/components/admin/survey-question-editor";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import {
@@ -106,36 +106,7 @@ export default async function AdminPage() {
             <h2>Create a survey question</h2>
           </div>
 
-          <form action={createSurveyQuestion} className="auth-form">
-            <label className="auth-field">
-              <span>Question prompt</span>
-              <input
-                name="prompt"
-                placeholder="What should we ask the user?"
-                required
-                type="text"
-              />
-            </label>
-
-            <label className="auth-field">
-              <span>Question type</span>
-              <select
-                className="auth-select"
-                defaultValue={SurveyQuestionType.TEXT}
-                name="type"
-              >
-                {Object.values(SurveyQuestionType).map((type) => (
-                  <option key={type} value={type}>
-                    {surveyQuestionTypeLabels[type]}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <button className="auth-button" type="submit">
-              Add survey question
-            </button>
-          </form>
+          <SurveyQuestionCreator action={createSurveyQuestion} />
         </section>
 
         <SignOutButton redirectTo="/admin/sign-in" />
