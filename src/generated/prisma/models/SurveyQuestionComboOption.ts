@@ -38,7 +38,6 @@ export type SurveyQuestionComboOptionMinAggregateOutputType = {
   id: string | null
   questionId: string | null
   label: string | null
-  value: string | null
   sortOrder: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -48,7 +47,6 @@ export type SurveyQuestionComboOptionMaxAggregateOutputType = {
   id: string | null
   questionId: string | null
   label: string | null
-  value: string | null
   sortOrder: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -58,7 +56,6 @@ export type SurveyQuestionComboOptionCountAggregateOutputType = {
   id: number
   questionId: number
   label: number
-  value: number
   sortOrder: number
   createdAt: number
   updatedAt: number
@@ -78,7 +75,6 @@ export type SurveyQuestionComboOptionMinAggregateInputType = {
   id?: true
   questionId?: true
   label?: true
-  value?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -88,7 +84,6 @@ export type SurveyQuestionComboOptionMaxAggregateInputType = {
   id?: true
   questionId?: true
   label?: true
-  value?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -98,7 +93,6 @@ export type SurveyQuestionComboOptionCountAggregateInputType = {
   id?: true
   questionId?: true
   label?: true
-  value?: true
   sortOrder?: true
   createdAt?: true
   updatedAt?: true
@@ -195,7 +189,6 @@ export type SurveyQuestionComboOptionGroupByOutputType = {
   id: string
   questionId: string
   label: string
-  value: string
   sortOrder: number
   createdAt: Date
   updatedAt: Date
@@ -228,7 +221,6 @@ export type SurveyQuestionComboOptionWhereInput = {
   id?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   questionId?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   label?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
-  value?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   sortOrder?: Prisma.IntFilter<"SurveyQuestionComboOption"> | number
   createdAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
@@ -239,7 +231,6 @@ export type SurveyQuestionComboOptionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  value?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -248,24 +239,21 @@ export type SurveyQuestionComboOptionOrderByWithRelationInput = {
 
 export type SurveyQuestionComboOptionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  questionId_value?: Prisma.SurveyQuestionComboOptionQuestionIdValueCompoundUniqueInput
   AND?: Prisma.SurveyQuestionComboOptionWhereInput | Prisma.SurveyQuestionComboOptionWhereInput[]
   OR?: Prisma.SurveyQuestionComboOptionWhereInput[]
   NOT?: Prisma.SurveyQuestionComboOptionWhereInput | Prisma.SurveyQuestionComboOptionWhereInput[]
   questionId?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   label?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
-  value?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   sortOrder?: Prisma.IntFilter<"SurveyQuestionComboOption"> | number
   createdAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
   question?: Prisma.XOR<Prisma.SurveyQuestionScalarRelationFilter, Prisma.SurveyQuestionWhereInput>
-}, "id" | "questionId_value">
+}, "id">
 
 export type SurveyQuestionComboOptionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  value?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -283,7 +271,6 @@ export type SurveyQuestionComboOptionScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"SurveyQuestionComboOption"> | string
   questionId?: Prisma.StringWithAggregatesFilter<"SurveyQuestionComboOption"> | string
   label?: Prisma.StringWithAggregatesFilter<"SurveyQuestionComboOption"> | string
-  value?: Prisma.StringWithAggregatesFilter<"SurveyQuestionComboOption"> | string
   sortOrder?: Prisma.IntWithAggregatesFilter<"SurveyQuestionComboOption"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyQuestionComboOption"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyQuestionComboOption"> | Date | string
@@ -292,7 +279,6 @@ export type SurveyQuestionComboOptionScalarWhereWithAggregatesInput = {
 export type SurveyQuestionComboOptionCreateInput = {
   id?: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -303,7 +289,6 @@ export type SurveyQuestionComboOptionUncheckedCreateInput = {
   id?: string
   questionId: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -312,7 +297,6 @@ export type SurveyQuestionComboOptionUncheckedCreateInput = {
 export type SurveyQuestionComboOptionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,7 +307,6 @@ export type SurveyQuestionComboOptionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,7 +316,6 @@ export type SurveyQuestionComboOptionCreateManyInput = {
   id?: string
   questionId: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -342,7 +324,6 @@ export type SurveyQuestionComboOptionCreateManyInput = {
 export type SurveyQuestionComboOptionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -352,7 +333,6 @@ export type SurveyQuestionComboOptionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -368,16 +348,10 @@ export type SurveyQuestionComboOptionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SurveyQuestionComboOptionQuestionIdValueCompoundUniqueInput = {
-  questionId: string
-  value: string
-}
-
 export type SurveyQuestionComboOptionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  value?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -391,7 +365,6 @@ export type SurveyQuestionComboOptionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  value?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -401,7 +374,6 @@ export type SurveyQuestionComboOptionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  value?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -464,7 +436,6 @@ export type IntFieldUpdateOperationsInput = {
 export type SurveyQuestionComboOptionCreateWithoutQuestionInput = {
   id?: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -473,7 +444,6 @@ export type SurveyQuestionComboOptionCreateWithoutQuestionInput = {
 export type SurveyQuestionComboOptionUncheckedCreateWithoutQuestionInput = {
   id?: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -512,7 +482,6 @@ export type SurveyQuestionComboOptionScalarWhereInput = {
   id?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   questionId?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   label?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
-  value?: Prisma.StringFilter<"SurveyQuestionComboOption"> | string
   sortOrder?: Prisma.IntFilter<"SurveyQuestionComboOption"> | number
   createdAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyQuestionComboOption"> | Date | string
@@ -521,7 +490,6 @@ export type SurveyQuestionComboOptionScalarWhereInput = {
 export type SurveyQuestionComboOptionCreateManyQuestionInput = {
   id?: string
   label: string
-  value: string
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -530,7 +498,6 @@ export type SurveyQuestionComboOptionCreateManyQuestionInput = {
 export type SurveyQuestionComboOptionUpdateWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -539,7 +506,6 @@ export type SurveyQuestionComboOptionUpdateWithoutQuestionInput = {
 export type SurveyQuestionComboOptionUncheckedUpdateWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -548,7 +514,6 @@ export type SurveyQuestionComboOptionUncheckedUpdateWithoutQuestionInput = {
 export type SurveyQuestionComboOptionUncheckedUpdateManyWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  value?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -560,7 +525,6 @@ export type SurveyQuestionComboOptionSelect<ExtArgs extends runtime.Types.Extens
   id?: boolean
   questionId?: boolean
   label?: boolean
-  value?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -571,7 +535,6 @@ export type SurveyQuestionComboOptionSelectCreateManyAndReturn<ExtArgs extends r
   id?: boolean
   questionId?: boolean
   label?: boolean
-  value?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -582,7 +545,6 @@ export type SurveyQuestionComboOptionSelectUpdateManyAndReturn<ExtArgs extends r
   id?: boolean
   questionId?: boolean
   label?: boolean
-  value?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -593,13 +555,12 @@ export type SurveyQuestionComboOptionSelectScalar = {
   id?: boolean
   questionId?: boolean
   label?: boolean
-  value?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SurveyQuestionComboOptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "questionId" | "label" | "value" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyQuestionComboOption"]>
+export type SurveyQuestionComboOptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "questionId" | "label" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyQuestionComboOption"]>
 export type SurveyQuestionComboOptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }
@@ -619,7 +580,6 @@ export type $SurveyQuestionComboOptionPayload<ExtArgs extends runtime.Types.Exte
     id: string
     questionId: string
     label: string
-    value: string
     sortOrder: number
     createdAt: Date
     updatedAt: Date
@@ -1050,7 +1010,6 @@ export interface SurveyQuestionComboOptionFieldRefs {
   readonly id: Prisma.FieldRef<"SurveyQuestionComboOption", 'String'>
   readonly questionId: Prisma.FieldRef<"SurveyQuestionComboOption", 'String'>
   readonly label: Prisma.FieldRef<"SurveyQuestionComboOption", 'String'>
-  readonly value: Prisma.FieldRef<"SurveyQuestionComboOption", 'String'>
   readonly sortOrder: Prisma.FieldRef<"SurveyQuestionComboOption", 'Int'>
   readonly createdAt: Prisma.FieldRef<"SurveyQuestionComboOption", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SurveyQuestionComboOption", 'DateTime'>

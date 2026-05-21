@@ -16,7 +16,6 @@ export default async function SurveyPage() {
     comboOptions: question.comboOptions.map((option) => ({
       id: option.id,
       label: option.label,
-      value: option.value,
     })),
     id: question.id,
     prompt: question.prompt,

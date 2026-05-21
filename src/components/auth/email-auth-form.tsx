@@ -41,7 +41,9 @@ export function EmailAuthForm({
         return;
       }
 
-      setNotice("Check your email for the sign-in link to finish creating your account.");
+      setNotice(
+        "Check your email for the sign-in link to finish creating your account.",
+      );
       setPending(false);
       return;
     }

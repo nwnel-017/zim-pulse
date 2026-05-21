@@ -18,7 +18,16 @@ export const SurveyQuestionType = {
   CHECKBOX: 'CHECKBOX',
   BOOLEAN: 'BOOLEAN',
   DATE: 'DATE',
-  EMAIL: 'EMAIL'
+  EMAIL: 'EMAIL',
+  SEARCH_SELECT: 'SEARCH_SELECT'
 } as const
 
 export type SurveyQuestionType = (typeof SurveyQuestionType)[keyof typeof SurveyQuestionType]
+
+
+export const SurveyQuestionDataSource = {
+  COUNTRY: 'COUNTRY',
+  CITY: 'CITY'
+} as const
+
+export type SurveyQuestionDataSource = (typeof SurveyQuestionDataSource)[keyof typeof SurveyQuestionDataSource]

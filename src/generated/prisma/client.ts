@@ -76,3 +76,13 @@ export type SurveyQuestionComboOption = Prisma.SurveyQuestionComboOptionModel
  * 
  */
 export type SurveyResponse = Prisma.SurveyResponseModel
+/**
+ * Model Country
+ * 
+ */
+export type Country = Prisma.CountryModel
+/**
+ * Model City
+ * 
+ */
+export type City = Prisma.CityModel

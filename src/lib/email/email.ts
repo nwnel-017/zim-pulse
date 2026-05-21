@@ -13,11 +13,16 @@ export async function sendAuthEmail({
 }: SendAuthEmailInput): Promise<void> {
   const fromEmail = process.env.RESEND_FROM_EMAIL;
   const fromName = process.env.APP_NAME ?? "ZimPulse";
+  const isProduction =
+    process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
+
+  if (!isProduction) {
+    console.log("Not in production environment. Login at: " + text);
+    return;
+  }
 
   if (!fromEmail) {
-    console.info(`[auth:email] ${email}`);
-    console.info(`[auth:subject] ${subject}`);
-    console.info(text);
+    console.log("No from email configured, skipping email sending");
     return;
   }
 

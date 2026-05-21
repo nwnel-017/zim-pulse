@@ -10,6 +10,8 @@ type AdminSignUpPayload = {
   signupCode?: unknown;
 };
 
+// this is wrong
+
 function toErrorMessage(error: unknown) {
   if (
     typeof error === "object" &&
@@ -33,10 +35,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const payload = (await request.json().catch(() => null)) as AdminSignUpPayload | null;
+  const payload = (await request
+    .json()
+    .catch(() => null)) as AdminSignUpPayload | null;
 
   if (!payload) {
-    return NextResponse.json({ message: "Invalid request body." }, { status: 400 });
+    return NextResponse.json(
+      { message: "Invalid request body." },
+      { status: 400 },
+    );
   }
 
   try {
@@ -58,11 +65,17 @@ export async function POST(request: Request) {
         : "";
 
     if (!password) {
-      return NextResponse.json({ message: "Password is required." }, { status: 400 });
+      return NextResponse.json(
+        { message: "Password is required." },
+        { status: 400 },
+      );
     }
 
     if (signupCode !== expectedSignupCode) {
-      return NextResponse.json({ message: "Invalid admin signup code." }, { status: 403 });
+      return NextResponse.json(
+        { message: "Invalid admin signup code." },
+        { status: 403 },
+      );
     }
 
     const result = await auth.api.signUpEmail({
@@ -93,6 +106,9 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    return NextResponse.json({ message: toErrorMessage(error) }, { status: 400 });
+    return NextResponse.json(
+      { message: toErrorMessage(error) },
+      { status: 400 },
+    );
   }
 }

@@ -92,12 +92,19 @@ enum SurveyQuestionType {
   BOOLEAN
   DATE
   EMAIL
+  SEARCH_SELECT
+}
+
+enum SurveyQuestionDataSource {
+  COUNTRY
+  CITY
 }
 
 model SurveyQuestion {
   id              String                      @id @default(cuid())
   prompt          String
   type            SurveyQuestionType
+  datasource      SurveyQuestionDataSource?
   createdAt       DateTime                    @default(now())
   updatedAt       DateTime                    @updatedAt
   comboOptions    SurveyQuestionComboOption[]
@@ -110,14 +117,12 @@ model SurveyQuestionComboOption {
   id         String         @id @default(cuid())
   questionId String
   label      String
-  value      String
   sortOrder  Int            @default(0)
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
   question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
-  @@unique([questionId, value])
   @@map("survey_question_combo_options")
 }
 
@@ -125,13 +130,57 @@ model SurveyResponse {
   id         String         @id @default(cuid())
   userId     String
   questionId String
+  cityId      String?
   answer     String
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  city        City?         @relation(fields: [cityId], references: [id], onDelete: Cascade)
   question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
 
   @@index([userId])
   @@index([questionId])
+  @@unique([userId, questionId])
   @@map("survey_responses")
+}
+
+model Country {
+  id          String   @id @default(cuid())
+
+  name        String
+  isoCode     String   @unique   // US, ZW, GB
+  phoneCode   String?            // +1, +263
+  currency    String?            // USD, ZWL
+  emoji       String?            // 🇿🇼
+
+  cities      City[]
+
+  createdAt   DateTime @default(now())
+
+  @@index([name])
+  @@map("country")
+}
+
+model City {
+  id            String   @id @default(cuid())
+
+  name          String
+  countryId     String
+  country       Country  @relation(fields: [countryId], references: [id])
+
+  stateCode     String?
+
+  latitude      Float?
+  longitude     Float?
+
+  population    Int?
+
+  SurveyResponse       SurveyResponse[]
+
+  createdAt     DateTime @default(now())
+
+  @@index([name])
+  @@index([countryId])
+  @@map("city")
 }

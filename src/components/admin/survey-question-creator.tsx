@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import type { ActionState } from "@/app/admin/action-state";
+import { initialActionState } from "@/app/admin/action-state";
 import { SurveyQuestionType } from "@/generated/prisma/enums";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
 import styles from "@/components/admin/survey-question-creator.module.css";
 
 type SurveyQuestionCreatorProps = {
-  action: (formData: FormData) => void | Promise<void>;
+  action: (state: ActionState, formData: FormData) => Promise<ActionState>;
 };
 
 const selectableQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set([
@@ -27,12 +29,22 @@ function SubmitButton() {
 }
 
 export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
+  const [state, formAction] = useActionState(action, initialActionState);
   const [questionType, setQuestionType] = useState<SurveyQuestionType>(
     SurveyQuestionType.TEXT,
   );
   const [optionLabels, setOptionLabels] = useState(["", ""]);
 
   const showsChoices = selectableQuestionTypes.has(questionType);
+
+  useEffect(() => {
+    if (!state.success) {
+      return;
+    }
+
+    setQuestionType(SurveyQuestionType.TEXT);
+    setOptionLabels(["", ""]);
+  }, [state.success]);
 
   function updateOptionLabel(index: number, value: string) {
     setOptionLabels((currentLabels) =>
@@ -53,7 +65,7 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
   }
 
   return (
-    <form action={action} className={`auth-form ${styles.creatorForm}`}>
+    <form action={formAction} className={`auth-form ${styles.creatorForm}`}>
       <label className="auth-field">
         <span>Question prompt</span>
         <input
@@ -69,7 +81,9 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
         <select
           className="auth-select"
           name="type"
-          onChange={(event) => setQuestionType(event.target.value as SurveyQuestionType)}
+          onChange={(event) =>
+            setQuestionType(event.target.value as SurveyQuestionType)
+          }
           value={questionType}
         >
           {Object.values(SurveyQuestionType).map((type) => (
@@ -89,13 +103,18 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
 
           <div className={styles.choiceList}>
             {optionLabels.map((label, index) => (
-              <div className={styles.choiceRow} key={`${questionType}-${index}`}>
+              <div
+                className={styles.choiceRow}
+                key={`${questionType}-${index}`}
+              >
                 <label className="auth-field">
                   <span>Choice {index + 1}</span>
                   <input
                     className={styles.choiceInput}
                     name="optionLabel"
-                    onChange={(event) => updateOptionLabel(index, event.target.value)}
+                    onChange={(event) =>
+                      updateOptionLabel(index, event.target.value)
+                    }
                     placeholder={`Enter choice ${index + 1}`}
                     required={showsChoices}
                     type="text"
@@ -129,6 +148,7 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
       ) : null}
 
       <SubmitButton />
+      {state.error ? <p className="auth-error">{state.error}</p> : null}
     </form>
   );
 }

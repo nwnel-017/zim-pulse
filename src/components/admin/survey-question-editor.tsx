@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { initialActionState } from "@/app/admin/action-state";
 import { updateSurveyQuestion } from "@/app/admin/actions";
 
 type SurveyQuestionEditorProps = {
@@ -14,38 +15,28 @@ export function SurveyQuestionEditor({
   questionId,
 }: SurveyQuestionEditorProps) {
   const router = useRouter();
+  const [state, formAction, isPending] = useActionState(
+    updateSurveyQuestion,
+    initialActionState,
+  );
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+ 
+  useEffect(() => {
+    if (!state.success) {
+      return;
+    }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(null);
-    setIsPending(true);
+    setIsOpen(false);
+    router.refresh();
+  }, [router, state.success]);
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      await updateSurveyQuestion(formData);
-      setIsOpen(false);
+  function handleOpenChange(isExpanded: boolean) {
+    if (!isExpanded) {
       router.refresh();
-    } catch (submissionError) {
-      if (
-        typeof submissionError === "object" &&
-        submissionError !== null &&
-        "message" in submissionError &&
-        typeof submissionError.message === "string"
-      ) {
-        setError(submissionError.message);
-      } else {
-        setError("Unable to save changes.");
-      }
-    } finally {
-      setIsPending(false);
     }
   }
 
   function handleCancel() {
-    setError(null);
     setIsOpen(false);
   }
 
@@ -53,7 +44,9 @@ export function SurveyQuestionEditor({
     <details
       className="admin-question-editor"
       onToggle={(event) => {
-        setIsOpen(event.currentTarget.open);
+        const nextIsOpen = event.currentTarget.open;
+        setIsOpen(nextIsOpen);
+        handleOpenChange(nextIsOpen);
       }}
       open={isOpen}
     >
@@ -61,7 +54,7 @@ export function SurveyQuestionEditor({
         Edit question
       </summary>
 
-      <form className="auth-form admin-inline-form" onSubmit={handleSubmit}>
+      <form action={formAction} className="auth-form admin-inline-form">
         <input name="questionId" type="hidden" value={questionId} />
 
         <label className="auth-field">
@@ -84,7 +77,7 @@ export function SurveyQuestionEditor({
         </div>
       </form>
 
-      {error ? <p className="auth-error">{error}</p> : null}
+      {state.error ? <p className="auth-error">{state.error}</p> : null}
     </details>
   );
 }

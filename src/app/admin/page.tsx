@@ -1,10 +1,8 @@
+import { DeleteSurveyQuestionForm } from "@/components/admin/delete-survey-question-form";
 import { SurveyQuestionCreator } from "@/components/admin/survey-question-creator";
 import { SurveyQuestionEditor } from "@/components/admin/survey-question-editor";
 import { SignOutButton } from "@/components/auth/sign-out-button";
-import {
-  createSurveyQuestion,
-  deleteSurveyQuestion,
-} from "@/app/admin/actions";
+import { createSurveyQuestion } from "@/app/admin/actions";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
@@ -54,10 +52,6 @@ export default async function AdminPage() {
             <dt>Role</dt>
             <dd>{session.user.role}</dd>
           </div>
-          <div>
-            <dt>User ID</dt>
-            <dd>{session.user.id}</dd>
-          </div>
         </dl>
 
         <section className="admin-section">
@@ -80,15 +74,7 @@ export default async function AdminPage() {
                       questionId={question.id}
                     />
 
-                    <form action={deleteSurveyQuestion}>
-                      <input name="questionId" type="hidden" value={question.id} />
-                      <button
-                        className="auth-button ghost-button admin-inline-button"
-                        type="submit"
-                      >
-                        Delete question
-                      </button>
-                    </form>
+                    <DeleteSurveyQuestionForm questionId={question.id} />
                   </div>
                 </li>
               ))}

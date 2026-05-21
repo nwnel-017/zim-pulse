@@ -28,6 +28,7 @@ export type SurveyResponseMinAggregateOutputType = {
   id: string | null
   userId: string | null
   questionId: string | null
+  cityId: string | null
   answer: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +38,7 @@ export type SurveyResponseMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   questionId: string | null
+  cityId: string | null
   answer: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +48,7 @@ export type SurveyResponseCountAggregateOutputType = {
   id: number
   userId: number
   questionId: number
+  cityId: number
   answer: number
   createdAt: number
   updatedAt: number
@@ -57,6 +60,7 @@ export type SurveyResponseMinAggregateInputType = {
   id?: true
   userId?: true
   questionId?: true
+  cityId?: true
   answer?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +70,7 @@ export type SurveyResponseMaxAggregateInputType = {
   id?: true
   userId?: true
   questionId?: true
+  cityId?: true
   answer?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +80,7 @@ export type SurveyResponseCountAggregateInputType = {
   id?: true
   userId?: true
   questionId?: true
+  cityId?: true
   answer?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +163,7 @@ export type SurveyResponseGroupByOutputType = {
   id: string
   userId: string
   questionId: string
+  cityId: string | null
   answer: string
   createdAt: Date
   updatedAt: Date
@@ -187,10 +194,12 @@ export type SurveyResponseWhereInput = {
   id?: Prisma.StringFilter<"SurveyResponse"> | string
   userId?: Prisma.StringFilter<"SurveyResponse"> | string
   questionId?: Prisma.StringFilter<"SurveyResponse"> | string
+  cityId?: Prisma.StringNullableFilter<"SurveyResponse"> | string | null
   answer?: Prisma.StringFilter<"SurveyResponse"> | string
   createdAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  city?: Prisma.XOR<Prisma.CityNullableScalarRelationFilter, Prisma.CityWhereInput> | null
   question?: Prisma.XOR<Prisma.SurveyQuestionScalarRelationFilter, Prisma.SurveyQuestionWhereInput>
 }
 
@@ -198,31 +207,37 @@ export type SurveyResponseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  cityId?: Prisma.SortOrderInput | Prisma.SortOrder
   answer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  city?: Prisma.CityOrderByWithRelationInput
   question?: Prisma.SurveyQuestionOrderByWithRelationInput
 }
 
 export type SurveyResponseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId_questionId?: Prisma.SurveyResponseUserIdQuestionIdCompoundUniqueInput
   AND?: Prisma.SurveyResponseWhereInput | Prisma.SurveyResponseWhereInput[]
   OR?: Prisma.SurveyResponseWhereInput[]
   NOT?: Prisma.SurveyResponseWhereInput | Prisma.SurveyResponseWhereInput[]
   userId?: Prisma.StringFilter<"SurveyResponse"> | string
   questionId?: Prisma.StringFilter<"SurveyResponse"> | string
+  cityId?: Prisma.StringNullableFilter<"SurveyResponse"> | string | null
   answer?: Prisma.StringFilter<"SurveyResponse"> | string
   createdAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  city?: Prisma.XOR<Prisma.CityNullableScalarRelationFilter, Prisma.CityWhereInput> | null
   question?: Prisma.XOR<Prisma.SurveyQuestionScalarRelationFilter, Prisma.SurveyQuestionWhereInput>
-}, "id">
+}, "id" | "userId_questionId">
 
 export type SurveyResponseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  cityId?: Prisma.SortOrderInput | Prisma.SortOrder
   answer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -238,6 +253,7 @@ export type SurveyResponseScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"SurveyResponse"> | string
   userId?: Prisma.StringWithAggregatesFilter<"SurveyResponse"> | string
   questionId?: Prisma.StringWithAggregatesFilter<"SurveyResponse"> | string
+  cityId?: Prisma.StringNullableWithAggregatesFilter<"SurveyResponse"> | string | null
   answer?: Prisma.StringWithAggregatesFilter<"SurveyResponse"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyResponse"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyResponse"> | Date | string
@@ -249,6 +265,7 @@ export type SurveyResponseCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSurveyResponsesInput
+  city?: Prisma.CityCreateNestedOneWithoutSurveyResponseInput
   question: Prisma.SurveyQuestionCreateNestedOneWithoutSurveyResponsesInput
 }
 
@@ -256,6 +273,7 @@ export type SurveyResponseUncheckedCreateInput = {
   id?: string
   userId: string
   questionId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -267,6 +285,7 @@ export type SurveyResponseUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSurveyResponsesNestedInput
+  city?: Prisma.CityUpdateOneWithoutSurveyResponseNestedInput
   question?: Prisma.SurveyQuestionUpdateOneRequiredWithoutSurveyResponsesNestedInput
 }
 
@@ -274,6 +293,7 @@ export type SurveyResponseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -283,6 +303,7 @@ export type SurveyResponseCreateManyInput = {
   id?: string
   userId: string
   questionId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -299,6 +320,7 @@ export type SurveyResponseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -314,10 +336,16 @@ export type SurveyResponseOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type SurveyResponseUserIdQuestionIdCompoundUniqueInput = {
+  userId: string
+  questionId: string
+}
+
 export type SurveyResponseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   answer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -327,6 +355,7 @@ export type SurveyResponseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   answer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -336,6 +365,7 @@ export type SurveyResponseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   answer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -425,17 +455,61 @@ export type SurveyResponseUncheckedUpdateManyWithoutQuestionNestedInput = {
   deleteMany?: Prisma.SurveyResponseScalarWhereInput | Prisma.SurveyResponseScalarWhereInput[]
 }
 
+export type SurveyResponseCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput> | Prisma.SurveyResponseCreateWithoutCityInput[] | Prisma.SurveyResponseUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.SurveyResponseCreateOrConnectWithoutCityInput | Prisma.SurveyResponseCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.SurveyResponseCreateManyCityInputEnvelope
+  connect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+}
+
+export type SurveyResponseUncheckedCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput> | Prisma.SurveyResponseCreateWithoutCityInput[] | Prisma.SurveyResponseUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.SurveyResponseCreateOrConnectWithoutCityInput | Prisma.SurveyResponseCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.SurveyResponseCreateManyCityInputEnvelope
+  connect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+}
+
+export type SurveyResponseUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput> | Prisma.SurveyResponseCreateWithoutCityInput[] | Prisma.SurveyResponseUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.SurveyResponseCreateOrConnectWithoutCityInput | Prisma.SurveyResponseCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.SurveyResponseUpsertWithWhereUniqueWithoutCityInput | Prisma.SurveyResponseUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.SurveyResponseCreateManyCityInputEnvelope
+  set?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  disconnect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  delete?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  connect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  update?: Prisma.SurveyResponseUpdateWithWhereUniqueWithoutCityInput | Prisma.SurveyResponseUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.SurveyResponseUpdateManyWithWhereWithoutCityInput | Prisma.SurveyResponseUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.SurveyResponseScalarWhereInput | Prisma.SurveyResponseScalarWhereInput[]
+}
+
+export type SurveyResponseUncheckedUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput> | Prisma.SurveyResponseCreateWithoutCityInput[] | Prisma.SurveyResponseUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.SurveyResponseCreateOrConnectWithoutCityInput | Prisma.SurveyResponseCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.SurveyResponseUpsertWithWhereUniqueWithoutCityInput | Prisma.SurveyResponseUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.SurveyResponseCreateManyCityInputEnvelope
+  set?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  disconnect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  delete?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  connect?: Prisma.SurveyResponseWhereUniqueInput | Prisma.SurveyResponseWhereUniqueInput[]
+  update?: Prisma.SurveyResponseUpdateWithWhereUniqueWithoutCityInput | Prisma.SurveyResponseUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.SurveyResponseUpdateManyWithWhereWithoutCityInput | Prisma.SurveyResponseUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.SurveyResponseScalarWhereInput | Prisma.SurveyResponseScalarWhereInput[]
+}
+
 export type SurveyResponseCreateWithoutUserInput = {
   id?: string
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  city?: Prisma.CityCreateNestedOneWithoutSurveyResponseInput
   question: Prisma.SurveyQuestionCreateNestedOneWithoutSurveyResponsesInput
 }
 
 export type SurveyResponseUncheckedCreateWithoutUserInput = {
   id?: string
   questionId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -474,6 +548,7 @@ export type SurveyResponseScalarWhereInput = {
   id?: Prisma.StringFilter<"SurveyResponse"> | string
   userId?: Prisma.StringFilter<"SurveyResponse"> | string
   questionId?: Prisma.StringFilter<"SurveyResponse"> | string
+  cityId?: Prisma.StringNullableFilter<"SurveyResponse"> | string | null
   answer?: Prisma.StringFilter<"SurveyResponse"> | string
   createdAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyResponse"> | Date | string
@@ -485,11 +560,13 @@ export type SurveyResponseCreateWithoutQuestionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSurveyResponsesInput
+  city?: Prisma.CityCreateNestedOneWithoutSurveyResponseInput
 }
 
 export type SurveyResponseUncheckedCreateWithoutQuestionInput = {
   id?: string
   userId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -521,9 +598,54 @@ export type SurveyResponseUpdateManyWithWhereWithoutQuestionInput = {
   data: Prisma.XOR<Prisma.SurveyResponseUpdateManyMutationInput, Prisma.SurveyResponseUncheckedUpdateManyWithoutQuestionInput>
 }
 
+export type SurveyResponseCreateWithoutCityInput = {
+  id?: string
+  answer: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutSurveyResponsesInput
+  question: Prisma.SurveyQuestionCreateNestedOneWithoutSurveyResponsesInput
+}
+
+export type SurveyResponseUncheckedCreateWithoutCityInput = {
+  id?: string
+  userId: string
+  questionId: string
+  answer: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SurveyResponseCreateOrConnectWithoutCityInput = {
+  where: Prisma.SurveyResponseWhereUniqueInput
+  create: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput>
+}
+
+export type SurveyResponseCreateManyCityInputEnvelope = {
+  data: Prisma.SurveyResponseCreateManyCityInput | Prisma.SurveyResponseCreateManyCityInput[]
+  skipDuplicates?: boolean
+}
+
+export type SurveyResponseUpsertWithWhereUniqueWithoutCityInput = {
+  where: Prisma.SurveyResponseWhereUniqueInput
+  update: Prisma.XOR<Prisma.SurveyResponseUpdateWithoutCityInput, Prisma.SurveyResponseUncheckedUpdateWithoutCityInput>
+  create: Prisma.XOR<Prisma.SurveyResponseCreateWithoutCityInput, Prisma.SurveyResponseUncheckedCreateWithoutCityInput>
+}
+
+export type SurveyResponseUpdateWithWhereUniqueWithoutCityInput = {
+  where: Prisma.SurveyResponseWhereUniqueInput
+  data: Prisma.XOR<Prisma.SurveyResponseUpdateWithoutCityInput, Prisma.SurveyResponseUncheckedUpdateWithoutCityInput>
+}
+
+export type SurveyResponseUpdateManyWithWhereWithoutCityInput = {
+  where: Prisma.SurveyResponseScalarWhereInput
+  data: Prisma.XOR<Prisma.SurveyResponseUpdateManyMutationInput, Prisma.SurveyResponseUncheckedUpdateManyWithoutCityInput>
+}
+
 export type SurveyResponseCreateManyUserInput = {
   id?: string
   questionId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -534,12 +656,14 @@ export type SurveyResponseUpdateWithoutUserInput = {
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  city?: Prisma.CityUpdateOneWithoutSurveyResponseNestedInput
   question?: Prisma.SurveyQuestionUpdateOneRequiredWithoutSurveyResponsesNestedInput
 }
 
 export type SurveyResponseUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -548,6 +672,7 @@ export type SurveyResponseUncheckedUpdateWithoutUserInput = {
 export type SurveyResponseUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   questionId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -556,6 +681,7 @@ export type SurveyResponseUncheckedUpdateManyWithoutUserInput = {
 export type SurveyResponseCreateManyQuestionInput = {
   id?: string
   userId: string
+  cityId?: string | null
   answer: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -567,11 +693,13 @@ export type SurveyResponseUpdateWithoutQuestionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSurveyResponsesNestedInput
+  city?: Prisma.CityUpdateOneWithoutSurveyResponseNestedInput
 }
 
 export type SurveyResponseUncheckedUpdateWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -580,6 +708,43 @@ export type SurveyResponseUncheckedUpdateWithoutQuestionInput = {
 export type SurveyResponseUncheckedUpdateManyWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SurveyResponseCreateManyCityInput = {
+  id?: string
+  userId: string
+  questionId: string
+  answer: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SurveyResponseUpdateWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutSurveyResponsesNestedInput
+  question?: Prisma.SurveyQuestionUpdateOneRequiredWithoutSurveyResponsesNestedInput
+}
+
+export type SurveyResponseUncheckedUpdateWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  questionId?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SurveyResponseUncheckedUpdateManyWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  questionId?: Prisma.StringFieldUpdateOperationsInput | string
   answer?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,10 +756,12 @@ export type SurveyResponseSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   userId?: boolean
   questionId?: boolean
+  cityId?: boolean
   answer?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["surveyResponse"]>
 
@@ -602,10 +769,12 @@ export type SurveyResponseSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   userId?: boolean
   questionId?: boolean
+  cityId?: boolean
   answer?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["surveyResponse"]>
 
@@ -613,10 +782,12 @@ export type SurveyResponseSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   userId?: boolean
   questionId?: boolean
+  cityId?: boolean
   answer?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["surveyResponse"]>
 
@@ -624,22 +795,26 @@ export type SurveyResponseSelectScalar = {
   id?: boolean
   userId?: boolean
   questionId?: boolean
+  cityId?: boolean
   answer?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SurveyResponseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionId" | "answer" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyResponse"]>
+export type SurveyResponseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionId" | "cityId" | "answer" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyResponse"]>
 export type SurveyResponseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }
 export type SurveyResponseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }
 export type SurveyResponseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  city?: boolean | Prisma.SurveyResponse$cityArgs<ExtArgs>
   question?: boolean | Prisma.SurveyQuestionDefaultArgs<ExtArgs>
 }
 
@@ -647,12 +822,14 @@ export type $SurveyResponsePayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "SurveyResponse"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    city: Prisma.$CityPayload<ExtArgs> | null
     question: Prisma.$SurveyQuestionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
     questionId: string
+    cityId: string | null
     answer: string
     createdAt: Date
     updatedAt: Date
@@ -1051,6 +1228,7 @@ readonly fields: SurveyResponseFieldRefs;
 export interface Prisma__SurveyResponseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  city<T extends Prisma.SurveyResponse$cityArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SurveyResponse$cityArgs<ExtArgs>>): Prisma.Prisma__CityClient<runtime.Types.Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   question<T extends Prisma.SurveyQuestionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SurveyQuestionDefaultArgs<ExtArgs>>): Prisma.Prisma__SurveyQuestionClient<runtime.Types.Result.GetResult<Prisma.$SurveyQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1084,6 +1262,7 @@ export interface SurveyResponseFieldRefs {
   readonly id: Prisma.FieldRef<"SurveyResponse", 'String'>
   readonly userId: Prisma.FieldRef<"SurveyResponse", 'String'>
   readonly questionId: Prisma.FieldRef<"SurveyResponse", 'String'>
+  readonly cityId: Prisma.FieldRef<"SurveyResponse", 'String'>
   readonly answer: Prisma.FieldRef<"SurveyResponse", 'String'>
   readonly createdAt: Prisma.FieldRef<"SurveyResponse", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SurveyResponse", 'DateTime'>
@@ -1485,6 +1664,25 @@ export type SurveyResponseDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many SurveyResponses to delete.
    */
   limit?: number
+}
+
+/**
+ * SurveyResponse.city
+ */
+export type SurveyResponse$cityArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the City
+   */
+  select?: Prisma.CitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the City
+   */
+  omit?: Prisma.CityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CityInclude<ExtArgs> | null
+  where?: Prisma.CityWhereInput
 }
 
 /**
