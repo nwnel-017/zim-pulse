@@ -12,8 +12,6 @@ import {
 } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/components/survey/survey-flow.module.css";
 
-// Review this
-
 type SurveyFlowProps = {
   action: (
     previousState: SurveyActionState,
@@ -57,6 +55,10 @@ export function SurveyFlow({
   const currentQuestion = questions[currentStep];
   const isLastStep = currentStep === questions.length - 1;
   const progress = ((currentStep + 1) / questionCount) * 100;
+
+  if (!currentQuestion) {
+    return null;
+  }
 
   function setSingleAnswer(questionId: string, value: string) {
     setAnswers((currentAnswers) => ({
@@ -132,26 +134,15 @@ export function SurveyFlow({
         </div>
       </div>
 
-      {questions.map((question) => {
-        const hidden = question.id !== currentQuestion.id;
-
-        return (
-          <div
-            aria-hidden={hidden}
-            className={styles.questionCard}
-            hidden={hidden}
-            key={question.id}
-          >
-            <p className={styles.questionPrompt}>{question.prompt}</p>
-            <CurrentQuestion
-              answer={answers[question.id]}
-              question={question}
-              setSingleAnswer={setSingleAnswer}
-              toggleCheckboxAnswer={toggleCheckboxAnswer}
-            />
-          </div>
-        );
-      })}
+      <div className={styles.questionCard}>
+        <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
+        <CurrentQuestion
+          answer={answers[currentQuestion.id]}
+          question={currentQuestion}
+          setSingleAnswer={setSingleAnswer}
+          toggleCheckboxAnswer={toggleCheckboxAnswer}
+        />
+      </div>
 
       {error ? <p className={styles.error}>{error}</p> : null}
       {!error && state.error ? (

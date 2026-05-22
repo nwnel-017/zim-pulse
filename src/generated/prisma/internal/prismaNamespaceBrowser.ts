@@ -145,6 +145,8 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 
 export const SurveyQuestionScalarFieldEnum = {
   id: 'id',
+  sortOrder: 'sortOrder',
+  required: 'required',
   prompt: 'prompt',
   type: 'type',
   datasource: 'datasource',

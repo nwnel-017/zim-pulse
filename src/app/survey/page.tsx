@@ -20,6 +20,7 @@ export default async function SurveyPage() {
     id: question.id,
     prompt: question.prompt,
     type: question.type,
+    datasource: question?.datasource,
   }));
 
   return (

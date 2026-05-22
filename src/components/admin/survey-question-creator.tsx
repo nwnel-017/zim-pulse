@@ -1,12 +1,16 @@
 "use client";
 
-import { useActionState, useState, useEffect } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { ActionState } from "@/app/admin/action-state";
 import { initialActionState } from "@/app/admin/action-state";
-import { SurveyQuestionType } from "@/generated/prisma/enums";
+import {
+  SurveyQuestionDataSource,
+  SurveyQuestionType,
+} from "@/generated/prisma/enums";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
 import styles from "@/components/admin/survey-question-creator.module.css";
+import DataSourceOptions from "./data-source-options";
 
 type SurveyQuestionCreatorProps = {
   action: (state: ActionState, formData: FormData) => Promise<ActionState>;
@@ -28,23 +32,25 @@ function SubmitButton() {
   );
 }
 
-export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
-  const [state, formAction] = useActionState(action, initialActionState);
+type SurveyQuestionCreatorFormProps = {
+  action: (formData: FormData) => void;
+  error: string | null;
+};
+
+function SurveyQuestionCreatorForm({
+  action,
+  error,
+}: SurveyQuestionCreatorFormProps) {
   const [questionType, setQuestionType] = useState<SurveyQuestionType>(
     SurveyQuestionType.TEXT,
+  );
+  const [dataSource, setDataSource] = useState<SurveyQuestionDataSource>(
+    SurveyQuestionDataSource.COUNTRY,
   );
   const [optionLabels, setOptionLabels] = useState(["", ""]);
 
   const showsChoices = selectableQuestionTypes.has(questionType);
-
-  useEffect(() => {
-    if (!state.success) {
-      return;
-    }
-
-    setQuestionType(SurveyQuestionType.TEXT);
-    setOptionLabels(["", ""]);
-  }, [state.success]);
+  const showDataSources = questionType === SurveyQuestionType.SEARCH_SELECT;
 
   function updateOptionLabel(index: number, value: string) {
     setOptionLabels((currentLabels) =>
@@ -65,7 +71,7 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
   }
 
   return (
-    <form action={formAction} className={`auth-form ${styles.creatorForm}`}>
+    <form action={action} className={`auth-form ${styles.creatorForm}`}>
       <label className="auth-field">
         <span>Question prompt</span>
         <input
@@ -145,10 +151,22 @@ export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
             </button>
           </div>
         </section>
+      ) : showDataSources ? (
+        <DataSourceOptions
+          onDataSourceChange={setDataSource}
+          required={showDataSources}
+          selectedDataSource={dataSource}
+        />
       ) : null}
 
       <SubmitButton />
-      {state.error ? <p className="auth-error">{state.error}</p> : null}
+      {error ? <p className="auth-error">{error}</p> : null}
     </form>
   );
+}
+
+export function SurveyQuestionCreator({ action }: SurveyQuestionCreatorProps) {
+  const [state, formAction] = useActionState(action, initialActionState);
+
+  return <SurveyQuestionCreatorForm action={formAction} error={state.error} />;
 }

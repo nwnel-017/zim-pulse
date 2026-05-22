@@ -20,12 +20,24 @@ export type SurveyQuestionModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregateSurveyQuestion = {
   _count: SurveyQuestionCountAggregateOutputType | null
+  _avg: SurveyQuestionAvgAggregateOutputType | null
+  _sum: SurveyQuestionSumAggregateOutputType | null
   _min: SurveyQuestionMinAggregateOutputType | null
   _max: SurveyQuestionMaxAggregateOutputType | null
 }
 
+export type SurveyQuestionAvgAggregateOutputType = {
+  sortOrder: number | null
+}
+
+export type SurveyQuestionSumAggregateOutputType = {
+  sortOrder: number | null
+}
+
 export type SurveyQuestionMinAggregateOutputType = {
   id: string | null
+  sortOrder: number | null
+  required: boolean | null
   prompt: string | null
   type: $Enums.SurveyQuestionType | null
   datasource: $Enums.SurveyQuestionDataSource | null
@@ -35,6 +47,8 @@ export type SurveyQuestionMinAggregateOutputType = {
 
 export type SurveyQuestionMaxAggregateOutputType = {
   id: string | null
+  sortOrder: number | null
+  required: boolean | null
   prompt: string | null
   type: $Enums.SurveyQuestionType | null
   datasource: $Enums.SurveyQuestionDataSource | null
@@ -44,6 +58,8 @@ export type SurveyQuestionMaxAggregateOutputType = {
 
 export type SurveyQuestionCountAggregateOutputType = {
   id: number
+  sortOrder: number
+  required: number
   prompt: number
   type: number
   datasource: number
@@ -53,8 +69,18 @@ export type SurveyQuestionCountAggregateOutputType = {
 }
 
 
+export type SurveyQuestionAvgAggregateInputType = {
+  sortOrder?: true
+}
+
+export type SurveyQuestionSumAggregateInputType = {
+  sortOrder?: true
+}
+
 export type SurveyQuestionMinAggregateInputType = {
   id?: true
+  sortOrder?: true
+  required?: true
   prompt?: true
   type?: true
   datasource?: true
@@ -64,6 +90,8 @@ export type SurveyQuestionMinAggregateInputType = {
 
 export type SurveyQuestionMaxAggregateInputType = {
   id?: true
+  sortOrder?: true
+  required?: true
   prompt?: true
   type?: true
   datasource?: true
@@ -73,6 +101,8 @@ export type SurveyQuestionMaxAggregateInputType = {
 
 export type SurveyQuestionCountAggregateInputType = {
   id?: true
+  sortOrder?: true
+  required?: true
   prompt?: true
   type?: true
   datasource?: true
@@ -119,6 +149,18 @@ export type SurveyQuestionAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SurveyQuestionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SurveyQuestionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SurveyQuestionMinAggregateInputType
@@ -149,18 +191,24 @@ export type SurveyQuestionGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: SurveyQuestionCountAggregateInputType | true
+  _avg?: SurveyQuestionAvgAggregateInputType
+  _sum?: SurveyQuestionSumAggregateInputType
   _min?: SurveyQuestionMinAggregateInputType
   _max?: SurveyQuestionMaxAggregateInputType
 }
 
 export type SurveyQuestionGroupByOutputType = {
   id: string
+  sortOrder: number
+  required: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource: $Enums.SurveyQuestionDataSource | null
   createdAt: Date
   updatedAt: Date
   _count: SurveyQuestionCountAggregateOutputType | null
+  _avg: SurveyQuestionAvgAggregateOutputType | null
+  _sum: SurveyQuestionSumAggregateOutputType | null
   _min: SurveyQuestionMinAggregateOutputType | null
   _max: SurveyQuestionMaxAggregateOutputType | null
 }
@@ -185,6 +233,8 @@ export type SurveyQuestionWhereInput = {
   OR?: Prisma.SurveyQuestionWhereInput[]
   NOT?: Prisma.SurveyQuestionWhereInput | Prisma.SurveyQuestionWhereInput[]
   id?: Prisma.StringFilter<"SurveyQuestion"> | string
+  sortOrder?: Prisma.IntFilter<"SurveyQuestion"> | number
+  required?: Prisma.BoolFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
@@ -196,6 +246,8 @@ export type SurveyQuestionWhereInput = {
 
 export type SurveyQuestionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   datasource?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -210,6 +262,8 @@ export type SurveyQuestionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SurveyQuestionWhereInput | Prisma.SurveyQuestionWhereInput[]
   OR?: Prisma.SurveyQuestionWhereInput[]
   NOT?: Prisma.SurveyQuestionWhereInput | Prisma.SurveyQuestionWhereInput[]
+  sortOrder?: Prisma.IntFilter<"SurveyQuestion"> | number
+  required?: Prisma.BoolFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
@@ -221,14 +275,18 @@ export type SurveyQuestionWhereUniqueInput = Prisma.AtLeast<{
 
 export type SurveyQuestionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   datasource?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SurveyQuestionCountOrderByAggregateInput
+  _avg?: Prisma.SurveyQuestionAvgOrderByAggregateInput
   _max?: Prisma.SurveyQuestionMaxOrderByAggregateInput
   _min?: Prisma.SurveyQuestionMinOrderByAggregateInput
+  _sum?: Prisma.SurveyQuestionSumOrderByAggregateInput
 }
 
 export type SurveyQuestionScalarWhereWithAggregatesInput = {
@@ -236,6 +294,8 @@ export type SurveyQuestionScalarWhereWithAggregatesInput = {
   OR?: Prisma.SurveyQuestionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SurveyQuestionScalarWhereWithAggregatesInput | Prisma.SurveyQuestionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SurveyQuestion"> | string
+  sortOrder?: Prisma.IntWithAggregatesFilter<"SurveyQuestion"> | number
+  required?: Prisma.BoolWithAggregatesFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringWithAggregatesFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
@@ -245,6 +305,8 @@ export type SurveyQuestionScalarWhereWithAggregatesInput = {
 
 export type SurveyQuestionCreateInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -256,6 +318,8 @@ export type SurveyQuestionCreateInput = {
 
 export type SurveyQuestionUncheckedCreateInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -267,6 +331,8 @@ export type SurveyQuestionUncheckedCreateInput = {
 
 export type SurveyQuestionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -278,6 +344,8 @@ export type SurveyQuestionUpdateInput = {
 
 export type SurveyQuestionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -289,6 +357,8 @@ export type SurveyQuestionUncheckedUpdateInput = {
 
 export type SurveyQuestionCreateManyInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -298,6 +368,8 @@ export type SurveyQuestionCreateManyInput = {
 
 export type SurveyQuestionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -307,6 +379,8 @@ export type SurveyQuestionUpdateManyMutationInput = {
 
 export type SurveyQuestionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -316,6 +390,8 @@ export type SurveyQuestionUncheckedUpdateManyInput = {
 
 export type SurveyQuestionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   datasource?: Prisma.SortOrder
@@ -323,8 +399,14 @@ export type SurveyQuestionCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type SurveyQuestionAvgOrderByAggregateInput = {
+  sortOrder?: Prisma.SortOrder
+}
+
 export type SurveyQuestionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   datasource?: Prisma.SortOrder
@@ -334,6 +416,8 @@ export type SurveyQuestionMaxOrderByAggregateInput = {
 
 export type SurveyQuestionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  sortOrder?: Prisma.SortOrder
+  required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   datasource?: Prisma.SortOrder
@@ -341,9 +425,21 @@ export type SurveyQuestionMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type SurveyQuestionSumOrderByAggregateInput = {
+  sortOrder?: Prisma.SortOrder
+}
+
 export type SurveyQuestionScalarRelationFilter = {
   is?: Prisma.SurveyQuestionWhereInput
   isNot?: Prisma.SurveyQuestionWhereInput
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type EnumSurveyQuestionTypeFieldUpdateOperationsInput = {
@@ -384,6 +480,8 @@ export type SurveyQuestionUpdateOneRequiredWithoutSurveyResponsesNestedInput = {
 
 export type SurveyQuestionCreateWithoutComboOptionsInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -394,6 +492,8 @@ export type SurveyQuestionCreateWithoutComboOptionsInput = {
 
 export type SurveyQuestionUncheckedCreateWithoutComboOptionsInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -420,6 +520,8 @@ export type SurveyQuestionUpdateToOneWithWhereWithoutComboOptionsInput = {
 
 export type SurveyQuestionUpdateWithoutComboOptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -430,6 +532,8 @@ export type SurveyQuestionUpdateWithoutComboOptionsInput = {
 
 export type SurveyQuestionUncheckedUpdateWithoutComboOptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -440,6 +544,8 @@ export type SurveyQuestionUncheckedUpdateWithoutComboOptionsInput = {
 
 export type SurveyQuestionCreateWithoutSurveyResponsesInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -450,6 +556,8 @@ export type SurveyQuestionCreateWithoutSurveyResponsesInput = {
 
 export type SurveyQuestionUncheckedCreateWithoutSurveyResponsesInput = {
   id?: string
+  sortOrder?: number
+  required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
   datasource?: $Enums.SurveyQuestionDataSource | null
@@ -476,6 +584,8 @@ export type SurveyQuestionUpdateToOneWithWhereWithoutSurveyResponsesInput = {
 
 export type SurveyQuestionUpdateWithoutSurveyResponsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -486,6 +596,8 @@ export type SurveyQuestionUpdateWithoutSurveyResponsesInput = {
 
 export type SurveyQuestionUncheckedUpdateWithoutSurveyResponsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
@@ -536,6 +648,8 @@ export type SurveyQuestionCountOutputTypeCountSurveyResponsesArgs<ExtArgs extend
 
 export type SurveyQuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  sortOrder?: boolean
+  required?: boolean
   prompt?: boolean
   type?: boolean
   datasource?: boolean
@@ -548,6 +662,8 @@ export type SurveyQuestionSelect<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type SurveyQuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  sortOrder?: boolean
+  required?: boolean
   prompt?: boolean
   type?: boolean
   datasource?: boolean
@@ -557,6 +673,8 @@ export type SurveyQuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
 
 export type SurveyQuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  sortOrder?: boolean
+  required?: boolean
   prompt?: boolean
   type?: boolean
   datasource?: boolean
@@ -566,6 +684,8 @@ export type SurveyQuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 
 export type SurveyQuestionSelectScalar = {
   id?: boolean
+  sortOrder?: boolean
+  required?: boolean
   prompt?: boolean
   type?: boolean
   datasource?: boolean
@@ -573,7 +693,7 @@ export type SurveyQuestionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SurveyQuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "prompt" | "type" | "datasource" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyQuestion"]>
+export type SurveyQuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sortOrder" | "required" | "prompt" | "type" | "datasource" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyQuestion"]>
 export type SurveyQuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comboOptions?: boolean | Prisma.SurveyQuestion$comboOptionsArgs<ExtArgs>
   surveyResponses?: boolean | Prisma.SurveyQuestion$surveyResponsesArgs<ExtArgs>
@@ -590,6 +710,8 @@ export type $SurveyQuestionPayload<ExtArgs extends runtime.Types.Extensions.Inte
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    sortOrder: number
+    required: boolean
     prompt: string
     type: $Enums.SurveyQuestionType
     datasource: $Enums.SurveyQuestionDataSource | null
@@ -1021,6 +1143,8 @@ export interface Prisma__SurveyQuestionClient<T, Null = never, ExtArgs extends r
  */
 export interface SurveyQuestionFieldRefs {
   readonly id: Prisma.FieldRef<"SurveyQuestion", 'String'>
+  readonly sortOrder: Prisma.FieldRef<"SurveyQuestion", 'Int'>
+  readonly required: Prisma.FieldRef<"SurveyQuestion", 'Boolean'>
   readonly prompt: Prisma.FieldRef<"SurveyQuestion", 'String'>
   readonly type: Prisma.FieldRef<"SurveyQuestion", 'SurveyQuestionType'>
   readonly datasource: Prisma.FieldRef<"SurveyQuestion", 'SurveyQuestionDataSource'>

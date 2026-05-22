@@ -1,4 +1,7 @@
-import { SurveyQuestionType } from "@/generated/prisma/enums";
+import {
+  SurveyQuestionType,
+  SurveyQuestionDataSource,
+} from "@/generated/prisma/enums";
 
 export const surveyQuestionTypeLabels: Record<SurveyQuestionType, string> = {
   TEXT: "Single line response",
@@ -11,4 +14,9 @@ export const surveyQuestionTypeLabels: Record<SurveyQuestionType, string> = {
   DATE: "Date",
   EMAIL: "Email",
   SEARCH_SELECT: "Lookup search",
+};
+
+export const dataSourceTypeLabels: Record<SurveyQuestionDataSource, string> = {
+  COUNTRY: "World countries",
+  CITY: "World cities",
 };

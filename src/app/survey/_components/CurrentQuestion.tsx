@@ -1,4 +1,6 @@
 import styles from "@/components/survey/survey-flow.module.css";
+import DataSelection from "./data-source-selections/data-selection";
+import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
 
 type SurveyQuestionOption = {
   id: string;
@@ -10,6 +12,7 @@ export type SurveyQuestion = {
   id: string;
   prompt: string;
   type: string;
+  datasource: SurveyQuestionDataSource | null;
 };
 
 type CurrentQuestionProps = {
@@ -32,7 +35,9 @@ export function CurrentQuestion({
           <span>Type your answer</span>
           <textarea
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             value={typeof answer === "string" ? answer : ""}
           />
@@ -44,7 +49,9 @@ export function CurrentQuestion({
           <span>Enter a number</span>
           <input
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             step="any"
             type="number"
@@ -58,7 +65,9 @@ export function CurrentQuestion({
           <span>Email address</span>
           <input
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             type="email"
             value={typeof answer === "string" ? answer : ""}
@@ -71,7 +80,9 @@ export function CurrentQuestion({
           <span>Select a date</span>
           <input
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             type="date"
             value={typeof answer === "string" ? answer : ""}
@@ -84,7 +95,9 @@ export function CurrentQuestion({
           <span>Select one option</span>
           <select
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             value={typeof answer === "string" ? answer : ""}
           >
@@ -108,7 +121,9 @@ export function CurrentQuestion({
           <span>Select one option</span>
           <select
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             value={typeof answer === "string" ? answer : ""}
           >
@@ -126,7 +141,9 @@ export function CurrentQuestion({
               <input
                 checked={answer === option.label}
                 name={`question-${question.id}`}
-                onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+                onChange={(event) =>
+                  setSingleAnswer(question.id, event.target.value)
+                }
                 required
                 type="radio"
                 value={option.label}
@@ -152,7 +169,9 @@ export function CurrentQuestion({
                 <input
                   checked={selectedValues.includes(option.label)}
                   name={`question-${question.id}`}
-                  onChange={() => toggleCheckboxAnswer(question.id, option.label)}
+                  onChange={() =>
+                    toggleCheckboxAnswer(question.id, option.label)
+                  }
                   type="checkbox"
                   value={option.label}
                 />
@@ -167,6 +186,17 @@ export function CurrentQuestion({
           it.
         </p>
       );
+    case "SEARCH_SELECT":
+      if (question.datasource) {
+        return (
+          <DataSelection
+            answer={typeof answer === "string" ? answer : ""}
+            questionId={question.id}
+            setSingleAnswer={setSingleAnswer}
+            source={question.datasource}
+          />
+        );
+      }
     case "TEXT":
     default:
       return (
@@ -174,7 +204,9 @@ export function CurrentQuestion({
           <span>Type your answer</span>
           <input
             name={`question-${question.id}`}
-            onChange={(event) => setSingleAnswer(question.id, event.target.value)}
+            onChange={(event) =>
+              setSingleAnswer(question.id, event.target.value)
+            }
             required
             type="text"
             value={typeof answer === "string" ? answer : ""}

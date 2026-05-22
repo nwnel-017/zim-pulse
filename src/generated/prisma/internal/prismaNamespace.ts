@@ -1184,6 +1184,8 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 
 export const SurveyQuestionScalarFieldEnum = {
   id: 'id',
+  sortOrder: 'sortOrder',
+  required: 'required',
   prompt: 'prompt',
   type: 'type',
   datasource: 'datasource',
@@ -1312,6 +1314,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'SurveyQuestionType'
  */
 export type EnumSurveyQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SurveyQuestionType'>
@@ -1336,20 +1352,6 @@ export type EnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> = FieldRefIn
  * Reference to a field of type 'SurveyQuestionDataSource[]'
  */
 export type ListEnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SurveyQuestionDataSource[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 

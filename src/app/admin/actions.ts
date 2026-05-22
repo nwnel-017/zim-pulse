@@ -2,10 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/app/admin/action-state";
-import { SurveyQuestionType } from "@/generated/prisma/enums";
+import {
+  SurveyQuestionType,
+} from "@/generated/prisma/enums";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
-import { sanitizeTextInput } from "@/utils/validation/sanitize-input";
+import {
+  sanitizeDataSource,
+  sanitizeTextInput,
+} from "@/utils/validation/sanitize-input";
 
 const surveyQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set(
   Object.values(SurveyQuestionType),
@@ -17,11 +22,14 @@ const selectableQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set([
 ]);
 
 function createQuestionError(message: string) {
-  return { success: false, error: message };
+  return { success: false, error: message, resetKey: "initial" };
 }
 
 function createQuestionSuccess(): ActionState {
-  return { success: true, error: null };
+  return {
+    success: true,
+    error: null,
+  };
 }
 
 function createOptionValue(label: string) {
@@ -39,6 +47,7 @@ export async function createSurveyQuestion(
 
   const promptValue = formData.get("prompt");
   const typeValue = formData.get("type");
+  const dataSourceValue = formData.get("datasource");
 
   if (!promptValue || typeof promptValue !== "string") {
     return createQuestionError("Question prompt is required.");
@@ -65,11 +74,20 @@ export async function createSurveyQuestion(
   }
 
   const questionType = type as SurveyQuestionType;
+  const dataSourceResult = sanitizeDataSource(dataSourceValue);
   const optionLabels = formData
     .getAll("optionLabel")
     .filter((value): value is string => typeof value === "string")
     .map((value) => value.trim())
     .filter(Boolean);
+
+  if (questionType === SurveyQuestionType.SEARCH_SELECT) {
+    if (!dataSourceResult.success) {
+      return createQuestionError(
+        dataSourceResult.error || "Select a valid data source.",
+      );
+    }
+  }
 
   if (selectableQuestionTypes.has(questionType) && !optionLabels.length) {
     return createQuestionError(
@@ -116,6 +134,10 @@ export async function createSurveyQuestion(
               create: comboOptions,
             }
           : undefined,
+        datasource:
+          questionType === SurveyQuestionType.SEARCH_SELECT
+            ? dataSourceResult.value
+            : null,
         prompt,
         type: questionType,
       },
@@ -171,7 +193,10 @@ export async function updateSurveyQuestion(
   });
 
   if (!result.count) {
-    return { success: false, error: "Survey question not found." };
+    return {
+      success: false,
+      error: "Survey question not found.",
+    };
   }
 
   revalidatePath("/admin");
@@ -189,7 +214,10 @@ export async function deleteSurveyQuestion(
   const questionIdResult = sanitizeTextInput(questionIdValue);
 
   if (!questionIdResult.success || !questionIdResult.value) {
-    return { success: false, error: "Invalid question ID." };
+    return {
+      success: false,
+      error: "Invalid question ID.",
+    };
   }
 
   if (questionIdResult.value.length > maxLength) {
@@ -204,7 +232,10 @@ export async function deleteSurveyQuestion(
   });
 
   if (!result.count) {
-    return { success: false, error: "Survey question not found." };
+    return {
+      success: false,
+      error: "Survey question not found.",
+    };
   }
 
   revalidatePath("/admin");
