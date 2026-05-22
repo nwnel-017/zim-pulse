@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
+import { surveySearchSchema } from "@/app/api/survey-search/schema";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
-import {
-  sanitizeDataSource,
-  sanitizeTextInput,
-} from "@/utils/validation/sanitize-input";
+import { getFirstZodIssueMessage } from "@/utils/validation/zod-helpers";
 
-const MIN_QUERY_LENGTH = 2;
-const MAX_QUERY_LENGTH = 100;
 const RESULT_LIMIT = 10;
 
 function createBadRequest(message: string) {
@@ -21,28 +17,18 @@ export async function GET(request: Request) {
   console.log("calling survey search route");
 
   const { searchParams } = new URL(request.url);
-  const sourceResult = sanitizeDataSource(searchParams.get("source"));
-  const queryResult = sanitizeTextInput(searchParams.get("q"));
+  const validationResult = surveySearchSchema.safeParse({
+    q: searchParams.get("q"),
+    source: searchParams.get("source"),
+  });
 
-  if (!sourceResult.success) {
-    return createBadRequest(sourceResult.error || "Invalid data source.");
+  if (!validationResult.success) {
+    return createBadRequest(getFirstZodIssueMessage(validationResult.error));
   }
 
-  if (!queryResult.success) {
-    return createBadRequest("Enter at least 2 characters to search.");
-  }
+  const { q: query, source } = validationResult.data;
 
-  if (queryResult.value.length < MIN_QUERY_LENGTH) {
-    return createBadRequest("Enter at least 2 characters to search.");
-  }
-
-  if (queryResult.value.length > MAX_QUERY_LENGTH) {
-    return createBadRequest("Search must be under 100 characters.");
-  }
-
-  const query = queryResult.value;
-
-  switch (sourceResult.value) {
+  switch (source) {
     case SurveyQuestionDataSource.COUNTRY: {
       const countries = await prisma.country.findMany({
         orderBy: {

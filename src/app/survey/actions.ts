@@ -3,11 +3,14 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { SurveyActionState } from "@/app/survey/action-state";
+import {
+  surveyCheckboxAnswersSchema,
+  surveyTextAnswerSchema,
+} from "@/app/survey/schemas";
 import { SurveyQuestionType } from "@/generated/prisma/enums";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
-import { sanitizeTextInput } from "@/utils/validation/sanitize-input";
 
 const selectableQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set([
   SurveyQuestionType.DROPDOWN,
@@ -41,15 +44,16 @@ export async function submitSurveyResponses(
       const fieldName = `question-${question.id}`;
 
       if (question.type === SurveyQuestionType.CHECKBOX) {
-        const values = formData
-          .getAll(fieldName)
-          .filter((value): value is string => typeof value === "string")
-          .map((value) => value.trim())
-          .filter(Boolean);
+        const validationResult = surveyCheckboxAnswersSchema.safeParse(
+          formData.getAll(fieldName),
+        );
 
-        if (!values.length) {
+        if (!validationResult.success) {
+          console.log("zod validation failed on form");
           throw new Error(`A response is required for "${question.prompt}".`);
         }
+
+        const values = validationResult.data;
 
         const allowedValues = new Set(
           question.comboOptions.map((option) => option.label),
@@ -70,19 +74,16 @@ export async function submitSurveyResponses(
         }));
       }
 
-      let maxLength = 5000;
-      const rawValue = formData.get(fieldName);
-      const answerResult = sanitizeTextInput(rawValue);
+      const validationResult = surveyTextAnswerSchema.safeParse(
+        formData.get(fieldName),
+      );
 
-      if (!answerResult.success || !answerResult.value) {
+      if (!validationResult.success) {
+        console.log("zod validation failed");
         throw new Error("Invalid answer.");
       }
 
-      if (answerResult.value.length > maxLength) {
-        throw new Error("Answer is too long.");
-      }
-
-      const answer = answerResult.value;
+      const answer = validationResult.data;
 
       if (question.type === SurveyQuestionType.BOOLEAN) {
         if (!booleanQuestionValues.has(answer)) {

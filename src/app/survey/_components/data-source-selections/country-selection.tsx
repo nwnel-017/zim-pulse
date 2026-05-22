@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type {
+  SetSingleSurveyAnswer,
+  SurveySearchResponse,
+  SurveySearchResult,
+} from "@/types/survey";
 import styles from "./data-selection.module.css";
-
-type SearchResult = {
-  id: string;
-  label: string;
-  meta: string;
-  value: string;
-};
 
 type CountrySelectionProps = {
   answer: string;
   questionId: string;
-  setSingleAnswer: (questionId: string, value: string) => void;
+  setSingleAnswer: SetSingleSurveyAnswer;
 };
 
 export default function CountrySelection({
@@ -22,7 +20,7 @@ export default function CountrySelection({
   setSingleAnswer,
 }: CountrySelectionProps) {
   const [query, setQuery] = useState(answer);
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SurveySearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
@@ -47,10 +45,7 @@ export default function CountrySelection({
           },
         );
 
-        const payload = (await response.json()) as {
-          message?: string;
-          results?: SearchResult[];
-        };
+        const payload = (await response.json()) as SurveySearchResponse;
 
         if (!response.ok) {
           throw new Error(payload.message || "Unable to search countries.");
@@ -81,7 +76,7 @@ export default function CountrySelection({
     };
   }, [query]);
 
-  function handleSelect(result: SearchResult) {
+  function handleSelect(result: SurveySearchResult) {
     setQuery("");
     setResults([]);
     setSearchError(null);

@@ -22,6 +22,18 @@ export default async function AdminPage() {
       },
     }),
     prisma.surveyQuestion.findMany({
+      include: {
+        comboOptions: {
+          orderBy: [
+            {
+              sortOrder: "asc",
+            },
+            {
+              createdAt: "asc",
+            },
+          ],
+        },
+      },
       orderBy: {
         createdAt: "asc",
       },
@@ -70,8 +82,13 @@ export default async function AdminPage() {
                   <p className="admin-question-prompt">{question.prompt}</p>
                   <div className="admin-question-actions">
                     <SurveyQuestionEditor
+                      comboOptions={question.comboOptions.map((option) => ({
+                        id: option.id,
+                        label: option.label,
+                      }))}
                       prompt={question.prompt}
                       questionId={question.id}
+                      type={question.type}
                     />
 
                     <DeleteSurveyQuestionForm questionId={question.id} />

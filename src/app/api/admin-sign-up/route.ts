@@ -1,16 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { authPool } from "@/lib/prisma/db";
-import { sanitizeTextInput } from "@/utils/validation/sanitize-input";
-
-type AdminSignUpPayload = {
-  email?: unknown;
-  name?: unknown;
-  password?: unknown;
-  signupCode?: unknown;
-};
-
-// this is wrong
+import { adminSignUpSchema } from "@/app/api/admin-sign-up/schema";
+import { getFirstZodIssueMessage } from "@/utils/validation/zod-helpers";
 
 function toErrorMessage(error: unknown) {
   if (
@@ -35,9 +27,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const payload = (await request
-    .json()
-    .catch(() => null)) as AdminSignUpPayload | null;
+  const payload = await request.json().catch(() => null);
 
   if (!payload) {
     return NextResponse.json(
@@ -47,29 +37,16 @@ export async function POST(request: Request) {
   }
 
   try {
-    const name = sanitizeTextInput(payload.name, {
-      fieldName: "Name",
-      maxLength: 120,
-    });
-    const email = sanitizeTextInput(payload.email, {
-      fieldName: "Email",
-      maxLength: 320,
-    });
-    const signupCode = sanitizeTextInput(payload.signupCode, {
-      fieldName: "Admin signup code",
-      maxLength: 200,
-    });
-    const password =
-      typeof payload.password === "string" && payload.password.length > 0
-        ? payload.password
-        : "";
+    const validationResult = adminSignUpSchema.safeParse(payload);
 
-    if (!password) {
+    if (!validationResult.success) {
       return NextResponse.json(
-        { message: "Password is required." },
+        { message: getFirstZodIssueMessage(validationResult.error) },
         { status: 400 },
       );
     }
+
+    const { email, name, password, signupCode } = validationResult.data;
 
     if (signupCode !== expectedSignupCode) {
       return NextResponse.json(

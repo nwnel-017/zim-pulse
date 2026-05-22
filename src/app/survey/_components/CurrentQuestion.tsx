@@ -1,25 +1,17 @@
 import styles from "@/app/survey/_components/survey-flow.module.css";
+import type {
+  FrontendSurveyQuestion,
+  SetSingleSurveyAnswer,
+  SurveyAnswerValue,
+  ToggleCheckboxSurveyAnswer,
+} from "@/types/survey";
 import DataSelection from "./data-source-selections/data-selection";
-import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
-
-type SurveyQuestionOption = {
-  id: string;
-  label: string;
-};
-
-export type SurveyQuestion = {
-  comboOptions: SurveyQuestionOption[];
-  id: string;
-  prompt: string;
-  type: string;
-  datasource: SurveyQuestionDataSource | null;
-};
 
 type CurrentQuestionProps = {
-  question: SurveyQuestion;
-  answer: string | string[];
-  setSingleAnswer: (questionId: string, value: string) => void;
-  toggleCheckboxAnswer: (questionId: string, value: string) => void;
+  answer: SurveyAnswerValue;
+  question: FrontendSurveyQuestion;
+  setSingleAnswer: SetSingleSurveyAnswer;
+  toggleCheckboxAnswer: ToggleCheckboxSurveyAnswer;
 };
 
 export function CurrentQuestion({

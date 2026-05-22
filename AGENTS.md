@@ -21,6 +21,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Scripts You Can Run
 
+- generic get content / list content scripts
 - npm run dev
 - npm run lint
 - npm run build
@@ -30,5 +31,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 - Before adding files or directories, please look at the project structure and match the same structure
 - When creating a component - use css modules for scoped component styles
+
+## Project structure
+
+- I am structuring my project with a features based directory
+- components that are feature specific are put inside the relevant sub-directory (ex: app/admin/\_components)
+- if a component is truly reusable (ex: nav-bar), then put it in src/components
 
  <!-- END:nextjs-agent-rules -->

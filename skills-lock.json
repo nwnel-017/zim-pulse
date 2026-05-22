@@ -18,6 +18,12 @@
       "sourceType": "github",
       "skillPath": "prisma-postgres/SKILL.md",
       "computedHash": "fd8f16f26e2cce1dd3e8e7916dcddbffddf295003eba86141f53e9d2d9d2bc0c"
+    },
+    "zod-validation-utilities": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/zod-validation-utilities/SKILL.md",
+      "computedHash": "1cff327cbaa26c5e07d934a113557045f16392043692fa69ab664d5aa7944025"
     }
   }
 }

@@ -6,7 +6,7 @@ const validDataSources: ReadonlySet<SurveyQuestionDataSource> = new Set(
   Object.values(SurveyQuestionDataSource),
 );
 
-export function sanitizeTextInput(value: unknown) {
+export function sanitizeTextInput(value: unknown, maxLength: number) {
   if (typeof value !== "string") {
     return { success: false, error: "Input must be text.", value: "" };
   }
@@ -18,6 +18,14 @@ export function sanitizeTextInput(value: unknown) {
 
   if (!sanitizedValue) {
     return { success: false, error: `Invalid characters.`, value: "" };
+  }
+
+  if (sanitizedValue.length > maxLength) {
+    return {
+      success: false,
+      error: `Input must be less than ${maxLength} characters.`,
+      value: "",
+    };
   }
 
   return { success: true, error: null, value: sanitizedValue };

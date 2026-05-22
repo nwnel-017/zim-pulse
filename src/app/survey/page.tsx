@@ -3,6 +3,7 @@ import { submitSurveyResponses } from "@/app/survey/actions";
 import { SurveyFlow } from "@/app/survey/_components/survey-flow";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
+import type { FrontendSurveyQuestion } from "@/types/survey";
 
 export default async function SurveyPage() {
   const session = await requireSurveySession();
@@ -12,7 +13,8 @@ export default async function SurveyPage() {
     redirect("/dashboard");
   }
 
-  const serializedQuestions = questions.map((question) => ({
+  const serializedQuestions: FrontendSurveyQuestion[] = questions.map(
+    (question) => ({
     comboOptions: question.comboOptions.map((option) => ({
       id: option.id,
       label: option.label,
@@ -21,7 +23,8 @@ export default async function SurveyPage() {
     prompt: question.prompt,
     type: question.type,
     datasource: question?.datasource,
-  }));
+    }),
+  );
 
   return (
     <main className="app-shell">

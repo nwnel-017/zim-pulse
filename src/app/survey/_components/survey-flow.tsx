@@ -8,9 +8,9 @@ import {
 } from "@/app/survey/action-state";
 import {
   CurrentQuestion,
-  type SurveyQuestion,
 } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/app/survey/_components/survey-flow.module.css";
+import type { FrontendSurveyQuestion, SurveyAnswers } from "@/types/survey";
 
 type SurveyFlowProps = {
   action: (
@@ -18,11 +18,9 @@ type SurveyFlowProps = {
     formData: FormData,
   ) => Promise<SurveyActionState>;
   questionCount: number;
-  questions: SurveyQuestion[];
+  questions: FrontendSurveyQuestion[];
   userName: string;
 };
-
-type SurveyAnswers = Record<string, string | string[]>;
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -83,7 +81,7 @@ export function SurveyFlow({
     });
   }
 
-  function hasAnswer(question: SurveyQuestion) {
+  function hasAnswer(question: FrontendSurveyQuestion) {
     const answer = answers[question.id];
 
     if (Array.isArray(answer)) {
