@@ -1,8 +1,8 @@
-import { DeleteSurveyQuestionForm } from "@/components/admin/delete-survey-question-form";
-import { SurveyQuestionCreator } from "@/components/admin/survey-question-creator";
-import { SurveyQuestionEditor } from "@/components/admin/survey-question-editor";
-import { SignOutButton } from "@/components/auth/sign-out-button";
 import { createSurveyQuestion } from "@/app/admin/actions";
+import { DeleteSurveyQuestionForm } from "@/app/admin/_components/delete-survey-question-form";
+import { SurveyQuestionCreator } from "@/app/admin/_components/survey-question-creator";
+import { SurveyQuestionEditor } from "@/app/admin/_components/survey-question-editor";
+import { SignOutButton } from "@/app/_components/auth/sign-out-button";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";

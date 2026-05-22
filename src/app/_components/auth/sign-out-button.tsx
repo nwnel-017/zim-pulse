@@ -20,7 +20,12 @@ export function SignOutButton({ redirectTo }: SignOutButtonProps) {
   }
 
   return (
-    <button className="auth-link-button" disabled={pending} onClick={handleClick} type="button">
+    <button
+      className="auth-link-button"
+      disabled={pending}
+      onClick={handleClick}
+      type="button"
+    >
       {pending ? "Signing out..." : "Sign out"}
     </button>
   );

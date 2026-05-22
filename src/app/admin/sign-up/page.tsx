@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AdminSignUpForm } from "@/components/auth/admin-sign-up-form";
+import { AdminSignUpForm } from "@/app/admin/_components/admin-sign-up-form";
 
 export default function AdminSignUpPage() {
   return (

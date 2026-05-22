@@ -38,7 +38,8 @@ export function AdminSignInForm() {
         <p className="eyebrow">Admin Access</p>
         <h1>Sign in with email and password</h1>
         <p>
-          Admin accounts are expected to be created separately. Public email registration is disabled.
+          Admin accounts are expected to be created separately. Public email
+          registration is disabled.
         </p>
       </div>
 

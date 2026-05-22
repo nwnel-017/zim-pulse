@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EmailAuthForm } from "@/components/auth/email-auth-form";
+import { EmailAuthForm } from "@/app/_components/auth/email-auth-form";
 
 export default function UserSignUpPage() {
   return (

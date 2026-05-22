@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserSignInForm } from "@/components/auth/email-auth-form";
+import { UserSignInForm } from "@/app/_components/auth/email-auth-form";
 
 export default function UserSignInPage() {
   return (

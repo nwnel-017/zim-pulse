@@ -1,4 +1,4 @@
-import { SignOutButton } from "@/components/auth/sign-out-button";
+import { SignOutButton } from "@/app/_components/auth/sign-out-button";
 import { requireUserSession } from "@/lib/auth/middleware";
 
 export default async function DashboardPage() {

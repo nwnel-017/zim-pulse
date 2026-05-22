@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { submitSurveyResponses } from "@/app/survey/actions";
-import { SurveyFlow } from "@/components/survey/survey-flow";
+import { SurveyFlow } from "@/app/survey/_components/survey-flow";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
 

@@ -1,4 +1,4 @@
-import styles from "@/components/survey/survey-flow.module.css";
+import styles from "@/app/survey/_components/survey-flow.module.css";
 import DataSelection from "./data-source-selections/data-selection";
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
 

@@ -20,7 +20,7 @@ export function SurveyQuestionEditor({
     initialActionState,
   );
   const [isOpen, setIsOpen] = useState(false);
- 
+
   useEffect(() => {
     if (!state.success) {
       return;

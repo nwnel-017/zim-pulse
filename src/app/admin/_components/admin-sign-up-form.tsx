@@ -34,7 +34,9 @@ export function AdminSignUpForm() {
       }),
     });
 
-    const result = (await response.json().catch(() => null)) as AdminSignUpResponse | null;
+    const result = (await response.json().catch(() => null)) as
+      | AdminSignUpResponse
+      | null;
 
     if (!response.ok) {
       setError(result?.message ?? "Unable to create the admin account.");
@@ -52,7 +54,8 @@ export function AdminSignUpForm() {
         <p className="eyebrow">Temporary Admin Access</p>
         <h1>Create an admin account</h1>
         <p>
-          This temporary flow creates an email-and-password account, then promotes it to the
+          This temporary flow creates an email-and-password account, then
+          promotes it to the
           <code> admin </code>
           role on the server.
         </p>

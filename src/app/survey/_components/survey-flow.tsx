@@ -10,7 +10,7 @@ import {
   CurrentQuestion,
   type SurveyQuestion,
 } from "@/app/survey/_components/CurrentQuestion";
-import styles from "@/components/survey/survey-flow.module.css";
+import styles from "@/app/survey/_components/survey-flow.module.css";
 
 type SurveyFlowProps = {
   action: (

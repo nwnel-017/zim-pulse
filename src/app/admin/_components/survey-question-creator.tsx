@@ -9,7 +9,7 @@ import {
   SurveyQuestionType,
 } from "@/generated/prisma/enums";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
-import styles from "@/components/admin/survey-question-creator.module.css";
+import styles from "@/app/admin/_components/survey-question-creator.module.css";
 import DataSourceOptions from "./data-source-options";
 
 type SurveyQuestionCreatorProps = {
