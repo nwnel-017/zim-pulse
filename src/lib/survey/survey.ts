@@ -14,9 +14,14 @@ export async function getSurveyQuestions() {
         ],
       },
     },
-    orderBy: {
-      createdAt: "asc",
-    },
+    orderBy: [
+      {
+        sortOrder: "asc",
+      },
+      {
+        createdAt: "asc",
+      },
+    ],
   });
 }
 
@@ -44,5 +49,5 @@ export async function getIncompleteSurveyQuestions(userId: string) {
 export async function userNeedsSurvey(userId: string) {
   const incompleteQuestions = await getIncompleteSurveyQuestions(userId);
 
-  return incompleteQuestions.length > 0;
+  return incompleteQuestions.some((question) => question.required);
 }

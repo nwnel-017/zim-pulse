@@ -11,6 +11,7 @@ import { SurveyQuestionType } from "@/generated/prisma/enums";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
+import type { SurveyAnswers } from "@/types/survey";
 
 const selectableQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set([
   SurveyQuestionType.DROPDOWN,
@@ -23,9 +24,20 @@ function createSurveyActionError(error: string): SurveyActionState {
   return { success: false, error };
 }
 
+function isBlankOptionalAnswer(answer: SurveyAnswers[string] | undefined) {
+  if (typeof answer === "undefined") {
+    return true;
+  }
+
+  if (Array.isArray(answer)) {
+    return answer.length === 0;
+  }
+
+  return answer.trim().length === 0;
+}
+
 export async function submitSurveyResponses(
-  _previousState: SurveyActionState,
-  formData: FormData,
+  surveyResponses: SurveyAnswers,
 ): Promise<SurveyActionState> {
   const session = await requireSurveySession();
   const questions = await getIncompleteSurveyQuestions(session.user.id);
@@ -41,11 +53,15 @@ export async function submitSurveyResponses(
   }>;
   try {
     responsesToCreate = questions.flatMap((question) => {
-      const fieldName = `question-${question.id}`;
+      const submittedAnswer = surveyResponses[question.id];
+
+      if (!question.required && isBlankOptionalAnswer(submittedAnswer)) {
+        return [];
+      }
 
       if (question.type === SurveyQuestionType.CHECKBOX) {
         const validationResult = surveyCheckboxAnswersSchema.safeParse(
-          formData.getAll(fieldName),
+          submittedAnswer,
         );
 
         if (!validationResult.success) {
@@ -75,7 +91,7 @@ export async function submitSurveyResponses(
       }
 
       const validationResult = surveyTextAnswerSchema.safeParse(
-        formData.get(fieldName),
+        submittedAnswer,
       );
 
       if (!validationResult.success) {
@@ -122,9 +138,11 @@ export async function submitSurveyResponses(
     }
   }
 
-  await prisma.surveyResponse.createMany({
-    data: responsesToCreate,
-  });
+  if (responsesToCreate.length > 0) {
+    await prisma.surveyResponse.createMany({
+      data: responsesToCreate,
+    });
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/survey");

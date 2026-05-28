@@ -56,6 +56,8 @@ export async function createSurveyQuestion(
   }
 
   try {
+    const nextSortOrder = await prisma.surveyQuestion.count();
+
     await prisma.surveyQuestion.create({
       data: {
         comboOptions: comboOptions.length
@@ -66,6 +68,7 @@ export async function createSurveyQuestion(
         datasource:
           type === SurveyQuestionType.SEARCH_SELECT ? datasource : null,
         prompt,
+        sortOrder: nextSortOrder,
         type,
       },
     });
@@ -86,13 +89,15 @@ export async function updateSurveyQuestion(
   const validationResult = updateSurveyQuestionSchema.safeParse({
     prompt: formData.get("prompt"),
     questionId: formData.get("questionId"),
+    required: formData.get("required") === "true",
+    sortOrder: formData.get("sortOrder"),
   });
 
   if (!validationResult.success) {
     return { success: false, error: "Invalid input." };
   }
 
-  const { prompt, questionId } = validationResult.data;
+  const { prompt, questionId, required, sortOrder } = validationResult.data;
 
   const result = await prisma.surveyQuestion.updateMany({
     where: {
@@ -100,6 +105,8 @@ export async function updateSurveyQuestion(
     },
     data: {
       prompt,
+      required,
+      sortOrder,
     },
   });
 

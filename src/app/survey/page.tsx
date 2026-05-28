@@ -15,14 +15,15 @@ export default async function SurveyPage() {
 
   const serializedQuestions: FrontendSurveyQuestion[] = questions.map(
     (question) => ({
-    comboOptions: question.comboOptions.map((option) => ({
-      id: option.id,
-      label: option.label,
-    })),
-    id: question.id,
-    prompt: question.prompt,
-    type: question.type,
-    datasource: question?.datasource,
+      comboOptions: question.comboOptions.map((option) => ({
+        id: option.id,
+        label: option.label,
+      })),
+      datasource: question.datasource,
+      id: question.id,
+      prompt: question.prompt,
+      required: question.required,
+      type: question.type,
     }),
   );
 

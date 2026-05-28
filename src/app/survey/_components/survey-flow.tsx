@@ -1,36 +1,20 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
-import {
-  initialSurveyActionState,
-  type SurveyActionState,
-} from "@/app/survey/action-state";
-import {
-  CurrentQuestion,
-} from "@/app/survey/_components/CurrentQuestion";
+import { useState, useTransition } from "react";
+import type { SurveyActionState } from "@/app/survey/action-state";
+import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/app/survey/_components/survey-flow.module.css";
-import type { FrontendSurveyQuestion, SurveyAnswers } from "@/types/survey";
+import {
+  type FrontendSurveyQuestion,
+  type SurveyAnswers,
+} from "@/types/survey";
 
 type SurveyFlowProps = {
-  action: (
-    previousState: SurveyActionState,
-    formData: FormData,
-  ) => Promise<SurveyActionState>;
+  action: (surveyResponses: SurveyAnswers) => Promise<SurveyActionState>;
   questionCount: number;
   questions: FrontendSurveyQuestion[];
   userName: string;
 };
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button className="auth-button" disabled={pending} type="submit">
-      {pending ? "Submitting..." : "Submit survey"}
-    </button>
-  );
-}
 
 export function SurveyFlow({
   action,
@@ -38,9 +22,9 @@ export function SurveyFlow({
   questions,
   userName,
 }: SurveyFlowProps) {
-  const [state, formAction] = useActionState(action, initialSurveyActionState);
+  const [pending, startTransition] = useTransition();
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<SurveyAnswers>(() =>
+  const [surveyResponses, setSurveyResponses] = useState<SurveyAnswers>(() =>
     Object.fromEntries(
       questions.map((question) => [
         question.id,
@@ -48,6 +32,10 @@ export function SurveyFlow({
       ]),
     ),
   );
+  const [state, setState] = useState<SurveyActionState>({
+    success: false,
+    error: null,
+  });
   const [error, setError] = useState<string | null>(null);
 
   const currentQuestion = questions[currentStep];
@@ -58,31 +46,15 @@ export function SurveyFlow({
     return null;
   }
 
-  function setSingleAnswer(questionId: string, value: string) {
-    setAnswers((currentAnswers) => ({
-      ...currentAnswers,
+  function addResponse(questionId: string, value: SurveyAnswers[string]) {
+    setSurveyResponses((currentResponses) => ({
+      ...currentResponses,
       [questionId]: value,
     }));
   }
 
-  function toggleCheckboxAnswer(questionId: string, value: string) {
-    setAnswers((currentAnswers) => {
-      const existingValue = currentAnswers[questionId];
-      const currentSelection = Array.isArray(existingValue)
-        ? existingValue
-        : [];
-
-      return {
-        ...currentAnswers,
-        [questionId]: currentSelection.includes(value)
-          ? currentSelection.filter((item) => item !== value)
-          : [...currentSelection, value],
-      };
-    });
-  }
-
   function hasAnswer(question: FrontendSurveyQuestion) {
-    const answer = answers[question.id];
+    const answer = surveyResponses[question.id];
 
     if (Array.isArray(answer)) {
       return answer.length > 0;
@@ -91,8 +63,19 @@ export function SurveyFlow({
     return typeof answer === "string" && answer.trim().length > 0;
   }
 
+  function canLeaveQuestion(question: FrontendSurveyQuestion) {
+    return !question.required || hasAnswer(question);
+  }
+
+  function submitResponses(nextResponses: SurveyAnswers) {
+    startTransition(async () => {
+      const nextState = await action(nextResponses);
+      setState(nextState);
+    });
+  }
+
   function moveToNextStep() {
-    if (!hasAnswer(currentQuestion)) {
+    if (!canLeaveQuestion(currentQuestion)) {
       setError("Complete this question before moving to the next step.");
       return;
     }
@@ -106,8 +89,35 @@ export function SurveyFlow({
     setCurrentStep((step) => step - 1);
   }
 
+  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!canLeaveQuestion(currentQuestion)) {
+      setError("Complete this question before submitting the survey.");
+      return;
+    }
+
+    setError(null);
+    submitResponses(surveyResponses);
+  }
+
+  function handleSkipQuestion() {
+    if (currentQuestion.required) {
+      return;
+    }
+
+    setError(null);
+
+    if (isLastStep) {
+      submitResponses(surveyResponses);
+      return;
+    }
+
+    setCurrentStep((step) => step + 1);
+  }
+
   return (
-    <form action={formAction} className={styles.surveyFlow}>
+    <form className={styles.surveyFlow} onSubmit={handleSubmit}>
       <div className={styles.copy}>
         <p className="eyebrow">Survey</p>
         <h1>Complete your profile before entering the dashboard.</h1>
@@ -135,10 +145,9 @@ export function SurveyFlow({
       <div className={styles.questionCard}>
         <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
         <CurrentQuestion
-          answer={answers[currentQuestion.id]}
+          addResponse={addResponse}
+          answer={surveyResponses[currentQuestion.id]}
           question={currentQuestion}
-          setSingleAnswer={setSingleAnswer}
-          toggleCheckboxAnswer={toggleCheckboxAnswer}
         />
       </div>
 
@@ -150,18 +159,32 @@ export function SurveyFlow({
       <div className={styles.actions}>
         <button
           className={styles.secondaryAction}
-          disabled={currentStep === 0}
+          disabled={currentStep === 0 || pending}
           onClick={moveToPreviousStep}
           type="button"
         >
           Previous
         </button>
 
+        {!currentQuestion.required && !isLastStep ? (
+          <button
+            className={styles.secondaryAction}
+            disabled={pending}
+            onClick={handleSkipQuestion}
+            type="button"
+          >
+            Skip
+          </button>
+        ) : null}
+
         {isLastStep ? (
-          <SubmitButton />
+          <button className="auth-button" disabled={pending} type="submit">
+            {pending ? "Submitting..." : "Submit survey"}
+          </button>
         ) : (
           <button
             className="auth-button"
+            disabled={pending}
             onClick={moveToNextStep}
             type="button"
           >

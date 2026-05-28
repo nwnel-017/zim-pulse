@@ -290,6 +290,12 @@ code {
   line-height: 1;
 }
 
+.admin-question-order {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 .admin-stat-copy,
 .admin-empty-state {
   color: var(--muted);

@@ -95,6 +95,20 @@ export const updateSurveyQuestionSchema = z.object({
   questionId: normalizedText({
     max: 191,
   }),
+  required: z.boolean(),
+  sortOrder: z.coerce
+    .number({
+      error: "Question order must be a valid number.",
+    })
+    .int({
+      error: "Question order must be a whole number.",
+    })
+    .min(0, {
+      error: "Question order cannot be negative.",
+    })
+    .max(10000, {
+      error: "Question order is too large.",
+    }),
 });
 
 export const deleteSurveyQuestionSchema = z.object({

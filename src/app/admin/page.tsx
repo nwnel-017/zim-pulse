@@ -6,6 +6,7 @@ import { SignOutButton } from "@/app/_components/auth/sign-out-button";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
+import { getSurveyQuestions } from "@/lib/survey/survey";
 
 export default async function AdminPage() {
   const session = await requireAdminSession();
@@ -21,23 +22,7 @@ export default async function AdminPage() {
         ],
       },
     }),
-    prisma.surveyQuestion.findMany({
-      include: {
-        comboOptions: {
-          orderBy: [
-            {
-              sortOrder: "asc",
-            },
-            {
-              createdAt: "asc",
-            },
-          ],
-        },
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    }),
+    getSurveyQuestions(),
   ]);
 
   return (
@@ -76,8 +61,16 @@ export default async function AdminPage() {
             <ol className="admin-question-list">
               {surveyQuestions.map((question) => (
                 <li className="admin-question-card" key={question.id}>
+                  <p className="admin-question-order">
+                    Question order: {question.sortOrder}
+                  </p>
                   <p className="admin-question-type">
                     {surveyQuestionTypeLabels[question.type]}
+                  </p>
+                  <p className="admin-question-type">
+                    {question.required
+                      ? "Required question"
+                      : "Optional question"}
                   </p>
                   <p className="admin-question-prompt">{question.prompt}</p>
                   <div className="admin-question-actions">
@@ -88,6 +81,8 @@ export default async function AdminPage() {
                       }))}
                       prompt={question.prompt}
                       questionId={question.id}
+                      required={question.required}
+                      sortOrder={question.sortOrder}
                       type={question.type}
                     />
 

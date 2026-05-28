@@ -1,36 +1,32 @@
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import type {
+  AddSurveyResponse,
   FrontendSurveyQuestion,
-  SetSingleSurveyAnswer,
   SurveyAnswerValue,
-  ToggleCheckboxSurveyAnswer,
 } from "@/types/survey";
 import DataSelection from "./data-source-selections/data-selection";
 
 type CurrentQuestionProps = {
+  addResponse: AddSurveyResponse;
   answer: SurveyAnswerValue;
   question: FrontendSurveyQuestion;
-  setSingleAnswer: SetSingleSurveyAnswer;
-  toggleCheckboxAnswer: ToggleCheckboxSurveyAnswer;
 };
 
 export function CurrentQuestion({
+  addResponse,
   question,
   answer,
-  setSingleAnswer,
-  toggleCheckboxAnswer,
 }: CurrentQuestionProps) {
+  const isRequired = question.required;
+
   switch (question.type) {
     case "TEXTAREA":
       return (
         <label className={styles.field}>
           <span>Type your answer</span>
           <textarea
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             value={typeof answer === "string" ? answer : ""}
           />
         </label>
@@ -40,11 +36,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Enter a number</span>
           <input
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             step="any"
             type="number"
             value={typeof answer === "string" ? answer : ""}
@@ -56,11 +49,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Email address</span>
           <input
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             type="email"
             value={typeof answer === "string" ? answer : ""}
           />
@@ -71,11 +61,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Select a date</span>
           <input
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             type="date"
             value={typeof answer === "string" ? answer : ""}
           />
@@ -86,11 +73,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Select one option</span>
           <select
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             value={typeof answer === "string" ? answer : ""}
           >
             <option value="">Choose an option</option>
@@ -112,11 +96,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Select one option</span>
           <select
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             value={typeof answer === "string" ? answer : ""}
           >
             <option value="">Choose an option</option>
@@ -132,11 +113,8 @@ export function CurrentQuestion({
             <label className={styles.optionLabel} key={option.id}>
               <input
                 checked={answer === option.label}
-                name={`question-${question.id}`}
-                onChange={(event) =>
-                  setSingleAnswer(question.id, event.target.value)
-                }
-                required
+                onChange={(event) => addResponse(question.id, event.target.value)}
+                required={isRequired}
                 type="radio"
                 value={option.label}
               />
@@ -155,15 +133,15 @@ export function CurrentQuestion({
         <div className={styles.optionList}>
           {question.comboOptions.map((option) => {
             const selectedValues = Array.isArray(answer) ? answer : [];
+            const nextValues = selectedValues.includes(option.label)
+              ? selectedValues.filter((item) => item !== option.label)
+              : [...selectedValues, option.label];
 
             return (
               <label className={styles.optionLabel} key={option.id}>
                 <input
                   checked={selectedValues.includes(option.label)}
-                  name={`question-${question.id}`}
-                  onChange={() =>
-                    toggleCheckboxAnswer(question.id, option.label)
-                  }
+                  onChange={() => addResponse(question.id, nextValues)}
                   type="checkbox"
                   value={option.label}
                 />
@@ -183,8 +161,8 @@ export function CurrentQuestion({
         return (
           <DataSelection
             answer={typeof answer === "string" ? answer : ""}
+            addResponse={addResponse}
             questionId={question.id}
-            setSingleAnswer={setSingleAnswer}
             source={question.datasource}
           />
         );
@@ -195,11 +173,8 @@ export function CurrentQuestion({
         <label className={styles.field}>
           <span>Type your answer</span>
           <input
-            name={`question-${question.id}`}
-            onChange={(event) =>
-              setSingleAnswer(question.id, event.target.value)
-            }
-            required
+            onChange={(event) => addResponse(question.id, event.target.value)}
+            required={isRequired}
             type="text"
             value={typeof answer === "string" ? answer : ""}
           />

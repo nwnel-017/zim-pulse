@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type {
-  SetSingleSurveyAnswer,
+  AddSurveyResponse,
   SurveySearchResponse,
   SurveySearchResult,
 } from "@/types/survey";
@@ -10,14 +10,14 @@ import styles from "./data-selection.module.css";
 
 type CountrySelectionProps = {
   answer: string;
+  addResponse: AddSurveyResponse;
   questionId: string;
-  setSingleAnswer: SetSingleSurveyAnswer;
 };
 
 export default function CountrySelection({
   answer,
+  addResponse,
   questionId,
-  setSingleAnswer,
 }: CountrySelectionProps) {
   const [query, setQuery] = useState(answer);
   const [results, setResults] = useState<SurveySearchResult[]>([]);
@@ -76,11 +76,12 @@ export default function CountrySelection({
     };
   }, [query]);
 
+  // Review - why is addResponse called in two places?
   function handleSelect(result: SurveySearchResult) {
     setQuery("");
     setResults([]);
     setSearchError(null);
-    setSingleAnswer(questionId, result.value);
+    addResponse(questionId, result.value);
   }
 
   return (
@@ -96,15 +97,13 @@ export default function CountrySelection({
             setResults([]);
             setIsLoading(false);
             setSearchError(null);
-            setSingleAnswer(questionId, "");
+            addResponse(questionId, "");
           }}
           placeholder="Start typing a country name"
           type="text"
           value={query}
         />
       </label>
-
-      <input name={`question-${questionId}`} type="hidden" value={answer} />
 
       {isLoading ? (
         <p className={styles.statusText}>Searching countries...</p>

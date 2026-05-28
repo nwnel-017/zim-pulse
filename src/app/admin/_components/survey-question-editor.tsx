@@ -15,6 +15,8 @@ type SurveyQuestionEditorProps = {
   comboOptions: SurveyQuestionOption[];
   prompt: string;
   questionId: string;
+  required: boolean;
+  sortOrder: number;
   type: SurveyQuestionType;
 };
 
@@ -86,6 +88,8 @@ export function SurveyQuestionEditor({
   comboOptions,
   prompt,
   questionId,
+  required,
+  sortOrder,
   type,
 }: SurveyQuestionEditorProps) {
   const router = useRouter();
@@ -135,6 +139,29 @@ export function SurveyQuestionEditor({
         <label className="auth-field">
           <span>Question prompt</span>
           <input defaultValue={prompt} name="prompt" required type="text" />
+        </label>
+
+        <label className="auth-field">
+          <span>Question order</span>
+          <input
+            defaultValue={sortOrder}
+            min="0"
+            name="sortOrder"
+            required
+            type="number"
+          />
+        </label>
+
+        <label className="auth-field">
+          <span>
+            <input
+              defaultChecked={required}
+              name="required"
+              type="checkbox"
+              value="true"
+            />{" "}
+            Required for users
+          </span>
         </label>
 
         <div className="admin-inline-actions">

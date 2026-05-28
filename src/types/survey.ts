@@ -13,6 +13,7 @@ export type FrontendSurveyQuestion = {
   datasource: SurveyQuestionDataSource | null;
   id: string;
   prompt: string;
+  required: boolean;
   type: SurveyQuestionType;
 };
 
@@ -20,14 +21,9 @@ export type SurveyAnswerValue = string | string[];
 
 export type SurveyAnswers = Record<string, SurveyAnswerValue>;
 
-export type SetSingleSurveyAnswer = (
+export type AddSurveyResponse = (
   questionId: string,
-  value: string,
-) => void;
-
-export type ToggleCheckboxSurveyAnswer = (
-  questionId: string,
-  value: string,
+  value: SurveyAnswerValue,
 ) => void;
 
 export type SurveySearchResult = {

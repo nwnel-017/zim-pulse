@@ -1,19 +1,19 @@
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
-import type { SetSingleSurveyAnswer } from "@/types/survey";
+import type { AddSurveyResponse } from "@/types/survey";
 import CitySelection from "./city-selection";
 import CountrySelection from "./country-selection";
 
 type DataSelectionProps = {
   answer: string;
+  addResponse: AddSurveyResponse;
   questionId: string;
-  setSingleAnswer: SetSingleSurveyAnswer;
   source: SurveyQuestionDataSource;
 };
 
 export default function DataSelection({
   answer,
+  addResponse,
   questionId,
-  setSingleAnswer,
   source,
 }: DataSelectionProps) {
   switch (source) {
@@ -21,16 +21,16 @@ export default function DataSelection({
       return (
         <CountrySelection
           answer={answer}
+          addResponse={addResponse}
           questionId={questionId}
-          setSingleAnswer={setSingleAnswer}
         />
       );
     case SurveyQuestionDataSource.CITY:
       return (
         <CitySelection
           answer={answer}
+          addResponse={addResponse}
           questionId={questionId}
-          setSingleAnswer={setSingleAnswer}
         />
       );
   }
