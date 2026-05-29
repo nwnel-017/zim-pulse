@@ -342,6 +342,12 @@ code {
   font-size: 1.05rem;
 }
 
+.admin-survey-email {
+  font-size: 1.05rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
 .admin-question-actions {
   display: grid;
   gap: 0.75rem;

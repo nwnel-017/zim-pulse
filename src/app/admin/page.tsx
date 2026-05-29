@@ -1,16 +1,11 @@
-import { createSurveyQuestion } from "@/app/admin/actions";
-import { DeleteSurveyQuestionForm } from "@/app/admin/_components/delete-survey-question-form";
-import { SurveyQuestionCreator } from "@/app/admin/_components/survey-question-creator";
-import { SurveyQuestionEditor } from "@/app/admin/_components/survey-question-editor";
+import Link from "next/link";
 import { SignOutButton } from "@/app/_components/auth/sign-out-button";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
-import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
-import { getSurveyQuestions } from "@/lib/survey/survey";
 
 export default async function AdminPage() {
   const session = await requireAdminSession();
-  const [userCount, surveyQuestions] = await Promise.all([
+  const [userCount, surveyQuestionCount] = await Promise.all([
     prisma.user.count({
       where: {
         OR: [
@@ -22,7 +17,7 @@ export default async function AdminPage() {
         ],
       },
     }),
-    getSurveyQuestions(),
+    prisma.surveyQuestion.count(),
   ]);
 
   return (
@@ -31,13 +26,23 @@ export default async function AdminPage() {
         <p className="eyebrow">Admin Console</p>
         <h1>{session.user.name}</h1>
         <p className="lead">
-          Review the current survey setup, add new survey questions, and monitor
-          how many non-admin users are in the app.
+          Monitor user activity and jump into the survey management pages when
+          you need to review submissions or edit questions.
         </p>
         <section className="admin-stat-grid" aria-label="Admin summary">
           <article className="admin-stat-card">
             <p className="admin-stat-label">Users in app</p>
             <strong className="admin-stat-value">{userCount}</strong>
+            <Link className="auth-link-button ghost-button" href="/admin/surveys">
+              View surveys
+            </Link>
+          </article>
+          <article className="admin-stat-card">
+            <p className="admin-stat-label">Survey questions</p>
+            <strong className="admin-stat-value">{surveyQuestionCount}</strong>
+            <Link className="auth-link-button ghost-button" href="/admin/questions">
+              View or edit questions
+            </Link>
           </article>
         </section>
         <dl className="session-list">
@@ -50,62 +55,6 @@ export default async function AdminPage() {
             <dd>{session.user.role}</dd>
           </div>
         </dl>
-
-        <section className="admin-section">
-          <div className="admin-section-copy">
-            <p className="eyebrow">Survey Builder</p>
-            <h2>All survey questions</h2>
-          </div>
-
-          {surveyQuestions.length ? (
-            <ol className="admin-question-list">
-              {surveyQuestions.map((question) => (
-                <li className="admin-question-card" key={question.id}>
-                  <p className="admin-question-order">
-                    Question order: {question.sortOrder}
-                  </p>
-                  <p className="admin-question-type">
-                    {surveyQuestionTypeLabels[question.type]}
-                  </p>
-                  <p className="admin-question-type">
-                    {question.required
-                      ? "Required question"
-                      : "Optional question"}
-                  </p>
-                  <p className="admin-question-prompt">{question.prompt}</p>
-                  <div className="admin-question-actions">
-                    <SurveyQuestionEditor
-                      comboOptions={question.comboOptions.map((option) => ({
-                        id: option.id,
-                        label: option.label,
-                      }))}
-                      prompt={question.prompt}
-                      questionId={question.id}
-                      required={question.required}
-                      sortOrder={question.sortOrder}
-                      type={question.type}
-                    />
-
-                    <DeleteSurveyQuestionForm questionId={question.id} />
-                  </div>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p className="admin-empty-state">
-              No survey questions have been added yet.
-            </p>
-          )}
-        </section>
-
-        <section className="admin-section">
-          <div className="admin-section-copy">
-            <p className="eyebrow">Add Question</p>
-            <h2>Create a survey question</h2>
-          </div>
-
-          <SurveyQuestionCreator action={createSurveyQuestion} />
-        </section>
 
         <SignOutButton redirectTo="/admin/sign-in" />
       </section>

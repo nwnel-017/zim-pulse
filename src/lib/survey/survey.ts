@@ -115,6 +115,49 @@ export async function getSurveyResponseSummary(userId: string) {
   };
 }
 
+export async function getAdminSurveyEntries() {
+  const surveyResponses = await prisma.surveyResponse.findMany({
+    orderBy: {
+      createdAt: "asc",
+    },
+    select: {
+      createdAt: true,
+      userId: true,
+      user: {
+        select: {
+          email: true,
+          role: true,
+        },
+      },
+    },
+  });
+
+  const entriesByUserId = new Map<
+    string,
+    {
+      email: string;
+      submittedAt: Date;
+      userId: string;
+    }
+  >();
+
+  for (const response of surveyResponses) {
+    if (response.user.role === "admin" || entriesByUserId.has(response.userId)) {
+      continue;
+    }
+
+    entriesByUserId.set(response.userId, {
+      email: response.user.email,
+      submittedAt: response.createdAt,
+      userId: response.userId,
+    });
+  }
+
+  return Array.from(entriesByUserId.values()).sort(
+    (left, right) => right.submittedAt.getTime() - left.submittedAt.getTime(),
+  );
+}
+
 export async function getEditableSurveyResponseQuestions(
   userId: string,
 ): Promise<EditableSurveyResponseQuestion[]> {
