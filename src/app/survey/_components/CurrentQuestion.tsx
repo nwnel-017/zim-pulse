@@ -2,6 +2,7 @@ import styles from "@/app/survey/_components/survey-flow.module.css";
 import type {
   AddSurveyResponse,
   FrontendSurveyQuestion,
+  SearchSelectAnswer,
   SurveyAnswerValue,
 } from "@/types/survey";
 import DataSelection from "./data-source-selections/data-selection";
@@ -18,6 +19,18 @@ export function CurrentQuestion({
   answer,
 }: CurrentQuestionProps) {
   const isRequired = question.required;
+  const searchSelectAnswer = isSearchSelectAnswer(answer)
+    ? answer
+    : {
+        label: "",
+        selectedId: null,
+      };
+
+  function isSearchSelectAnswer(
+    answer: SurveyAnswerValue,
+  ): answer is SearchSelectAnswer {
+    return !Array.isArray(answer) && typeof answer !== "string";
+  }
 
   switch (question.type) {
     case "TEXTAREA":
@@ -113,7 +126,9 @@ export function CurrentQuestion({
             <label className={styles.optionLabel} key={option.id}>
               <input
                 checked={answer === option.label}
-                onChange={(event) => addResponse(question.id, event.target.value)}
+                onChange={(event) =>
+                  addResponse(question.id, event.target.value)
+                }
                 required={isRequired}
                 type="radio"
                 value={option.label}
@@ -160,7 +175,7 @@ export function CurrentQuestion({
       if (question.datasource) {
         return (
           <DataSelection
-            answer={typeof answer === "string" ? answer : ""}
+            answer={searchSelectAnswer}
             addResponse={addResponse}
             questionId={question.id}
             source={question.datasource}

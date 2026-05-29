@@ -6,6 +6,7 @@ import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import {
   type FrontendSurveyQuestion,
+  type SearchSelectAnswer,
   type SurveyAnswers,
 } from "@/types/survey";
 
@@ -15,6 +16,21 @@ type SurveyFlowProps = {
   questions: FrontendSurveyQuestion[];
   userName: string;
 };
+
+function createInitialSurveyAnswer(question: FrontendSurveyQuestion) {
+  if (question.type === "CHECKBOX") {
+    return [];
+  }
+
+  if (question.type === "SEARCH_SELECT") {
+    return {
+      label: "",
+      selectedId: null,
+    } satisfies SearchSelectAnswer;
+  }
+
+  return "";
+}
 
 export function SurveyFlow({
   action,
@@ -28,7 +44,7 @@ export function SurveyFlow({
     Object.fromEntries(
       questions.map((question) => [
         question.id,
-        question.type === "CHECKBOX" ? [] : "",
+        createInitialSurveyAnswer(question),
       ]),
     ),
   );
@@ -60,7 +76,11 @@ export function SurveyFlow({
       return answer.length > 0;
     }
 
-    return typeof answer === "string" && answer.trim().length > 0;
+    if (typeof answer === "string") {
+      return answer.trim().length > 0;
+    }
+
+    return answer.label.trim().length > 0 && answer.selectedId !== null;
   }
 
   function canLeaveQuestion(question: FrontendSurveyQuestion) {

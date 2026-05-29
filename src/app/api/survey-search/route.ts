@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
 import { surveySearchSchema } from "@/app/api/survey-search/schema";
-import { requireSurveySession } from "@/lib/auth/middleware";
+import { requireParticipantSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { getFirstZodIssueMessage } from "@/utils/validation/zod-helpers";
 
@@ -12,7 +12,7 @@ function createBadRequest(message: string) {
 }
 
 export async function GET(request: Request) {
-  await requireSurveySession();
+  await requireParticipantSession();
 
   console.log("calling survey search route");
 

@@ -1,4 +1,12 @@
 import { prisma } from "@/lib/prisma/prisma";
+import {
+  SurveyQuestionDataSource,
+  SurveyQuestionType,
+} from "@/generated/prisma/enums";
+import type {
+  EditableSurveyResponseQuestion,
+  SurveyAnswerValue,
+} from "@/types/survey";
 
 export async function getSurveyQuestions() {
   return prisma.surveyQuestion.findMany({
@@ -44,6 +52,107 @@ export async function getIncompleteSurveyQuestions(userId: string) {
   );
 
   return questions.filter((question) => !answeredQuestionIds.has(question.id));
+}
+
+function deserializeSurveyAnswer(
+  datasource: SurveyQuestionDataSource | null,
+  questionType: SurveyQuestionType,
+  answer: string | null,
+  cityId: string | null,
+): SurveyAnswerValue {
+  if (questionType === SurveyQuestionType.SEARCH_SELECT) {
+    return {
+      label: answer ?? "",
+      selectedId:
+        datasource === SurveyQuestionDataSource.CITY ? cityId : null,
+    };
+  }
+
+  if (questionType !== SurveyQuestionType.CHECKBOX) {
+    return answer ?? "";
+  }
+
+  if (!answer) {
+    return [];
+  }
+
+  try {
+    const parsedAnswer = JSON.parse(answer);
+
+    if (
+      Array.isArray(parsedAnswer) &&
+      parsedAnswer.every((value) => typeof value === "string")
+    ) {
+      return parsedAnswer;
+    }
+  } catch (error) {
+    console.log("Failed to parse checkbox survey answer", error);
+  }
+
+  return [];
+}
+
+export async function getSurveyResponseSummary(userId: string) {
+  const responseSummary = await prisma.surveyResponse.aggregate({
+    _count: {
+      id: true,
+    },
+    _min: {
+      createdAt: true,
+    },
+    where: {
+      userId,
+    },
+  });
+
+  if (!responseSummary._count.id || !responseSummary._min.createdAt) {
+    return null;
+  }
+
+  return {
+    responseCount: responseSummary._count.id,
+    submittedAt: responseSummary._min.createdAt,
+  };
+}
+
+export async function getEditableSurveyResponseQuestions(
+  userId: string,
+): Promise<EditableSurveyResponseQuestion[]> {
+  const [questions, responses] = await Promise.all([
+    getSurveyQuestions(),
+    prisma.surveyResponse.findMany({
+      select: {
+        answer: true,
+        cityId: true,
+        questionId: true,
+      },
+      where: {
+        userId,
+      },
+    }),
+  ]);
+
+  const responsesByQuestionId = new Map(
+    responses.map((response) => [response.questionId, response]),
+  );
+
+  return questions.map((question) => ({
+    comboOptions: question.comboOptions.map((option) => ({
+      id: option.id,
+      label: option.label,
+    })),
+    currentAnswer: deserializeSurveyAnswer(
+      question.datasource,
+      question.type,
+      responsesByQuestionId.get(question.id)?.answer ?? null,
+      responsesByQuestionId.get(question.id)?.cityId ?? null,
+    ),
+    datasource: question.datasource,
+    id: question.id,
+    prompt: question.prompt,
+    required: question.required,
+    type: question.type,
+  }));
 }
 
 export async function userNeedsSurvey(userId: string) {

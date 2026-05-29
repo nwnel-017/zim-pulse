@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import type {
   AddSurveyResponse,
+  SearchSelectAnswer,
   SurveySearchResponse,
   SurveySearchResult,
 } from "@/types/survey";
 import styles from "./data-selection.module.css";
 
 type CitySelectionProps = {
-  answer: string;
+  answer: SearchSelectAnswer;
   addResponse: AddSurveyResponse;
   questionId: string;
 };
@@ -19,7 +20,7 @@ export default function CitySelection({
   addResponse,
   questionId,
 }: CitySelectionProps) {
-  const [query, setQuery] = useState(answer);
+  const [query, setQuery] = useState(answer.label);
   const [results, setResults] = useState<SurveySearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -74,12 +75,15 @@ export default function CitySelection({
     };
   }, [query]);
 
-  // Review - why is addResponse called in two places?
+  // TO DO - Review - addResponse called in two places
   function handleSelect(result: SurveySearchResult) {
     setQuery(result.label);
     setResults([]);
     setSearchError(null);
-    addResponse(questionId, result.value);
+    addResponse(questionId, {
+      label: result.value,
+      selectedId: result.id,
+    });
   }
 
   return (
@@ -95,7 +99,10 @@ export default function CitySelection({
             setResults([]);
             setIsLoading(false);
             setSearchError(null);
-            addResponse(questionId, "");
+            addResponse(questionId, {
+              label: nextQuery,
+              selectedId: null,
+            });
           }}
           placeholder="Start typing a city name"
           type="text"
@@ -144,8 +151,8 @@ export default function CitySelection({
         </ul>
       ) : null}
 
-      {answer ? (
-        <p className={styles.selectedText}>Selected: {answer}</p>
+      {answer.label ? (
+        <p className={styles.selectedText}>Selected: {answer.label}</p>
       ) : null}
     </div>
   );

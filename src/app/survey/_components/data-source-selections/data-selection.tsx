@@ -1,10 +1,10 @@
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
-import type { AddSurveyResponse } from "@/types/survey";
+import type { AddSurveyResponse, SearchSelectAnswer } from "@/types/survey";
 import CitySelection from "./city-selection";
 import CountrySelection from "./country-selection";
 
 type DataSelectionProps = {
-  answer: string;
+  answer: SearchSelectAnswer;
   addResponse: AddSurveyResponse;
   questionId: string;
   source: SurveyQuestionDataSource;

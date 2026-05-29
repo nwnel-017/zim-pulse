@@ -7,11 +7,14 @@ import {
   surveyCheckboxAnswersSchema,
   surveyTextAnswerSchema,
 } from "@/app/survey/schemas";
-import { SurveyQuestionType } from "@/generated/prisma/enums";
+import {
+  SurveyQuestionDataSource,
+  SurveyQuestionType,
+} from "@/generated/prisma/enums";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
-import type { SurveyAnswers } from "@/types/survey";
+import type { SearchSelectAnswer, SurveyAnswers } from "@/types/survey";
 
 const selectableQuestionTypes: ReadonlySet<SurveyQuestionType> = new Set([
   SurveyQuestionType.DROPDOWN,
@@ -33,7 +36,44 @@ function isBlankOptionalAnswer(answer: SurveyAnswers[string] | undefined) {
     return answer.length === 0;
   }
 
-  return answer.trim().length === 0;
+  if (typeof answer === "string") {
+    return answer.trim().length === 0;
+  }
+
+  return answer.label.trim().length === 0;
+}
+
+function serializeCheckboxAnswers(values: string[]) {
+  return JSON.stringify(values);
+}
+
+function isSearchSelectAnswer(
+  answer: SurveyAnswers[string] | undefined,
+): answer is SearchSelectAnswer {
+  return (
+    typeof answer === "object" &&
+    answer !== null &&
+    !Array.isArray(answer) &&
+    "label" in answer &&
+    "selectedId" in answer
+  );
+}
+
+function formatCityAnswer(city: {
+  country: {
+    name: string;
+  };
+  name: string;
+  stateCode: string | null;
+}) {
+  const labelParts = [city.name];
+
+  if (city.stateCode) {
+    labelParts.push(city.stateCode);
+  }
+
+  labelParts.push(city.country.name);
+  return labelParts.join(", ");
 }
 
 export async function submitSurveyResponses(
@@ -48,87 +88,151 @@ export async function submitSurveyResponses(
 
   let responsesToCreate: Array<{
     answer: string;
+    cityId?: string | null;
     questionId: string;
     userId: string;
   }>;
   try {
-    responsesToCreate = questions.flatMap((question) => {
-      const submittedAnswer = surveyResponses[question.id];
+    const responseGroups = await Promise.all(
+      questions.map(async (question) => {
+        const submittedAnswer = surveyResponses[question.id];
 
-      if (!question.required && isBlankOptionalAnswer(submittedAnswer)) {
-        return [];
-      }
-
-      if (question.type === SurveyQuestionType.CHECKBOX) {
-        const validationResult = surveyCheckboxAnswersSchema.safeParse(
-          submittedAnswer,
-        );
-
-        if (!validationResult.success) {
-          console.log("zod validation failed on form");
-          throw new Error(`A response is required for "${question.prompt}".`);
+        if (!question.required && isBlankOptionalAnswer(submittedAnswer)) {
+          return [];
         }
 
-        const values = validationResult.data;
+        if (question.type === SurveyQuestionType.CHECKBOX) {
+          const validationResult =
+            surveyCheckboxAnswersSchema.safeParse(submittedAnswer);
 
-        const allowedValues = new Set(
-          question.comboOptions.map((option) => option.label),
-        );
+          if (!validationResult.success) {
+            console.log("zod validation failed on form");
+            throw new Error(`A response is required for "${question.prompt}".`);
+          }
 
-        for (const value of values) {
-          if (!allowedValues.has(value)) {
+          const values = validationResult.data;
+
+          const allowedValues = new Set(
+            question.comboOptions.map((option) => option.label),
+          );
+
+          for (const value of values) {
+            if (!allowedValues.has(value)) {
+              throw new Error(
+                `An invalid option was submitted for "${question.prompt}".`,
+              );
+            }
+          }
+
+          return [
+            {
+              answer: serializeCheckboxAnswers(values),
+              questionId: question.id,
+              userId: session.user.id,
+            },
+          ];
+        }
+
+        if (question.type === SurveyQuestionType.SEARCH_SELECT) {
+          if (!isSearchSelectAnswer(submittedAnswer)) {
+            throw new Error("Invalid answer.");
+          }
+
+          const validationResult = surveyTextAnswerSchema.safeParse(
+            submittedAnswer.label,
+          );
+
+          if (!validationResult.success) {
+            throw new Error("Invalid answer.");
+          }
+
+          if (question.datasource === SurveyQuestionDataSource.CITY) {
+            if (!submittedAnswer.selectedId) {
+              throw new Error(
+                `A valid city must be selected for "${question.prompt}".`,
+              );
+            }
+
+            const city = await prisma.city.findUnique({
+              include: {
+                country: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+              where: {
+                id: submittedAnswer.selectedId,
+              },
+            });
+
+            if (!city) {
+              throw new Error(
+                `A valid city must be selected for "${question.prompt}".`,
+              );
+            }
+
+            return [
+              {
+                answer: formatCityAnswer(city),
+                cityId: city.id,
+                questionId: question.id,
+                userId: session.user.id,
+              },
+            ];
+          }
+
+          return [
+            {
+              answer: validationResult.data,
+              cityId: null,
+              questionId: question.id,
+              userId: session.user.id,
+            },
+          ];
+        }
+
+        const validationResult =
+          surveyTextAnswerSchema.safeParse(submittedAnswer);
+
+        if (!validationResult.success) {
+          console.log("zod validation failed");
+          throw new Error("Invalid answer.");
+        }
+
+        const answer = validationResult.data;
+
+        if (question.type === SurveyQuestionType.BOOLEAN) {
+          if (!booleanQuestionValues.has(answer)) {
             throw new Error(
               `An invalid option was submitted for "${question.prompt}".`,
             );
           }
         }
 
-        return values.map((answer) => ({
-          answer,
-          questionId: question.id,
-          userId: session.user.id,
-        }));
-      }
-
-      const validationResult = surveyTextAnswerSchema.safeParse(
-        submittedAnswer,
-      );
-
-      if (!validationResult.success) {
-        console.log("zod validation failed");
-        throw new Error("Invalid answer.");
-      }
-
-      const answer = validationResult.data;
-
-      if (question.type === SurveyQuestionType.BOOLEAN) {
-        if (!booleanQuestionValues.has(answer)) {
-          throw new Error(
-            `An invalid option was submitted for "${question.prompt}".`,
+        if (selectableQuestionTypes.has(question.type)) {
+          const allowedValues = new Set(
+            question.comboOptions.map((option) => option.label),
           );
+
+          if (!allowedValues.has(answer)) {
+            throw new Error(
+              `An invalid option was submitted for "${question.prompt}".`,
+            );
+          }
         }
-      }
 
-      if (selectableQuestionTypes.has(question.type)) {
-        const allowedValues = new Set(
-          question.comboOptions.map((option) => option.label),
-        );
+        return [
+          {
+            answer,
+            questionId: question.id,
+            userId: session.user.id,
+          },
+        ];
+      }),
+    );
 
-        if (!allowedValues.has(answer)) {
-          throw new Error(
-            `An invalid option was submitted for "${question.prompt}".`,
-          );
-        }
-      }
-
-      return [
-        {
-          answer,
-          questionId: question.id,
-          userId: session.user.id,
-        },
-      ];
-    });
+    responsesToCreate = responseGroups.flat();
   } catch (error) {
     console.log("failed to batch responses: " + error);
     if (error instanceof Error) {

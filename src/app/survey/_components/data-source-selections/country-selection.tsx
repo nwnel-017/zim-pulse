@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import type {
   AddSurveyResponse,
+  SearchSelectAnswer,
   SurveySearchResponse,
   SurveySearchResult,
 } from "@/types/survey";
 import styles from "./data-selection.module.css";
 
 type CountrySelectionProps = {
-  answer: string;
+  answer: SearchSelectAnswer;
   addResponse: AddSurveyResponse;
   questionId: string;
 };
@@ -19,7 +20,7 @@ export default function CountrySelection({
   addResponse,
   questionId,
 }: CountrySelectionProps) {
-  const [query, setQuery] = useState(answer);
+  const [query, setQuery] = useState(answer.label);
   const [results, setResults] = useState<SurveySearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -76,12 +77,15 @@ export default function CountrySelection({
     };
   }, [query]);
 
-  // Review - why is addResponse called in two places?
+  // TO DO - Review - addResponse called in two places
   function handleSelect(result: SurveySearchResult) {
-    setQuery("");
+    setQuery(result.label);
     setResults([]);
     setSearchError(null);
-    addResponse(questionId, result.value);
+    addResponse(questionId, {
+      label: result.value,
+      selectedId: result.id,
+    });
   }
 
   return (
@@ -97,7 +101,10 @@ export default function CountrySelection({
             setResults([]);
             setIsLoading(false);
             setSearchError(null);
-            addResponse(questionId, "");
+            addResponse(questionId, {
+              label: nextQuery,
+              selectedId: null,
+            });
           }}
           placeholder="Start typing a country name"
           type="text"
@@ -146,8 +153,8 @@ export default function CountrySelection({
         </ul>
       ) : null}
 
-      {answer ? (
-        <p className={styles.selectedText}>Selected: {answer}</p>
+      {answer.label ? (
+        <p className={styles.selectedText}>Selected: {answer.label}</p>
       ) : null}
     </div>
   );

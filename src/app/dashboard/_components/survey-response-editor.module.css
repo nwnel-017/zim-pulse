@@ -1,0 +1,59 @@
+.editorSection {
+  display: grid;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.editorCopy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.editorTitle {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  line-height: 1.08;
+}
+
+.editorDescription {
+  color: var(--muted);
+}
+
+.questionList {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.questionCard {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.questionPrompt {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.answerPreview {
+  color: var(--muted);
+}
+
+.emptyAnswer {
+  font-style: italic;
+}
+
+.editorForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.closeButton {
+  justify-self: start;
+}
