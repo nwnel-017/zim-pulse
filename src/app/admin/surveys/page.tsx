@@ -43,6 +43,14 @@ export default async function AdminSurveysPage() {
                   <p className="admin-question-order">
                     Submitted {submittedDateFormatter.format(entry.submittedAt)}
                   </p>
+                  <div className="admin-question-actions">
+                    <Link
+                      className="auth-link-button ghost-button"
+                      href={`/admin/surveys/view/${entry.userId}`}
+                    >
+                      View
+                    </Link>
+                  </div>
                 </li>
               ))}
             </ol>

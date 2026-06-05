@@ -19,10 +19,8 @@ const GlobeRenderer = dynamic(() => import("react-globe.gl"), {
   ssr: false,
 }) as DynamicGlobeComponent;
 
-const globeImageUrl =
-  "//unpkg.com/three-globe/example/img/earth-night.jpg";
-const bumpImageUrl =
-  "//unpkg.com/three-globe/example/img/earth-topology.png";
+const globeImageUrl = "//unpkg.com/three-globe/example/img/earth-night.jpg";
+const bumpImageUrl = "//unpkg.com/three-globe/example/img/earth-topology.png";
 
 function formatTooltip(point: GlobeCityPoint) {
   const userLabel = point.userCount === 1 ? "user" : "users";
@@ -134,7 +132,7 @@ export default function Globe() {
     globeRef.current.pointOfView({ altitude: 2.2, lat: 16, lng: 8 }, 1200);
     const controls = globeRef.current.controls();
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.45;
+    controls.autoRotateSpeed = 0;
     controls.enablePan = false;
   }
 

@@ -7,6 +7,7 @@ import {
 } from "@/generated/prisma/enums";
 import { requireUserSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
+import { getResponseMode, responseModes } from "@/lib/survey/response-mode";
 import { surveyCheckboxAnswersSchema, surveyTextAnswerSchema } from "@/app/survey/schemas";
 import type { SurveyActionState } from "@/app/survey/action-state";
 import type { SearchSelectAnswer, SurveyAnswerValue } from "@/types/survey";
@@ -45,10 +46,6 @@ function isBlankOptionalAnswer(answer: SurveyAnswerValue | undefined) {
   }
 
   return answer.label.trim().length === 0;
-}
-
-function serializeCheckboxAnswers(values: string[]) {
-  return JSON.stringify(values);
 }
 
 function isSearchSelectAnswer(
@@ -99,19 +96,36 @@ export async function updateSurveyResponse(
   }
 
   if (!question.required && isBlankOptionalAnswer(input.answer)) {
-    await prisma.surveyResponse.deleteMany({
+    const submission = await prisma.surveySubmission.findUnique({
+      select: {
+        id: true,
+      },
       where: {
-        questionId: question.id,
         userId: session.user.id,
       },
     });
+
+    if (submission) {
+      await prisma.surveyAnswer.deleteMany({
+        where: {
+          questionId: question.id,
+          submissionId: submission.id,
+        },
+      });
+    }
 
     revalidatePath("/dashboard");
     return createSurveyActionSuccess();
   }
 
-  let answerToSave: string;
-  let cityIdToSave: string | null = null;
+  const responseMode = getResponseMode(question);
+  let answersToSave: Array<{
+    booleanValue: boolean | null;
+    cityId: string | null;
+    languageId: string | null;
+    numberValue: number | null;
+    textValue: string | null;
+  }> = [];
 
   if (question.type === SurveyQuestionType.CHECKBOX) {
     const validationResult = surveyCheckboxAnswersSchema.safeParse(input.answer);
@@ -133,7 +147,21 @@ export async function updateSurveyResponse(
       }
     }
 
-    answerToSave = serializeCheckboxAnswers(values);
+    answersToSave = responseMode === responseModes.MULTIPLE
+      ? values.map((value) => ({
+          booleanValue: null,
+          cityId: null,
+          languageId: null,
+          numberValue: null,
+          textValue: value,
+        }))
+      : [{
+          booleanValue: null,
+          cityId: null,
+          languageId: null,
+          numberValue: null,
+          textValue: values[0] ?? null,
+        }];
   } else if (question.type === SurveyQuestionType.SEARCH_SELECT) {
     if (!isSearchSelectAnswer(input.answer)) {
       return createSurveyActionError("Invalid answer.");
@@ -171,10 +199,47 @@ export async function updateSurveyResponse(
         );
       }
 
-      answerToSave = formatCityAnswer(city);
-      cityIdToSave = city.id;
+      answersToSave = [{
+        booleanValue: null,
+        cityId: city.id,
+        languageId: null,
+        numberValue: null,
+        textValue: formatCityAnswer(city),
+      }];
+    } else if (question.datasource === SurveyQuestionDataSource.LANGUAGE) {
+      if (!input.answer.selectedId) {
+        return createSurveyActionError(
+          `A valid language must be selected for "${question.prompt}".`,
+        );
+      }
+
+      const language = await prisma.language.findUnique({
+        where: {
+          id: input.answer.selectedId,
+        },
+      });
+
+      if (!language) {
+        return createSurveyActionError(
+          `A valid language must be selected for "${question.prompt}".`,
+        );
+      }
+
+      answersToSave = [{
+        booleanValue: null,
+        cityId: null,
+        languageId: language.id,
+        numberValue: null,
+        textValue: language.name,
+      }];
     } else {
-      answerToSave = validationResult.data;
+      answersToSave = [{
+        booleanValue: null,
+        cityId: null,
+        languageId: null,
+        numberValue: null,
+        textValue: validationResult.data,
+      }];
     }
   } else {
     const validationResult = surveyTextAnswerSchema.safeParse(input.answer);
@@ -191,52 +256,85 @@ export async function updateSurveyResponse(
           `An invalid option was submitted for "${question.prompt}".`,
         );
       }
-    }
 
-    if (selectableQuestionTypes.has(question.type)) {
-      const allowedValues = new Set(
-        question.comboOptions.map((option) => option.label),
-      );
+      answersToSave = [{
+        booleanValue: answer === "yes",
+        cityId: null,
+        languageId: null,
+        numberValue: null,
+        textValue: null,
+      }];
+    } else if (question.type === SurveyQuestionType.NUMBER) {
+      const numberValue = Number(answer);
 
-      if (!allowedValues.has(answer)) {
+      if (!Number.isFinite(numberValue)) {
         return createSurveyActionError(
-          `An invalid option was submitted for "${question.prompt}".`,
+          `An invalid number was submitted for "${question.prompt}".`,
         );
       }
+
+      answersToSave = [{
+        booleanValue: null,
+        cityId: null,
+        languageId: null,
+        numberValue,
+        textValue: null,
+      }];
+    } else {
+      if (selectableQuestionTypes.has(question.type)) {
+        const allowedValues = new Set(
+          question.comboOptions.map((option) => option.label),
+        );
+
+        if (!allowedValues.has(answer)) {
+          return createSurveyActionError(
+            `An invalid option was submitted for "${question.prompt}".`,
+          );
+        }
+      }
+
+      answersToSave = [{
+        booleanValue: null,
+        cityId: null,
+        languageId: null,
+        numberValue: null,
+        textValue: answer,
+      }];
     }
-
-    answerToSave = answer;
   }
 
-  const existingResponse = await prisma.surveyResponse.findUnique({
-    where: {
-      userId_questionId: {
-        questionId: question.id,
+  await prisma.$transaction(async (tx) => {
+    const submission = await tx.surveySubmission.upsert({
+      create: {
         userId: session.user.id,
       },
-    },
-  });
-
-  if (existingResponse) {
-    await prisma.surveyResponse.update({
-      data: {
-        answer: answerToSave,
-        cityId: cityIdToSave,
-      },
+      update: {},
       where: {
-        id: existingResponse.id,
-      },
-    });
-  } else {
-    await prisma.surveyResponse.create({
-      data: {
-        answer: answerToSave,
-        cityId: cityIdToSave,
-        questionId: question.id,
         userId: session.user.id,
       },
     });
-  }
+
+    await tx.surveyAnswer.deleteMany({
+      where: {
+        questionId: question.id,
+        submissionId: submission.id,
+      },
+    });
+
+    if (answersToSave.length > 0) {
+      await tx.surveyAnswer.createMany({
+        data: answersToSave.map((answer) => ({
+          booleanValue: answer.booleanValue,
+          cityId: answer.cityId,
+          languageId: answer.languageId,
+          numberValue: answer.numberValue,
+          questionId: question.id,
+          submissionId: submission.id,
+          textValue: answer.textValue,
+        })),
+      });
+    }
+  });
 
   revalidatePath("/dashboard");
   return createSurveyActionSuccess();

@@ -57,9 +57,11 @@ export const ModelName = {
   Verification: 'Verification',
   SurveyQuestion: 'SurveyQuestion',
   SurveyQuestionComboOption: 'SurveyQuestionComboOption',
-  SurveyResponse: 'SurveyResponse',
+  SurveySubmission: 'SurveySubmission',
+  SurveyAnswer: 'SurveyAnswer',
   Country: 'Country',
-  City: 'City'
+  City: 'City',
+  Language: 'Language'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -149,6 +151,7 @@ export const SurveyQuestionScalarFieldEnum = {
   required: 'required',
   prompt: 'prompt',
   type: 'type',
+  responseMode: 'responseMode',
   datasource: 'datasource',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -169,17 +172,30 @@ export const SurveyQuestionComboOptionScalarFieldEnum = {
 export type SurveyQuestionComboOptionScalarFieldEnum = (typeof SurveyQuestionComboOptionScalarFieldEnum)[keyof typeof SurveyQuestionComboOptionScalarFieldEnum]
 
 
-export const SurveyResponseScalarFieldEnum = {
+export const SurveySubmissionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  questionId: 'questionId',
-  cityId: 'cityId',
-  answer: 'answer',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type SurveyResponseScalarFieldEnum = (typeof SurveyResponseScalarFieldEnum)[keyof typeof SurveyResponseScalarFieldEnum]
+export type SurveySubmissionScalarFieldEnum = (typeof SurveySubmissionScalarFieldEnum)[keyof typeof SurveySubmissionScalarFieldEnum]
+
+
+export const SurveyAnswerScalarFieldEnum = {
+  id: 'id',
+  submissionId: 'submissionId',
+  questionId: 'questionId',
+  textValue: 'textValue',
+  numberValue: 'numberValue',
+  booleanValue: 'booleanValue',
+  cityId: 'cityId',
+  languageId: 'languageId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SurveyAnswerScalarFieldEnum = (typeof SurveyAnswerScalarFieldEnum)[keyof typeof SurveyAnswerScalarFieldEnum]
 
 
 export const CountryScalarFieldEnum = {
@@ -207,6 +223,17 @@ export const CityScalarFieldEnum = {
 } as const
 
 export type CityScalarFieldEnum = (typeof CityScalarFieldEnum)[keyof typeof CityScalarFieldEnum]
+
+
+export const LanguageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  localName: 'localName',
+  iso6391: 'iso6391',
+  createdAt: 'createdAt'
+} as const
+
+export type LanguageScalarFieldEnum = (typeof LanguageScalarFieldEnum)[keyof typeof LanguageScalarFieldEnum]
 
 
 export const SortOrder = {

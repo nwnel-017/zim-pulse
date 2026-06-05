@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
 import type {
   AddSurveyResponse,
   SearchSelectAnswer,
@@ -9,17 +10,29 @@ import type {
 } from "@/types/survey";
 import styles from "./data-selection.module.css";
 
-type CitySelectionProps = {
+type SearchSelectionProps = {
   answer: SearchSelectAnswer;
   addResponse: AddSurveyResponse;
+  emptyStateText: string;
+  loadingText: string;
+  placeholder: string;
   questionId: string;
+  searchLabel: string;
+  showMeta: boolean;
+  source: SurveyQuestionDataSource;
 };
 
-export default function CitySelection({
+export default function SearchSelection({
   answer,
   addResponse,
+  emptyStateText,
+  loadingText,
+  placeholder,
   questionId,
-}: CitySelectionProps) {
+  searchLabel,
+  showMeta,
+  source,
+}: SearchSelectionProps) {
   const [query, setQuery] = useState(answer.label);
   const [results, setResults] = useState<SurveySearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +52,7 @@ export default function CitySelection({
 
       try {
         const response = await fetch(
-          `/api/survey-search?source=CITY&q=${encodeURIComponent(trimmedQuery)}`,
+          `/api/survey-search?source=${source}&q=${encodeURIComponent(trimmedQuery)}`,
           {
             method: "GET",
             signal: controller.signal,
@@ -49,7 +62,7 @@ export default function CitySelection({
         const payload = (await response.json()) as SurveySearchResponse;
 
         if (!response.ok) {
-          throw new Error(payload.message || "Unable to search cities.");
+          throw new Error(payload.message || `Unable to search ${searchLabel.toLowerCase()}.`);
         }
 
         setResults(payload.results || []);
@@ -60,7 +73,9 @@ export default function CitySelection({
 
         setResults([]);
         setSearchError(
-          error instanceof Error ? error.message : "Unable to search cities.",
+          error instanceof Error
+            ? error.message
+            : `Unable to search ${searchLabel.toLowerCase()}.`,
         );
       } finally {
         if (!controller.signal.aborted) {
@@ -73,9 +88,8 @@ export default function CitySelection({
       controller.abort();
       window.clearTimeout(timeoutId);
     };
-  }, [query]);
+  }, [query, searchLabel, source]);
 
-  // TO DO - Review - addResponse called in two places
   function handleSelect(result: SurveySearchResult) {
     setQuery(result.label);
     setResults([]);
@@ -89,7 +103,7 @@ export default function CitySelection({
   return (
     <div className={styles.selectionField}>
       <label className={styles.searchField}>
-        <span>Search for a city</span>
+        <span>{searchLabel}</span>
         <input
           autoComplete="off"
           className={styles.searchInput}
@@ -104,15 +118,13 @@ export default function CitySelection({
               selectedId: null,
             });
           }}
-          placeholder="Start typing a city name"
+          placeholder={placeholder}
           type="text"
           value={query}
         />
       </label>
 
-      {isLoading ? (
-        <p className={styles.statusText}>Searching cities...</p>
-      ) : null}
+      {isLoading ? <p className={styles.statusText}>{loadingText}</p> : null}
 
       {searchError ? <p className={styles.statusText}>{searchError}</p> : null}
 
@@ -129,7 +141,7 @@ export default function CitySelection({
       !searchError &&
       query.trim().length >= 2 &&
       !results.length ? (
-        <p className={styles.statusText}>No cities matched your search.</p>
+        <p className={styles.statusText}>{emptyStateText}</p>
       ) : null}
 
       {results.length ? (
@@ -142,7 +154,7 @@ export default function CitySelection({
                 type="button"
               >
                 <span>{result.label}</span>
-                {result.meta ? (
+                {showMeta && result.meta ? (
                   <span className={styles.resultMeta}>{result.meta}</span>
                 ) : null}
               </button>

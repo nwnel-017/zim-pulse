@@ -18,8 +18,7 @@ function comparePoints(left: GlobeCityPoint, right: GlobeCityPoint) {
 export async function GET() {
   await requireUserSession();
 
-  const responses = await prisma.surveyResponse.findMany({
-    distinct: ["userId", "cityId"],
+  const answers = await prisma.surveyAnswer.findMany({
     select: {
       city: {
         select: {
@@ -35,6 +34,7 @@ export async function GET() {
         },
       },
       cityId: true,
+      submissionId: true,
     },
     where: {
       cityId: {
@@ -48,30 +48,39 @@ export async function GET() {
   });
 
   const pointsByCityId = new Map<string, GlobeCityPoint>();
+  const seenSubmissionCityKeys = new Set<string>();
 
-  for (const response of responses) {
+  for (const answer of answers) {
     if (
-      !response.cityId ||
-      !response.city ||
-      response.city.latitude === null ||
-      response.city.longitude === null
+      !answer.cityId ||
+      !answer.city ||
+      answer.city.latitude === null ||
+      answer.city.longitude === null
     ) {
       continue;
     }
 
-    const existingPoint = pointsByCityId.get(response.cityId);
+    const submissionCityKey = `${answer.submissionId}:${answer.cityId}`;
+
+    if (seenSubmissionCityKeys.has(submissionCityKey)) {
+      continue;
+    }
+
+    seenSubmissionCityKeys.add(submissionCityKey);
+
+    const existingPoint = pointsByCityId.get(answer.cityId);
 
     if (existingPoint) {
       existingPoint.userCount += 1;
       continue;
     }
 
-    pointsByCityId.set(response.cityId, {
-      cityId: response.city.id,
-      cityName: response.city.name,
-      countryName: response.city.country.name,
-      lat: response.city.latitude,
-      lng: response.city.longitude,
+    pointsByCityId.set(answer.cityId, {
+      cityId: answer.city.id,
+      cityName: answer.city.name,
+      countryName: answer.city.country.name,
+      lat: answer.city.latitude,
+      lng: answer.city.longitude,
       userCount: 1,
     });
   }

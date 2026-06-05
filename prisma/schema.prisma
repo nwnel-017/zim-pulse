@@ -28,7 +28,7 @@ model User {
   banExpires          DateTime?
   accounts            Account[]
   sessions            Session[]
-  surveyResponses     SurveyResponse[]
+  surveySubmissions   SurveySubmission[]
 
   @@map("user")
 }
@@ -95,22 +95,29 @@ enum SurveyQuestionType {
   SEARCH_SELECT
 }
 
+enum SurveyResponseMode {
+  SINGLE_SELECT
+  MULTI_SELECT
+}
+
 enum SurveyQuestionDataSource {
   COUNTRY
   CITY
+  LANGUAGE
 }
 
 model SurveyQuestion {
   id              String                      @id @default(cuid())
-  sortOrder  Int            @default(0)
-  required        Boolean  @default(false)
+  sortOrder       Int                         @default(0)
+  required        Boolean                     @default(false)
   prompt          String
   type            SurveyQuestionType
+  responseMode    SurveyResponseMode          @default(SINGLE_SELECT)
   datasource      SurveyQuestionDataSource?
   createdAt       DateTime                    @default(now())
   updatedAt       DateTime                    @updatedAt
   comboOptions    SurveyQuestionComboOption[]
-  surveyResponses SurveyResponse[]
+  surveyAnswers   SurveyAnswer[]
 
   @@map("survey_questions")
 }
@@ -128,23 +135,39 @@ model SurveyQuestionComboOption {
   @@map("survey_question_combo_options")
 }
 
-model SurveyResponse {
-  id         String         @id @default(cuid())
-  userId     String
-  questionId String
-  cityId      String?
-  answer     String
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  city        City?         @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
+model SurveySubmission {
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  surveyAnswers SurveyAnswer[]
 
   @@index([userId])
+  @@map("survey_submissions")
+}
+
+model SurveyAnswer {
+  id            String           @id @default(cuid())
+  submissionId  String
+  questionId    String
+  textValue     String?
+  numberValue   Float?
+  booleanValue  Boolean?
+  cityId        String?
+  languageId    String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  submission    SurveySubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question      SurveyQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  city          City?            @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  language      Language?        @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
   @@index([questionId])
-  @@unique([userId, questionId])
-  @@map("survey_responses")
+  @@index([cityId])
+  @@index([languageId])
+  @@map("survey_answers")
 }
 
 model Country {
@@ -165,24 +188,40 @@ model Country {
 }
 
 model City {
-  id            String   @id @default(cuid())
+  id              String   @id @default(cuid())
 
-  name          String
-  countryId     String
-  country       Country  @relation(fields: [countryId], references: [id])
+  name            String
+  countryId       String
+  country         Country  @relation(fields: [countryId], references: [id])
 
-  stateCode     String?
+  stateCode       String?
 
-  latitude      Float?
-  longitude     Float?
+  latitude        Float?
+  longitude       Float?
 
-  population    Int?
+  population      Int?
 
-  SurveyResponse       SurveyResponse[]
+  surveyAnswers   SurveyAnswer[]
 
-  createdAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
 
   @@index([name])
   @@index([countryId])
   @@map("city")
+}
+
+model Language {
+  id              String           @id @default(cuid())
+
+  name            String
+  localName       String?
+  iso6391         String           @unique
+
+  surveyAnswers   SurveyAnswer[]
+
+  createdAt       DateTime         @default(now())
+
+  @@index([name])
+  @@index([localName])
+  @@map("language")
 }

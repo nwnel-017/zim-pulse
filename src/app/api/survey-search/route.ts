@@ -117,6 +117,53 @@ export async function GET(request: Request) {
       });
     }
 
+    case SurveyQuestionDataSource.LANGUAGE: {
+      const languages = await prisma.language.findMany({
+        orderBy: {
+          name: "asc",
+        },
+        select: {
+          id: true,
+          iso6391: true,
+          localName: true,
+          name: true,
+        },
+        take: RESULT_LIMIT,
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              localName: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              iso6391: {
+                contains: query.toLowerCase(),
+              },
+            },
+          ],
+        },
+      });
+
+      return NextResponse.json({
+        results: languages.map((language) => ({
+          id: language.id,
+          label: language.name,
+          meta: [language.localName, language.iso6391.toUpperCase()]
+            .filter(Boolean)
+            .join(" "),
+          value: language.name,
+        })),
+      });
+    }
+
     default:
       return createBadRequest("Invalid data source.");
   }

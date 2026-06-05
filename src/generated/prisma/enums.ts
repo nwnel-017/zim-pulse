@@ -25,9 +25,18 @@ export const SurveyQuestionType = {
 export type SurveyQuestionType = (typeof SurveyQuestionType)[keyof typeof SurveyQuestionType]
 
 
+export const SurveyResponseMode = {
+  SINGLE_SELECT: 'SINGLE_SELECT',
+  MULTI_SELECT: 'MULTI_SELECT'
+} as const
+
+export type SurveyResponseMode = (typeof SurveyResponseMode)[keyof typeof SurveyResponseMode]
+
+
 export const SurveyQuestionDataSource = {
   COUNTRY: 'COUNTRY',
-  CITY: 'CITY'
+  CITY: 'CITY',
+  LANGUAGE: 'LANGUAGE'
 } as const
 
 export type SurveyQuestionDataSource = (typeof SurveyQuestionDataSource)[keyof typeof SurveyQuestionDataSource]

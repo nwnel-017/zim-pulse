@@ -19,4 +19,5 @@ export const surveyQuestionTypeLabels: Record<SurveyQuestionType, string> = {
 export const dataSourceTypeLabels: Record<SurveyQuestionDataSource, string> = {
   COUNTRY: "World countries",
   CITY: "World cities",
+  LANGUAGE: "Languages",
 };

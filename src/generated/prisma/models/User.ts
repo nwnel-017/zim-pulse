@@ -248,7 +248,7 @@ export type UserWhereInput = {
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  surveyResponses?: Prisma.SurveyResponseListRelationFilter
+  surveySubmissions?: Prisma.SurveySubmissionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -267,7 +267,7 @@ export type UserOrderByWithRelationInput = {
   banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  surveyResponses?: Prisma.SurveyResponseOrderByRelationAggregateInput
+  surveySubmissions?: Prisma.SurveySubmissionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -289,7 +289,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  surveyResponses?: Prisma.SurveyResponseListRelationFilter
+  surveySubmissions?: Prisma.SurveySubmissionListRelationFilter
 }, "id" | "email" | "phoneNumber">
 
 export type UserOrderByWithAggregationInput = {
@@ -346,7 +346,7 @@ export type UserCreateInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -365,7 +365,7 @@ export type UserUncheckedCreateInput = {
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -384,7 +384,7 @@ export type UserUpdateInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -403,7 +403,7 @@ export type UserUncheckedUpdateInput = {
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -559,18 +559,18 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
-export type UserCreateNestedOneWithoutSurveyResponsesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSurveyResponsesInput, Prisma.UserUncheckedCreateWithoutSurveyResponsesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSurveyResponsesInput
+export type UserCreateNestedOneWithoutSurveySubmissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSurveySubmissionsInput, Prisma.UserUncheckedCreateWithoutSurveySubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSurveySubmissionsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutSurveyResponsesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSurveyResponsesInput, Prisma.UserUncheckedCreateWithoutSurveyResponsesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSurveyResponsesInput
-  upsert?: Prisma.UserUpsertWithoutSurveyResponsesInput
+export type UserUpdateOneRequiredWithoutSurveySubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSurveySubmissionsInput, Prisma.UserUncheckedCreateWithoutSurveySubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSurveySubmissionsInput
+  upsert?: Prisma.UserUpsertWithoutSurveySubmissionsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSurveyResponsesInput, Prisma.UserUpdateWithoutSurveyResponsesInput>, Prisma.UserUncheckedUpdateWithoutSurveyResponsesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSurveySubmissionsInput, Prisma.UserUpdateWithoutSurveySubmissionsInput>, Prisma.UserUncheckedUpdateWithoutSurveySubmissionsInput>
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -588,7 +588,7 @@ export type UserCreateWithoutSessionsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -606,7 +606,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -640,7 +640,7 @@ export type UserUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -658,7 +658,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -676,7 +676,7 @@ export type UserCreateWithoutAccountsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -694,7 +694,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   banReason?: string | null
   banExpires?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedCreateNestedManyWithoutUserInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -728,7 +728,7 @@ export type UserUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -746,10 +746,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  surveyResponses?: Prisma.SurveyResponseUncheckedUpdateManyWithoutUserNestedInput
+  surveySubmissions?: Prisma.SurveySubmissionUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutSurveyResponsesInput = {
+export type UserCreateWithoutSurveySubmissionsInput = {
   id?: string
   name: string
   email: string
@@ -767,7 +767,7 @@ export type UserCreateWithoutSurveyResponsesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutSurveyResponsesInput = {
+export type UserUncheckedCreateWithoutSurveySubmissionsInput = {
   id?: string
   name: string
   email: string
@@ -785,23 +785,23 @@ export type UserUncheckedCreateWithoutSurveyResponsesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutSurveyResponsesInput = {
+export type UserCreateOrConnectWithoutSurveySubmissionsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSurveyResponsesInput, Prisma.UserUncheckedCreateWithoutSurveyResponsesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSurveySubmissionsInput, Prisma.UserUncheckedCreateWithoutSurveySubmissionsInput>
 }
 
-export type UserUpsertWithoutSurveyResponsesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSurveyResponsesInput, Prisma.UserUncheckedUpdateWithoutSurveyResponsesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSurveyResponsesInput, Prisma.UserUncheckedCreateWithoutSurveyResponsesInput>
+export type UserUpsertWithoutSurveySubmissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSurveySubmissionsInput, Prisma.UserUncheckedUpdateWithoutSurveySubmissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSurveySubmissionsInput, Prisma.UserUncheckedCreateWithoutSurveySubmissionsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutSurveyResponsesInput = {
+export type UserUpdateToOneWithWhereWithoutSurveySubmissionsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSurveyResponsesInput, Prisma.UserUncheckedUpdateWithoutSurveyResponsesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSurveySubmissionsInput, Prisma.UserUncheckedUpdateWithoutSurveySubmissionsInput>
 }
 
-export type UserUpdateWithoutSurveyResponsesInput = {
+export type UserUpdateWithoutSurveySubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -819,7 +819,7 @@ export type UserUpdateWithoutSurveyResponsesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutSurveyResponsesInput = {
+export type UserUncheckedUpdateWithoutSurveySubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -845,13 +845,13 @@ export type UserUncheckedUpdateWithoutSurveyResponsesInput = {
 export type UserCountOutputType = {
   accounts: number
   sessions: number
-  surveyResponses: number
+  surveySubmissions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-  surveyResponses?: boolean | UserCountOutputTypeCountSurveyResponsesArgs
+  surveySubmissions?: boolean | UserCountOutputTypeCountSurveySubmissionsArgs
 }
 
 /**
@@ -881,8 +881,8 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSurveyResponsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SurveyResponseWhereInput
+export type UserCountOutputTypeCountSurveySubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SurveySubmissionWhereInput
 }
 
 
@@ -902,7 +902,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   banExpires?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  surveyResponses?: boolean | Prisma.User$surveyResponsesArgs<ExtArgs>
+  surveySubmissions?: boolean | Prisma.User$surveySubmissionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -958,7 +958,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  surveyResponses?: boolean | Prisma.User$surveyResponsesArgs<ExtArgs>
+  surveySubmissions?: boolean | Prisma.User$surveySubmissionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -969,7 +969,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    surveyResponses: Prisma.$SurveyResponsePayload<ExtArgs>[]
+    surveySubmissions: Prisma.$SurveySubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1381,7 +1381,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  surveyResponses<T extends Prisma.User$surveyResponsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$surveyResponsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SurveyResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  surveySubmissions<T extends Prisma.User$surveySubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$surveySubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SurveySubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1865,27 +1865,27 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * User.surveyResponses
+ * User.surveySubmissions
  */
-export type User$surveyResponsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$surveySubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the SurveyResponse
+   * Select specific fields to fetch from the SurveySubmission
    */
-  select?: Prisma.SurveyResponseSelect<ExtArgs> | null
+  select?: Prisma.SurveySubmissionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the SurveyResponse
+   * Omit specific fields from the SurveySubmission
    */
-  omit?: Prisma.SurveyResponseOmit<ExtArgs> | null
+  omit?: Prisma.SurveySubmissionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.SurveyResponseInclude<ExtArgs> | null
-  where?: Prisma.SurveyResponseWhereInput
-  orderBy?: Prisma.SurveyResponseOrderByWithRelationInput | Prisma.SurveyResponseOrderByWithRelationInput[]
-  cursor?: Prisma.SurveyResponseWhereUniqueInput
+  include?: Prisma.SurveySubmissionInclude<ExtArgs> | null
+  where?: Prisma.SurveySubmissionWhereInput
+  orderBy?: Prisma.SurveySubmissionOrderByWithRelationInput | Prisma.SurveySubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.SurveySubmissionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.SurveyResponseScalarFieldEnum | Prisma.SurveyResponseScalarFieldEnum[]
+  distinct?: Prisma.SurveySubmissionScalarFieldEnum | Prisma.SurveySubmissionScalarFieldEnum[]
 }
 
 /**

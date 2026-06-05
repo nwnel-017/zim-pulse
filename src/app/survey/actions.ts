@@ -13,6 +13,7 @@ import {
 } from "@/generated/prisma/enums";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
+import { getResponseMode, responseModes } from "@/lib/survey/response-mode";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
 import type { SearchSelectAnswer, SurveyAnswers } from "@/types/survey";
 
@@ -41,10 +42,6 @@ function isBlankOptionalAnswer(answer: SurveyAnswers[string] | undefined) {
   }
 
   return answer.label.trim().length === 0;
-}
-
-function serializeCheckboxAnswers(values: string[]) {
-  return JSON.stringify(values);
 }
 
 function isSearchSelectAnswer(
@@ -86,16 +83,19 @@ export async function submitSurveyResponses(
     redirect("/dashboard");
   }
 
-  let responsesToCreate: Array<{
-    answer: string;
+  let answersToCreate: Array<{
+    booleanValue: boolean | null;
     cityId?: string | null;
+    languageId?: string | null;
+    numberValue: number | null;
     questionId: string;
-    userId: string;
+    textValue: string | null;
   }>;
   try {
-    const responseGroups = await Promise.all(
+    const answerGroups = await Promise.all(
       questions.map(async (question) => {
         const submittedAnswer = surveyResponses[question.id];
+        const responseMode = getResponseMode(question);
 
         if (!question.required && isBlankOptionalAnswer(submittedAnswer)) {
           return [];
@@ -124,13 +124,25 @@ export async function submitSurveyResponses(
             }
           }
 
-          return [
-            {
-              answer: serializeCheckboxAnswers(values),
+          if (responseMode === responseModes.MULTIPLE) {
+            return values.map((value) => ({
+              booleanValue: null,
+              cityId: null,
+              languageId: null,
+              numberValue: null,
               questionId: question.id,
-              userId: session.user.id,
-            },
-          ];
+              textValue: value,
+            }));
+          }
+
+          return [{
+            booleanValue: null,
+            cityId: null,
+            languageId: null,
+            numberValue: null,
+            questionId: question.id,
+            textValue: values[0] ?? null,
+          }];
         }
 
         if (question.type === SurveyQuestionType.SEARCH_SELECT) {
@@ -174,20 +186,55 @@ export async function submitSurveyResponses(
 
             return [
               {
-                answer: formatCityAnswer(city),
+                booleanValue: null,
                 cityId: city.id,
+                languageId: null,
+                numberValue: null,
                 questionId: question.id,
-                userId: session.user.id,
+                textValue: formatCityAnswer(city),
+              },
+            ];
+          }
+
+          if (question.datasource === SurveyQuestionDataSource.LANGUAGE) {
+            if (!submittedAnswer.selectedId) {
+              throw new Error(
+                `A valid language must be selected for "${question.prompt}".`,
+              );
+            }
+
+            const language = await prisma.language.findUnique({
+              where: {
+                id: submittedAnswer.selectedId,
+              },
+            });
+
+            if (!language) {
+              throw new Error(
+                `A valid language must be selected for "${question.prompt}".`,
+              );
+            }
+
+            return [
+              {
+                booleanValue: null,
+                cityId: null,
+                languageId: language.id,
+                numberValue: null,
+                questionId: question.id,
+                textValue: language.name,
               },
             ];
           }
 
           return [
             {
-              answer: validationResult.data,
+              booleanValue: null,
               cityId: null,
+              languageId: null,
+              numberValue: null,
               questionId: question.id,
-              userId: session.user.id,
+              textValue: validationResult.data,
             },
           ];
         }
@@ -208,6 +255,38 @@ export async function submitSurveyResponses(
               `An invalid option was submitted for "${question.prompt}".`,
             );
           }
+
+          return [
+            {
+              booleanValue: answer === "yes",
+              cityId: null,
+              languageId: null,
+              numberValue: null,
+              questionId: question.id,
+              textValue: null,
+            },
+          ];
+        }
+
+        if (question.type === SurveyQuestionType.NUMBER) {
+          const numberValue = Number(answer);
+
+          if (!Number.isFinite(numberValue)) {
+            throw new Error(
+              `An invalid number was submitted for "${question.prompt}".`,
+            );
+          }
+
+          return [
+            {
+              booleanValue: null,
+              cityId: null,
+              languageId: null,
+              numberValue,
+              questionId: question.id,
+              textValue: null,
+            },
+          ];
         }
 
         if (selectableQuestionTypes.has(question.type)) {
@@ -224,15 +303,18 @@ export async function submitSurveyResponses(
 
         return [
           {
-            answer,
+            booleanValue: null,
+            cityId: null,
+            languageId: null,
+            numberValue: null,
             questionId: question.id,
-            userId: session.user.id,
+            textValue: answer,
           },
         ];
       }),
     );
 
-    responsesToCreate = responseGroups.flat();
+    answersToCreate = answerGroups.flat();
   } catch (error) {
     console.log("failed to batch responses: " + error);
     if (error instanceof Error) {
@@ -242,9 +324,29 @@ export async function submitSurveyResponses(
     }
   }
 
-  if (responsesToCreate.length > 0) {
-    await prisma.surveyResponse.createMany({
-      data: responsesToCreate,
+  if (answersToCreate.length > 0) {
+    await prisma.$transaction(async (tx) => {
+      const submission = await tx.surveySubmission.upsert({
+        create: {
+          userId: session.user.id,
+        },
+        update: {},
+        where: {
+          userId: session.user.id,
+        },
+      });
+
+      await tx.surveyAnswer.createMany({
+        data: answersToCreate.map((answer) => ({
+          booleanValue: answer.booleanValue,
+          cityId: answer.cityId ?? null,
+          languageId: answer.languageId ?? null,
+          numberValue: answer.numberValue,
+          questionId: answer.questionId,
+          submissionId: submission.id,
+          textValue: answer.textValue,
+        })),
+      });
     });
   }
 

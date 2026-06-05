@@ -179,6 +179,13 @@ export type EnumSurveyQuestionTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSurveyQuestionTypeFilter<$PrismaModel> | $Enums.SurveyQuestionType
 }
 
+export type EnumSurveyResponseModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SurveyResponseMode | Prisma.EnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  in?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel> | $Enums.SurveyResponseMode
+}
+
 export type EnumSurveyQuestionDataSourceNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.SurveyQuestionDataSource | Prisma.EnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
   in?: $Enums.SurveyQuestionDataSource[] | Prisma.ListEnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
@@ -212,6 +219,16 @@ export type EnumSurveyQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
 }
 
+export type EnumSurveyResponseModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SurveyResponseMode | Prisma.EnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  in?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSurveyResponseModeWithAggregatesFilter<$PrismaModel> | $Enums.SurveyResponseMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel>
+}
+
 export type EnumSurveyQuestionDataSourceNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.SurveyQuestionDataSource | Prisma.EnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
   in?: $Enums.SurveyQuestionDataSource[] | Prisma.ListEnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
@@ -233,17 +250,6 @@ export type FloatNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
 }
 
-export type IntNullableFilter<$PrismaModel = never> = {
-  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
-  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
-  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
-  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
-  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
-  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
-  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
-}
-
 export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -258,6 +264,17 @@ export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -443,6 +460,13 @@ export type NestedEnumSurveyQuestionTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSurveyQuestionTypeFilter<$PrismaModel> | $Enums.SurveyQuestionType
 }
 
+export type NestedEnumSurveyResponseModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SurveyResponseMode | Prisma.EnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  in?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel> | $Enums.SurveyResponseMode
+}
+
 export type NestedEnumSurveyQuestionDataSourceNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.SurveyQuestionDataSource | Prisma.EnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
   in?: $Enums.SurveyQuestionDataSource[] | Prisma.ListEnumSurveyQuestionDataSourceFieldRefInput<$PrismaModel> | null
@@ -485,6 +509,16 @@ export type NestedEnumSurveyQuestionTypeWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumSurveyResponseModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SurveyResponseMode | Prisma.EnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  in?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SurveyResponseMode[] | Prisma.ListEnumSurveyResponseModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSurveyResponseModeWithAggregatesFilter<$PrismaModel> | $Enums.SurveyResponseMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSurveyResponseModeFilter<$PrismaModel>
 }
 
 export type NestedEnumSurveyQuestionDataSourceNullableWithAggregatesFilter<$PrismaModel = never> = {
