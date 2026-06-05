@@ -57,6 +57,22 @@
   justify-self: start;
 }
 
+.checkboxField {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.65rem;
+  justify-self: start;
+  line-height: 1.4;
+}
+
+.checkboxInput {
+  accent-color: var(--accent);
+  block-size: 1rem;
+  inline-size: 1rem;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
 @media (min-width: 768px) {
   .choiceRow {
     grid-template-columns: minmax(0, 1fr) auto;

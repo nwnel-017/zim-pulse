@@ -23,8 +23,8 @@ export default async function AdminPage() {
   return (
     <main className="app-shell">
       <section className="panel admin-panel">
-        <p className="eyebrow">Admin Console</p>
-        <h1>{session.user.name}</h1>
+        <p className="eyebrow">ZimPulse</p>
+        <h1>Admin Console</h1>
         <p className="lead">
           Monitor user activity and jump into the survey management pages when
           you need to review submissions or edit questions.
@@ -33,14 +33,20 @@ export default async function AdminPage() {
           <article className="admin-stat-card">
             <p className="admin-stat-label">Users in app</p>
             <strong className="admin-stat-value">{userCount}</strong>
-            <Link className="auth-link-button ghost-button" href="/admin/surveys">
+            <Link
+              className="auth-link-button ghost-button"
+              href="/admin/surveys"
+            >
               View surveys
             </Link>
           </article>
           <article className="admin-stat-card">
             <p className="admin-stat-label">Survey questions</p>
             <strong className="admin-stat-value">{surveyQuestionCount}</strong>
-            <Link className="auth-link-button ghost-button" href="/admin/questions">
+            <Link
+              className="auth-link-button ghost-button"
+              href="/admin/questions"
+            >
               View or edit questions
             </Link>
           </article>
@@ -56,7 +62,7 @@ export default async function AdminPage() {
           </div>
         </dl>
 
-        <SignOutButton redirectTo="/admin/sign-in" />
+        <SignOutButton redirectTo="/sign-in" />
       </section>
     </main>
   );

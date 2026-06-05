@@ -145,10 +145,10 @@ export function SurveyFlow({
     <form className={styles.surveyFlow} onSubmit={handleSubmit}>
       <div className={styles.copy}>
         <p className="eyebrow">Survey</p>
-        <h1>Complete your profile before entering the dashboard.</h1>
+        <h1>Thank you for joining ZimPulse!</h1>
         <p className="lead">
-          {userName}, answer each question step by step. Your responses will be
-          saved when you submit the final step.
+          Answer each question step by step. Your responses will be saved when
+          you submit the final step.
         </p>
       </div>
 

@@ -6,12 +6,38 @@ import { sendAuthEmail } from "@/lib/email/email";
 import { authPool } from "@/lib/prisma/db";
 
 const isProduction = process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
+const adminEmails = new Set(
+  (process.env.APP_ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean),
+);
 
 export const auth = betterAuth({
   appName: "ZimPulse",
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
   database: authPool,
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const normalizedEmail = user.email.toLowerCase();
+
+          if (!adminEmails.has(normalizedEmail)) {
+            return;
+          }
+
+          return {
+            data: {
+              ...user,
+              role: "admin",
+            },
+          };
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     autoSignIn: !isProduction,

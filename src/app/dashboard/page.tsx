@@ -13,7 +13,7 @@ export default async function DashboardPage() {
       <section className="panel">
         <p className="eyebrow">User Dashboard</p>
         <h1>Welcome back</h1>
-        <p className="lead">You are signed in through the email link flow.</p>
+        <p className="lead">Thank you for participating.</p>
         <dl className="session-list">
           <div>
             <dt>Name</dt>

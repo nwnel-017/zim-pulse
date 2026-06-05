@@ -8,12 +8,6 @@ export default function UserSignInPage() {
       <p className="auth-secondary-link">
         Need an account? <Link href="/sign-up">Create one with your email</Link>.
       </p>
-      <p className="auth-secondary-link">
-        Need admin access? <Link href="/admin/sign-in">Use the admin sign-in</Link>.
-      </p>
-      <p className="auth-secondary-link">
-        Setting up admin access? <Link href="/admin/sign-up">Create a temporary admin account</Link>.
-      </p>
     </main>
   );
 }

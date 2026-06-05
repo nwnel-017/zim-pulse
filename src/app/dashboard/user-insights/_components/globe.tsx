@@ -141,7 +141,7 @@ export default function Globe() {
       <section className={styles.panel}>
         <div className={styles.copy}>
           <p className="eyebrow">User Insights</p>
-          <h1>See where your users are clustered.</h1>
+          <h1>See where other users are located</h1>
           <p className={styles.description}>
             Each point marks a city with at least one saved user response.
             Taller markers indicate cities with more users.

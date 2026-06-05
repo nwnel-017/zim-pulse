@@ -173,11 +173,14 @@ function SurveyQuestionCreatorForm({
       ) : null}
 
       {showAllowMultipleAnswers ? (
-        <label className="auth-field">
-          <span>
-            <input name="allowMultipleAnswers" type="checkbox" value="true" />{" "}
-            Allow multiple answers
-          </span>
+        <label className={styles.checkboxField}>
+          <input
+            className={styles.checkboxInput}
+            name="allowMultipleAnswers"
+            type="checkbox"
+            value="true"
+          />
+          <span>Allow multiple answers</span>
         </label>
       ) : null}
 

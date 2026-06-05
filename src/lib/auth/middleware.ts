@@ -52,7 +52,7 @@ export async function requireAdminSession() {
   const session = await getSession();
 
   if (!session) {
-    redirect("/admin/sign-in");
+    redirect("/sign-in");
   }
 
   if (session.user.role !== "admin") {

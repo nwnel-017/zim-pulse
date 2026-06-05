@@ -16,12 +16,6 @@ export default function Home() {
           <Link className="auth-button" href="/sign-in">
             User sign-in
           </Link>
-          <Link className="auth-button ghost-button" href="/admin/sign-up">
-            Admin sign-up
-          </Link>
-          <Link className="auth-button ghost-button" href="/admin/sign-in">
-            Admin sign-in
-          </Link>
         </div>
       </section>
     </main>
