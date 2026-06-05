@@ -22,7 +22,13 @@ const submittedDateFormatter = new Intl.DateTimeFormat("en-US", {
 
 function formatAnswer(answer: SurveyAnswerValue) {
   if (Array.isArray(answer)) {
-    return answer.length ? answer.join(", ") : "No response saved.";
+    if (!answer.length) {
+      return "No response saved.";
+    }
+
+    return answer
+      .map((value) => typeof value === "string" ? value : value.label)
+      .join(", ");
   }
 
   if (typeof answer === "string") {

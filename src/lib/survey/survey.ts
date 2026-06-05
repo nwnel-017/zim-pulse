@@ -18,6 +18,7 @@ type SurveyQuestionRecord = {
     id: string;
     label: string;
   }>;
+  sortOrder: number;
   datasource: SurveyQuestionDataSource | null;
   id: string;
   prompt: string;
@@ -93,13 +94,34 @@ function deserializeSurveyAnswer(
   const firstAnswer = answers[0];
 
   if (questionType === SurveyQuestionType.SEARCH_SELECT) {
+    if (responseMode === responseModes.MULTIPLE) {
+      return answers.flatMap((answer) => {
+        if (!answer.textValue) {
+          return [];
+        }
+
+        return [
+          {
+            label: answer.textValue,
+            selectedId:
+              datasource === SurveyQuestionDataSource.CITY
+                ? answer.cityId
+                : datasource === SurveyQuestionDataSource.LANGUAGE
+                  ? answer.languageId
+                  : null,
+          },
+        ];
+      });
+    }
+
     return {
       label: firstAnswer?.textValue ?? "",
-      selectedId: datasource === SurveyQuestionDataSource.CITY
-        ? (firstAnswer?.cityId ?? null)
-        : datasource === SurveyQuestionDataSource.LANGUAGE
-          ? (firstAnswer?.languageId ?? null)
-          : null,
+      selectedId:
+        datasource === SurveyQuestionDataSource.CITY
+          ? (firstAnswer?.cityId ?? null)
+          : datasource === SurveyQuestionDataSource.LANGUAGE
+            ? (firstAnswer?.languageId ?? null)
+            : null,
     };
   }
 
@@ -181,7 +203,7 @@ export async function getAdminSurveyEntryByUserId(userId: string) {
 export async function getAdminSurveyEntries() {
   const submissions = await prisma.surveySubmission.findMany({
     orderBy: {
-      createdAt: true,
+      createdAt: "desc",
     },
     select: {
       createdAt: true,
@@ -203,7 +225,9 @@ export async function getAdminSurveyEntries() {
       submittedAt: submission.createdAt,
       userId: submission.userId,
     }))
-    .sort((left, right) => right.submittedAt.getTime() - left.submittedAt.getTime());
+    .sort(
+      (left, right) => right.submittedAt.getTime() - left.submittedAt.getTime(),
+    );
 }
 
 export async function getEditableSurveyResponseQuestions(
@@ -266,6 +290,7 @@ export async function getEditableSurveyResponseQuestions(
     id: question.id,
     prompt: question.prompt,
     required: question.required,
+    responseMode: getResponseMode(question),
     type: question.type,
   }));
 }

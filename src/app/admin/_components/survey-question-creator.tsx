@@ -51,6 +51,8 @@ function SurveyQuestionCreatorForm({
 
   const showsChoices = selectableQuestionTypes.has(questionType);
   const showDataSources = questionType === SurveyQuestionType.SEARCH_SELECT;
+  const showAllowMultipleAnswers = questionType === SurveyQuestionType.CHECKBOX
+    || questionType === SurveyQuestionType.SEARCH_SELECT;
 
   function updateOptionLabel(index: number, value: string) {
     setOptionLabels((currentLabels) =>
@@ -98,6 +100,17 @@ function SurveyQuestionCreatorForm({
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="auth-field">
+        <span>Question order</span>
+        <input
+          defaultValue="0"
+          min="0"
+          name="sortOrder"
+          required
+          type="number"
+        />
       </label>
 
       {showsChoices ? (
@@ -157,6 +170,15 @@ function SurveyQuestionCreatorForm({
           required={showDataSources}
           selectedDataSource={dataSource}
         />
+      ) : null}
+
+      {showAllowMultipleAnswers ? (
+        <label className="auth-field">
+          <span>
+            <input name="allowMultipleAnswers" type="checkbox" value="true" />{" "}
+            Allow multiple answers
+          </span>
+        </label>
       ) : null}
 
       <SubmitButton />

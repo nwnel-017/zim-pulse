@@ -10,8 +10,26 @@ import type {
 } from "@/types/survey";
 import styles from "./data-selection.module.css";
 
+function isSearchSelectAnswer(
+  value: SearchSelectAnswer | SearchSelectAnswer[],
+): value is SearchSelectAnswer {
+  return !Array.isArray(value);
+}
+
+function isSameSelection(
+  left: SearchSelectAnswer,
+  right: SearchSelectAnswer,
+) {
+  if (left.selectedId && right.selectedId) {
+    return left.selectedId === right.selectedId;
+  }
+
+  return left.label === right.label;
+}
+
 type SearchSelectionProps = {
-  answer: SearchSelectAnswer;
+  allowMultiple: boolean;
+  answer: SearchSelectAnswer | SearchSelectAnswer[];
   addResponse: AddSurveyResponse;
   emptyStateText: string;
   loadingText: string;
@@ -23,6 +41,7 @@ type SearchSelectionProps = {
 };
 
 export default function SearchSelection({
+  allowMultiple,
   answer,
   addResponse,
   emptyStateText,
@@ -33,10 +52,15 @@ export default function SearchSelection({
   showMeta,
   source,
 }: SearchSelectionProps) {
-  const [query, setQuery] = useState(answer.label);
+  const [query, setQuery] = useState(
+    !allowMultiple && isSearchSelectAnswer(answer) ? answer.label : "",
+  );
   const [results, setResults] = useState<SurveySearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const selectedAnswers = allowMultiple
+    ? (Array.isArray(answer) ? answer : [])
+    : [];
 
   useEffect(() => {
     const trimmedQuery = query.trim();
@@ -91,13 +115,41 @@ export default function SearchSelection({
   }, [query, searchLabel, source]);
 
   function handleSelect(result: SurveySearchResult) {
+    const nextAnswer = {
+      label: result.value,
+      selectedId: result.id,
+    };
+
+    if (allowMultiple) {
+      if (selectedAnswers.some((item) => isSameSelection(item, nextAnswer))) {
+        setQuery("");
+        setResults([]);
+        setSearchError(null);
+        return;
+      }
+
+      addResponse(questionId, [...selectedAnswers, nextAnswer]);
+      setQuery("");
+      setResults([]);
+      setSearchError(null);
+      return;
+    }
+
     setQuery(result.label);
     setResults([]);
     setSearchError(null);
-    addResponse(questionId, {
-      label: result.value,
-      selectedId: result.id,
-    });
+    addResponse(questionId, nextAnswer);
+  }
+
+  function handleRemoveSelection(answerToRemove: SearchSelectAnswer) {
+    if (!allowMultiple) {
+      return;
+    }
+
+    addResponse(
+      questionId,
+      selectedAnswers.filter((item) => !isSameSelection(item, answerToRemove)),
+    );
   }
 
   return (
@@ -113,16 +165,36 @@ export default function SearchSelection({
             setResults([]);
             setIsLoading(false);
             setSearchError(null);
-            addResponse(questionId, {
-              label: nextQuery,
-              selectedId: null,
-            });
+
+            if (!allowMultiple) {
+              addResponse(questionId, {
+                label: nextQuery,
+                selectedId: null,
+              });
+            }
           }}
           placeholder={placeholder}
           type="text"
           value={query}
         />
       </label>
+
+      {allowMultiple && selectedAnswers.length ? (
+        <ul className={styles.selectedList}>
+          {selectedAnswers.map((selectedAnswer, index) => (
+            <li className={styles.selectedItem} key={`${selectedAnswer.selectedId ?? selectedAnswer.label}:${index}`}>
+              <span className={styles.selectedText}>{selectedAnswer.label}</span>
+              <button
+                className={styles.removeSelectedButton}
+                onClick={() => handleRemoveSelection(selectedAnswer)}
+                type="button"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {isLoading ? <p className={styles.statusText}>{loadingText}</p> : null}
 
@@ -163,7 +235,7 @@ export default function SearchSelection({
         </ul>
       ) : null}
 
-      {answer.label ? (
+      {!allowMultiple && isSearchSelectAnswer(answer) && answer.label ? (
         <p className={styles.selectedText}>Selected: {answer.label}</p>
       ) : null}
     </div>

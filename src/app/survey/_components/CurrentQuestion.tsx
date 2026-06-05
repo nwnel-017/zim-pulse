@@ -1,4 +1,5 @@
 import styles from "@/app/survey/_components/survey-flow.module.css";
+import { SurveyResponseMode } from "@/generated/prisma/enums";
 import type {
   AddSurveyResponse,
   FrontendSurveyQuestion,
@@ -19,17 +20,26 @@ export function CurrentQuestion({
   answer,
 }: CurrentQuestionProps) {
   const isRequired = question.required;
+  const isMultiSelect = question.responseMode === SurveyResponseMode.MULTI_SELECT;
   const searchSelectAnswer = isSearchSelectAnswer(answer)
     ? answer
     : {
         label: "",
         selectedId: null,
       };
+  const searchSelectAnswers = isSearchSelectAnswerList(answer) ? answer : [];
 
   function isSearchSelectAnswer(
     answer: SurveyAnswerValue,
   ): answer is SearchSelectAnswer {
     return !Array.isArray(answer) && typeof answer !== "string";
+  }
+
+  function isSearchSelectAnswerList(
+    answer: SurveyAnswerValue,
+  ): answer is SearchSelectAnswer[] {
+    return Array.isArray(answer) &&
+      answer.every((item) => typeof item === "object" && item !== null);
   }
 
   switch (question.type) {
@@ -147,16 +157,32 @@ export function CurrentQuestion({
       return question.comboOptions.length ? (
         <div className={styles.optionList}>
           {question.comboOptions.map((option) => {
-            const selectedValues = Array.isArray(answer) ? answer : [];
-            const nextValues = selectedValues.includes(option.label)
-              ? selectedValues.filter((item) => item !== option.label)
-              : [...selectedValues, option.label];
+            const selectedValues = Array.isArray(answer) &&
+              answer.every((item) => typeof item === "string")
+              ? answer
+              : [];
 
             return (
               <label className={styles.optionLabel} key={option.id}>
                 <input
-                  checked={selectedValues.includes(option.label)}
-                  onChange={() => addResponse(question.id, nextValues)}
+                  checked={isMultiSelect
+                    ? selectedValues.includes(option.label)
+                    : selectedValues.includes(option.label)}
+                  onChange={(event) => {
+                    if (!isMultiSelect) {
+                      addResponse(
+                        question.id,
+                        event.target.checked ? [option.label] : [],
+                      );
+                      return;
+                    }
+
+                    const nextValues = selectedValues.includes(option.label)
+                      ? selectedValues.filter((item) => item !== option.label)
+                      : [...selectedValues, option.label];
+
+                    addResponse(question.id, nextValues);
+                  }}
                   type="checkbox"
                   value={option.label}
                 />
@@ -175,7 +201,8 @@ export function CurrentQuestion({
       if (question.datasource) {
         return (
           <DataSelection
-            answer={searchSelectAnswer}
+            allowMultiple={isMultiSelect}
+            answer={isMultiSelect ? searchSelectAnswers : searchSelectAnswer}
             addResponse={addResponse}
             questionId={question.id}
             source={question.datasource}

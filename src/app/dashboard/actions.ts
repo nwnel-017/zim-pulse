@@ -60,6 +60,29 @@ function isSearchSelectAnswer(
   );
 }
 
+function isSearchSelectAnswerList(
+  answer: SurveyAnswerValue,
+): answer is SearchSelectAnswer[] {
+  return Array.isArray(answer) &&
+    answer.every((item) =>
+      typeof item === "object" &&
+      item !== null &&
+      "label" in item &&
+      "selectedId" in item
+    );
+}
+
+function getSearchSelectAnswers(
+  answer: SurveyAnswerValue,
+  allowMultiple: boolean,
+) {
+  if (allowMultiple) {
+    return isSearchSelectAnswerList(answer) ? answer : null;
+  }
+
+  return isSearchSelectAnswer(answer) ? [answer] : null;
+}
+
 function formatCityAnswer(city: {
   country: {
     name: string;
@@ -163,83 +186,98 @@ export async function updateSurveyResponse(
           textValue: values[0] ?? null,
         }];
   } else if (question.type === SurveyQuestionType.SEARCH_SELECT) {
-    if (!isSearchSelectAnswer(input.answer)) {
+    const values = getSearchSelectAnswers(
+      input.answer,
+      responseMode === responseModes.MULTIPLE,
+    );
+
+    if (!values?.length) {
       return createSurveyActionError("Invalid answer.");
     }
 
-    const validationResult = surveyTextAnswerSchema.safeParse(input.answer.label);
+    for (const value of values) {
+      const validationResult = surveyTextAnswerSchema.safeParse(value.label);
 
-    if (!validationResult.success) {
-      return createSurveyActionError("Invalid answer.");
+      if (!validationResult.success) {
+        return createSurveyActionError("Invalid answer.");
+      }
     }
 
     if (question.datasource === SurveyQuestionDataSource.CITY) {
-      if (!input.answer.selectedId) {
-        return createSurveyActionError(
-          `A valid city must be selected for "${question.prompt}".`,
-        );
-      }
+      answersToSave = [];
 
-      const city = await prisma.city.findUnique({
-        include: {
-          country: {
-            select: {
-              name: true,
+      for (const value of values) {
+        if (!value.selectedId) {
+          return createSurveyActionError(
+            `A valid city must be selected for "${question.prompt}".`,
+          );
+        }
+
+        const city = await prisma.city.findUnique({
+          include: {
+            country: {
+              select: {
+                name: true,
+              },
             },
           },
-        },
-        where: {
-          id: input.answer.selectedId,
-        },
-      });
+          where: {
+            id: value.selectedId,
+          },
+        });
 
-      if (!city) {
-        return createSurveyActionError(
-          `A valid city must be selected for "${question.prompt}".`,
-        );
+        if (!city) {
+          return createSurveyActionError(
+            `A valid city must be selected for "${question.prompt}".`,
+          );
+        }
+
+        answersToSave.push({
+          booleanValue: null,
+          cityId: city.id,
+          languageId: null,
+          numberValue: null,
+          textValue: formatCityAnswer(city),
+        });
       }
-
-      answersToSave = [{
-        booleanValue: null,
-        cityId: city.id,
-        languageId: null,
-        numberValue: null,
-        textValue: formatCityAnswer(city),
-      }];
     } else if (question.datasource === SurveyQuestionDataSource.LANGUAGE) {
-      if (!input.answer.selectedId) {
-        return createSurveyActionError(
-          `A valid language must be selected for "${question.prompt}".`,
-        );
+      answersToSave = [];
+
+      for (const value of values) {
+        if (!value.selectedId) {
+          return createSurveyActionError(
+            `A valid language must be selected for "${question.prompt}".`,
+          );
+        }
+
+        const language = await prisma.language.findUnique({
+          where: {
+            id: value.selectedId,
+          },
+        });
+
+        if (!language) {
+          return createSurveyActionError(
+            `A valid language must be selected for "${question.prompt}".`,
+          );
+        }
+
+        answersToSave.push({
+          booleanValue: null,
+          cityId: null,
+          languageId: language.id,
+          numberValue: null,
+          textValue: language.name,
+        });
       }
-
-      const language = await prisma.language.findUnique({
-        where: {
-          id: input.answer.selectedId,
-        },
-      });
-
-      if (!language) {
-        return createSurveyActionError(
-          `A valid language must be selected for "${question.prompt}".`,
-        );
-      }
-
-      answersToSave = [{
-        booleanValue: null,
-        cityId: null,
-        languageId: language.id,
-        numberValue: null,
-        textValue: language.name,
-      }];
     } else {
-      answersToSave = [{
+      answersToSave = values.map((value) => ({
         booleanValue: null,
         cityId: null,
         languageId: null,
         numberValue: null,
-        textValue: validationResult.data,
-      }];
+        textValue: value.label,
+      }));
     }
   } else {
     const validationResult = surveyTextAnswerSchema.safeParse(input.answer);

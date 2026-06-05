@@ -56,6 +56,29 @@ function isSearchSelectAnswer(
   );
 }
 
+function isSearchSelectAnswerList(
+  answer: SurveyAnswers[string] | undefined,
+): answer is SearchSelectAnswer[] {
+  return Array.isArray(answer) &&
+    answer.every((item) =>
+      typeof item === "object" &&
+      item !== null &&
+      "label" in item &&
+      "selectedId" in item
+    );
+}
+
+function getSearchSelectAnswers(
+  answer: SurveyAnswers[string] | undefined,
+  allowMultiple: boolean,
+) {
+  if (allowMultiple) {
+    return isSearchSelectAnswerList(answer) ? answer : null;
+  }
+
+  return isSearchSelectAnswer(answer) ? [answer] : null;
+}
+
 function formatCityAnswer(city: {
   country: {
     name: string;
@@ -146,97 +169,104 @@ export async function submitSurveyResponses(
         }
 
         if (question.type === SurveyQuestionType.SEARCH_SELECT) {
-          if (!isSearchSelectAnswer(submittedAnswer)) {
+          const values = getSearchSelectAnswers(
+            submittedAnswer,
+            responseMode === responseModes.MULTIPLE,
+          );
+
+          if (!values?.length) {
             throw new Error("Invalid answer.");
           }
 
-          const validationResult = surveyTextAnswerSchema.safeParse(
-            submittedAnswer.label,
-          );
+          for (const value of values) {
+            const validationResult = surveyTextAnswerSchema.safeParse(value.label);
 
-          if (!validationResult.success) {
-            throw new Error("Invalid answer.");
+            if (!validationResult.success) {
+              throw new Error("Invalid answer.");
+            }
           }
 
           if (question.datasource === SurveyQuestionDataSource.CITY) {
-            if (!submittedAnswer.selectedId) {
-              throw new Error(
-                `A valid city must be selected for "${question.prompt}".`,
-              );
-            }
+            return Promise.all(
+              values.map(async (value) => {
+                if (!value.selectedId) {
+                  throw new Error(
+                    `A valid city must be selected for "${question.prompt}".`,
+                  );
+                }
 
-            const city = await prisma.city.findUnique({
-              include: {
-                country: {
-                  select: {
-                    name: true,
+                const city = await prisma.city.findUnique({
+                  include: {
+                    country: {
+                      select: {
+                        name: true,
+                      },
+                    },
                   },
-                },
-              },
-              where: {
-                id: submittedAnswer.selectedId,
-              },
-            });
+                  where: {
+                    id: value.selectedId,
+                  },
+                });
 
-            if (!city) {
-              throw new Error(
-                `A valid city must be selected for "${question.prompt}".`,
-              );
-            }
+                if (!city) {
+                  throw new Error(
+                    `A valid city must be selected for "${question.prompt}".`,
+                  );
+                }
 
-            return [
-              {
-                booleanValue: null,
-                cityId: city.id,
-                languageId: null,
-                numberValue: null,
-                questionId: question.id,
-                textValue: formatCityAnswer(city),
-              },
-            ];
+                return {
+                  booleanValue: null,
+                  cityId: city.id,
+                  languageId: null,
+                  numberValue: null,
+                  questionId: question.id,
+                  textValue: formatCityAnswer(city),
+                };
+              }),
+            );
           }
 
           if (question.datasource === SurveyQuestionDataSource.LANGUAGE) {
-            if (!submittedAnswer.selectedId) {
-              throw new Error(
-                `A valid language must be selected for "${question.prompt}".`,
-              );
-            }
+            return Promise.all(
+              values.map(async (value) => {
+                if (!value.selectedId) {
+                  throw new Error(
+                    `A valid language must be selected for "${question.prompt}".`,
+                  );
+                }
 
-            const language = await prisma.language.findUnique({
-              where: {
-                id: submittedAnswer.selectedId,
-              },
-            });
+                const language = await prisma.language.findUnique({
+                  where: {
+                    id: value.selectedId,
+                  },
+                });
 
-            if (!language) {
-              throw new Error(
-                `A valid language must be selected for "${question.prompt}".`,
-              );
-            }
+                if (!language) {
+                  throw new Error(
+                    `A valid language must be selected for "${question.prompt}".`,
+                  );
+                }
 
-            return [
-              {
-                booleanValue: null,
-                cityId: null,
-                languageId: language.id,
-                numberValue: null,
-                questionId: question.id,
-                textValue: language.name,
-              },
-            ];
+                return {
+                  booleanValue: null,
+                  cityId: null,
+                  languageId: language.id,
+                  numberValue: null,
+                  questionId: question.id,
+                  textValue: language.name,
+                };
+              }),
+            );
           }
 
-          return [
-            {
-              booleanValue: null,
-              cityId: null,
-              languageId: null,
-              numberValue: null,
-              questionId: question.id,
-              textValue: validationResult.data,
-            },
-          ];
+          return values.map((value) => ({
+            booleanValue: null,
+            cityId: null,
+            languageId: null,
+            numberValue: null,
+            questionId: question.id,
+            textValue: value.label,
+          }));
         }
 
         const validationResult =

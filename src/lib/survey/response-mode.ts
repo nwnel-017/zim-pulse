@@ -27,8 +27,10 @@ export function getResponseMode(
 
 export function getResponseModeForQuestionType(
   questionType: SurveyQuestionType,
+  allowMultipleAnswers = false,
 ): ResponseModeValue {
-  return questionType === SurveyQuestionType.CHECKBOX
+  return ((questionType === SurveyQuestionType.CHECKBOX
+      || questionType === SurveyQuestionType.SEARCH_SELECT) && allowMultipleAnswers)
     ? responseModes.MULTIPLE
     : responseModes.SINGLE;
 }

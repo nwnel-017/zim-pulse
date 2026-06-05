@@ -1,15 +1,20 @@
 import { SurveyQuestionDataSource } from "@/generated/prisma/enums";
-import type { AddSurveyResponse, SearchSelectAnswer } from "@/types/survey";
+import type {
+  AddSurveyResponse,
+  SearchSelectAnswer,
+} from "@/types/survey";
 import SearchSelection from "./search-selection";
 
 type DataSelectionProps = {
-  answer: SearchSelectAnswer;
+  allowMultiple: boolean;
+  answer: SearchSelectAnswer | SearchSelectAnswer[];
   addResponse: AddSurveyResponse;
   questionId: string;
   source: SurveyQuestionDataSource;
 };
 
 export default function DataSelection({
+  allowMultiple,
   answer,
   addResponse,
   questionId,
@@ -19,6 +24,7 @@ export default function DataSelection({
     case SurveyQuestionDataSource.COUNTRY:
       return (
         <SearchSelection
+          allowMultiple={allowMultiple}
           answer={answer}
           addResponse={addResponse}
           emptyStateText="No countries matched your search."
@@ -33,6 +39,7 @@ export default function DataSelection({
     case SurveyQuestionDataSource.CITY:
       return (
         <SearchSelection
+          allowMultiple={allowMultiple}
           answer={answer}
           addResponse={addResponse}
           emptyStateText="No cities matched your search."
@@ -47,6 +54,7 @@ export default function DataSelection({
     case SurveyQuestionDataSource.LANGUAGE:
       return (
         <SearchSelection
+          allowMultiple={allowMultiple}
           answer={answer}
           addResponse={addResponse}
           emptyStateText="No languages matched your search."

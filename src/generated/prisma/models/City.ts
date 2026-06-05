@@ -42,6 +42,7 @@ export type CityMinAggregateOutputType = {
   id: string | null
   name: string | null
   countryId: string | null
+  dedupeKey: string | null
   stateCode: string | null
   latitude: number | null
   longitude: number | null
@@ -53,6 +54,7 @@ export type CityMaxAggregateOutputType = {
   id: string | null
   name: string | null
   countryId: string | null
+  dedupeKey: string | null
   stateCode: string | null
   latitude: number | null
   longitude: number | null
@@ -64,6 +66,7 @@ export type CityCountAggregateOutputType = {
   id: number
   name: number
   countryId: number
+  dedupeKey: number
   stateCode: number
   latitude: number
   longitude: number
@@ -89,6 +92,7 @@ export type CityMinAggregateInputType = {
   id?: true
   name?: true
   countryId?: true
+  dedupeKey?: true
   stateCode?: true
   latitude?: true
   longitude?: true
@@ -100,6 +104,7 @@ export type CityMaxAggregateInputType = {
   id?: true
   name?: true
   countryId?: true
+  dedupeKey?: true
   stateCode?: true
   latitude?: true
   longitude?: true
@@ -111,6 +116,7 @@ export type CityCountAggregateInputType = {
   id?: true
   name?: true
   countryId?: true
+  dedupeKey?: true
   stateCode?: true
   latitude?: true
   longitude?: true
@@ -209,6 +215,7 @@ export type CityGroupByOutputType = {
   id: string
   name: string
   countryId: string
+  dedupeKey: string | null
   stateCode: string | null
   latitude: number | null
   longitude: number | null
@@ -243,6 +250,7 @@ export type CityWhereInput = {
   id?: Prisma.StringFilter<"City"> | string
   name?: Prisma.StringFilter<"City"> | string
   countryId?: Prisma.StringFilter<"City"> | string
+  dedupeKey?: Prisma.StringNullableFilter<"City"> | string | null
   stateCode?: Prisma.StringNullableFilter<"City"> | string | null
   latitude?: Prisma.FloatNullableFilter<"City"> | number | null
   longitude?: Prisma.FloatNullableFilter<"City"> | number | null
@@ -256,6 +264,7 @@ export type CityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   countryId?: Prisma.SortOrder
+  dedupeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   stateCode?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -267,6 +276,7 @@ export type CityOrderByWithRelationInput = {
 
 export type CityWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  dedupeKey?: string
   AND?: Prisma.CityWhereInput | Prisma.CityWhereInput[]
   OR?: Prisma.CityWhereInput[]
   NOT?: Prisma.CityWhereInput | Prisma.CityWhereInput[]
@@ -279,12 +289,13 @@ export type CityWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"City"> | Date | string
   country?: Prisma.XOR<Prisma.CountryScalarRelationFilter, Prisma.CountryWhereInput>
   surveyAnswers?: Prisma.SurveyAnswerListRelationFilter
-}, "id">
+}, "id" | "dedupeKey">
 
 export type CityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   countryId?: Prisma.SortOrder
+  dedupeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   stateCode?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,6 +315,7 @@ export type CityScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"City"> | string
   name?: Prisma.StringWithAggregatesFilter<"City"> | string
   countryId?: Prisma.StringWithAggregatesFilter<"City"> | string
+  dedupeKey?: Prisma.StringNullableWithAggregatesFilter<"City"> | string | null
   stateCode?: Prisma.StringNullableWithAggregatesFilter<"City"> | string | null
   latitude?: Prisma.FloatNullableWithAggregatesFilter<"City"> | number | null
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"City"> | number | null
@@ -314,6 +326,7 @@ export type CityScalarWhereWithAggregatesInput = {
 export type CityCreateInput = {
   id?: string
   name: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -327,6 +340,7 @@ export type CityUncheckedCreateInput = {
   id?: string
   name: string
   countryId: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -338,6 +352,7 @@ export type CityUncheckedCreateInput = {
 export type CityUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -351,6 +366,7 @@ export type CityUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   countryId?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -363,6 +379,7 @@ export type CityCreateManyInput = {
   id?: string
   name: string
   countryId: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -373,6 +390,7 @@ export type CityCreateManyInput = {
 export type CityUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -384,6 +402,7 @@ export type CityUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   countryId?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -410,6 +429,7 @@ export type CityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   countryId?: Prisma.SortOrder
+  dedupeKey?: Prisma.SortOrder
   stateCode?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -427,6 +447,7 @@ export type CityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   countryId?: Prisma.SortOrder
+  dedupeKey?: Prisma.SortOrder
   stateCode?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -438,6 +459,7 @@ export type CityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   countryId?: Prisma.SortOrder
+  dedupeKey?: Prisma.SortOrder
   stateCode?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -520,6 +542,7 @@ export type NullableIntFieldUpdateOperationsInput = {
 export type CityCreateWithoutSurveyAnswersInput = {
   id?: string
   name: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -532,6 +555,7 @@ export type CityUncheckedCreateWithoutSurveyAnswersInput = {
   id?: string
   name: string
   countryId: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -558,6 +582,7 @@ export type CityUpdateToOneWithWhereWithoutSurveyAnswersInput = {
 export type CityUpdateWithoutSurveyAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -570,6 +595,7 @@ export type CityUncheckedUpdateWithoutSurveyAnswersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   countryId?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -580,6 +606,7 @@ export type CityUncheckedUpdateWithoutSurveyAnswersInput = {
 export type CityCreateWithoutCountryInput = {
   id?: string
   name: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -591,6 +618,7 @@ export type CityCreateWithoutCountryInput = {
 export type CityUncheckedCreateWithoutCountryInput = {
   id?: string
   name: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -632,6 +660,7 @@ export type CityScalarWhereInput = {
   id?: Prisma.StringFilter<"City"> | string
   name?: Prisma.StringFilter<"City"> | string
   countryId?: Prisma.StringFilter<"City"> | string
+  dedupeKey?: Prisma.StringNullableFilter<"City"> | string | null
   stateCode?: Prisma.StringNullableFilter<"City"> | string | null
   latitude?: Prisma.FloatNullableFilter<"City"> | number | null
   longitude?: Prisma.FloatNullableFilter<"City"> | number | null
@@ -642,6 +671,7 @@ export type CityScalarWhereInput = {
 export type CityCreateManyCountryInput = {
   id?: string
   name: string
+  dedupeKey?: string | null
   stateCode?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -652,6 +682,7 @@ export type CityCreateManyCountryInput = {
 export type CityUpdateWithoutCountryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -663,6 +694,7 @@ export type CityUpdateWithoutCountryInput = {
 export type CityUncheckedUpdateWithoutCountryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -674,6 +706,7 @@ export type CityUncheckedUpdateWithoutCountryInput = {
 export type CityUncheckedUpdateManyWithoutCountryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stateCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -716,6 +749,7 @@ export type CitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   name?: boolean
   countryId?: boolean
+  dedupeKey?: boolean
   stateCode?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -730,6 +764,7 @@ export type CitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   name?: boolean
   countryId?: boolean
+  dedupeKey?: boolean
   stateCode?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -742,6 +777,7 @@ export type CitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   name?: boolean
   countryId?: boolean
+  dedupeKey?: boolean
   stateCode?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -754,6 +790,7 @@ export type CitySelectScalar = {
   id?: boolean
   name?: boolean
   countryId?: boolean
+  dedupeKey?: boolean
   stateCode?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -761,7 +798,7 @@ export type CitySelectScalar = {
   createdAt?: boolean
 }
 
-export type CityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "countryId" | "stateCode" | "latitude" | "longitude" | "population" | "createdAt", ExtArgs["result"]["city"]>
+export type CityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "countryId" | "dedupeKey" | "stateCode" | "latitude" | "longitude" | "population" | "createdAt", ExtArgs["result"]["city"]>
 export type CityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   country?: boolean | Prisma.CountryDefaultArgs<ExtArgs>
   surveyAnswers?: boolean | Prisma.City$surveyAnswersArgs<ExtArgs>
@@ -784,6 +821,7 @@ export type $CityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     name: string
     countryId: string
+    dedupeKey: string | null
     stateCode: string | null
     latitude: number | null
     longitude: number | null
@@ -1217,6 +1255,7 @@ export interface CityFieldRefs {
   readonly id: Prisma.FieldRef<"City", 'String'>
   readonly name: Prisma.FieldRef<"City", 'String'>
   readonly countryId: Prisma.FieldRef<"City", 'String'>
+  readonly dedupeKey: Prisma.FieldRef<"City", 'String'>
   readonly stateCode: Prisma.FieldRef<"City", 'String'>
   readonly latitude: Prisma.FieldRef<"City", 'Float'>
   readonly longitude: Prisma.FieldRef<"City", 'Float'>

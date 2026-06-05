@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
 
 type EmailAuthFormProps = {
@@ -11,6 +12,13 @@ type EmailAuthFormProps = {
   title: string;
 };
 
+type UserSignUpResponse = {
+  message?: string;
+};
+
+const isProduction =
+  process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
+
 export function EmailAuthForm({
   callbackPath = "/dashboard",
   description,
@@ -18,6 +26,8 @@ export function EmailAuthForm({
   mode,
   title,
 }: EmailAuthFormProps) {
+  const router = useRouter();
+  const [appPassword, setAppPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -30,6 +40,33 @@ export function EmailAuthForm({
     setPending(true);
 
     if (mode === "sign-up") {
+      if (!isProduction) {
+        const response = await fetch("/api/dev/user-sign-up", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            appPassword,
+            email,
+          }),
+        });
+
+        const result = (await response
+          .json()
+          .catch(() => null)) as UserSignUpResponse | null;
+
+        if (!response.ok) {
+          setError(result?.message ?? "Unable to create your account.");
+          setPending(false);
+          return;
+        }
+
+        router.replace(callbackPath);
+        router.refresh();
+        return;
+      }
+
       const { error: signUpError } = await authClient.signIn.magicLink({
         email,
         newUserCallbackURL: callbackPath,
@@ -45,6 +82,33 @@ export function EmailAuthForm({
         "Check your email for the sign-in link to finish creating your account.",
       );
       setPending(false);
+      return;
+    }
+
+    if (!isProduction) {
+      const response = await fetch("/api/dev/user-sign-in", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          appPassword,
+          email,
+        }),
+      });
+
+      const result = (await response
+        .json()
+        .catch(() => null)) as UserSignUpResponse | null;
+
+      if (!response.ok) {
+        setError(result?.message ?? "Unable to sign in.");
+        setPending(false);
+        return;
+      }
+
+      router.replace(callbackPath);
+      router.refresh();
       return;
     }
 
@@ -85,14 +149,36 @@ export function EmailAuthForm({
           />
         </label>
 
+        {(mode === "sign-up" || mode === "sign-in") && !isProduction ? (
+          <label className="auth-field">
+            <span>App password</span>
+            <input
+              autoComplete="current-password"
+              name="appPassword"
+              onChange={(event) => setAppPassword(event.target.value)}
+              required
+              type="password"
+              value={appPassword}
+            />
+          </label>
+        ) : null}
+
         <button className="auth-button" disabled={pending} type="submit">
           {pending
             ? mode === "sign-up"
-              ? "Sending link..."
-              : "Sending link..."
+              ? isProduction
+                ? "Sending link..."
+                : "Creating account..."
+              : isProduction
+                ? "Sending link..."
+                : "Signing in..."
             : mode === "sign-up"
-              ? "Email me a sign-up link"
-              : "Email me a sign-in link"}
+              ? isProduction
+                ? "Email me a sign-up link"
+                : "Create account"
+              : isProduction
+                ? "Email me a sign-in link"
+                : "Sign in"}
         </button>
       </form>
 

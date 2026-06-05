@@ -12,6 +12,7 @@ import { SurveyQuestionType } from "@/generated/prisma/enums";
 import type { SurveyQuestionOption } from "@/types/survey";
 
 type SurveyQuestionEditorProps = {
+  allowMultipleAnswers: boolean;
   comboOptions: SurveyQuestionOption[];
   prompt: string;
   questionId: string;
@@ -85,6 +86,7 @@ function SurveyQuestionOptionEditorRow({
 }
 
 export function SurveyQuestionEditor({
+  allowMultipleAnswers,
   comboOptions,
   prompt,
   questionId,
@@ -118,6 +120,8 @@ export function SurveyQuestionEditor({
   }
 
   const showsChoices = selectableQuestionTypes.has(type);
+  const showsAllowMultipleAnswers = type === SurveyQuestionType.CHECKBOX
+    || type === SurveyQuestionType.SEARCH_SELECT;
 
   return (
     <details
@@ -135,6 +139,7 @@ export function SurveyQuestionEditor({
 
       <form action={formAction} className="auth-form admin-inline-form">
         <input name="questionId" type="hidden" value={questionId} />
+        <input name="type" type="hidden" value={type} />
 
         <label className="auth-field">
           <span>Question prompt</span>
@@ -163,6 +168,20 @@ export function SurveyQuestionEditor({
             Required for users
           </span>
         </label>
+
+        {showsAllowMultipleAnswers ? (
+          <label className="auth-field">
+            <span>
+              <input
+                defaultChecked={allowMultipleAnswers}
+                name="allowMultipleAnswers"
+                type="checkbox"
+                value="true"
+              />{" "}
+              Allow multiple answers
+            </span>
+          </label>
+        ) : null}
 
         <div className="admin-inline-actions">
           <button className="auth-button" disabled={isPending} type="submit">

@@ -39,6 +39,10 @@ const optionLabelsSchema = z.preprocess(
 
 export const createSurveyQuestionSchema = z
   .object({
+    allowMultipleAnswers: z.preprocess(
+      (value) => value === "true",
+      z.boolean(),
+    ),
     datasource: z.preprocess(
       (value) => {
         if (typeof value !== "string") {
@@ -60,11 +64,36 @@ export const createSurveyQuestionSchema = z
       invalidTypeError: "Question prompt is required.",
       max: 500,
     }),
+    sortOrder: z.coerce
+      .number({
+        error: "Question order must be a valid number.",
+      })
+      .int({
+        error: "Question order must be a whole number.",
+      })
+      .min(0, {
+        error: "Question order cannot be negative.",
+      })
+      .max(10000, {
+        error: "Question order is too large.",
+      }),
     type: z.enum(surveyQuestionTypeValues, {
       error: "Invalid question type.",
     }),
   })
   .superRefine((value, context) => {
+    if (
+      value.allowMultipleAnswers &&
+      value.type !== SurveyQuestionType.CHECKBOX &&
+      value.type !== SurveyQuestionType.SEARCH_SELECT
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Multiple answers can only be enabled for checkbox or search-select questions.",
+        path: ["allowMultipleAnswers"],
+      });
+    }
+
     if (
       value.type === SurveyQuestionType.SEARCH_SELECT &&
       !value.datasource
@@ -89,6 +118,10 @@ export const createSurveyQuestionSchema = z
   });
 
 export const updateSurveyQuestionSchema = z.object({
+  allowMultipleAnswers: z.preprocess(
+    (value) => value === "true",
+    z.boolean(),
+  ),
   prompt: normalizedText({
     max: 500,
   }),
@@ -109,6 +142,21 @@ export const updateSurveyQuestionSchema = z.object({
     .max(10000, {
       error: "Question order is too large.",
     }),
+  type: z.enum(surveyQuestionTypeValues, {
+    error: "Invalid question type.",
+  }),
+}).superRefine((value, context) => {
+  if (
+    value.allowMultipleAnswers &&
+    value.type !== SurveyQuestionType.CHECKBOX &&
+    value.type !== SurveyQuestionType.SEARCH_SELECT
+  ) {
+    context.addIssue({
+      code: "custom",
+      message: "Multiple answers can only be enabled for checkbox or search-select questions.",
+      path: ["allowMultipleAnswers"],
+    });
+  }
 });
 
 export const deleteSurveyQuestionSchema = z.object({

@@ -215,6 +215,7 @@ export const CityScalarFieldEnum = {
   id: 'id',
   name: 'name',
   countryId: 'countryId',
+  dedupeKey: 'dedupeKey',
   stateCode: 'stateCode',
   latitude: 'latitude',
   longitude: 'longitude',

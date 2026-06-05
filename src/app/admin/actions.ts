@@ -33,9 +33,11 @@ export async function createSurveyQuestion(
   await requireAdminSession();
 
   const validationResult = createSurveyQuestionSchema.safeParse({
+    allowMultipleAnswers: formData.get("allowMultipleAnswers"),
     datasource: formData.get("datasource"),
     optionLabels: formData.getAll("optionLabel"),
     prompt: formData.get("prompt"),
+    sortOrder: formData.get("sortOrder"),
     type: formData.get("type"),
   });
 
@@ -43,7 +45,14 @@ export async function createSurveyQuestion(
     return createQuestionError(getFirstZodIssueMessage(validationResult.error));
   }
 
-  const { datasource, optionLabels, prompt, type } = validationResult.data;
+  const {
+    allowMultipleAnswers,
+    datasource,
+    optionLabels,
+    prompt,
+    sortOrder,
+    type,
+  } = validationResult.data;
   const comboOptions: Array<{
     label: string;
     sortOrder: number;
@@ -57,8 +66,6 @@ export async function createSurveyQuestion(
   }
 
   try {
-    const nextSortOrder = await prisma.surveyQuestion.count();
-
     await prisma.surveyQuestion.create({
       data: {
         comboOptions: comboOptions.length
@@ -69,8 +76,8 @@ export async function createSurveyQuestion(
         datasource:
           type === SurveyQuestionType.SEARCH_SELECT ? datasource : null,
         prompt,
-        responseMode: getResponseModeForQuestionType(type),
-        sortOrder: nextSortOrder,
+        responseMode: getResponseModeForQuestionType(type, allowMultipleAnswers),
+        sortOrder,
         type,
       },
     } as never);
@@ -89,17 +96,26 @@ export async function updateSurveyQuestion(
   await requireAdminSession();
 
   const validationResult = updateSurveyQuestionSchema.safeParse({
+    allowMultipleAnswers: formData.get("allowMultipleAnswers"),
     prompt: formData.get("prompt"),
     questionId: formData.get("questionId"),
     required: formData.get("required") === "true",
     sortOrder: formData.get("sortOrder"),
+    type: formData.get("type"),
   });
 
   if (!validationResult.success) {
     return { success: false, error: "Invalid input." };
   }
 
-  const { prompt, questionId, required, sortOrder } = validationResult.data;
+  const {
+    allowMultipleAnswers,
+    prompt,
+    questionId,
+    required,
+    sortOrder,
+    type,
+  } = validationResult.data;
 
   const result = await prisma.surveyQuestion.updateMany({
     where: {
@@ -108,6 +124,7 @@ export async function updateSurveyQuestion(
     data: {
       prompt,
       required,
+      responseMode: getResponseModeForQuestionType(type, allowMultipleAnswers),
       sortOrder,
     },
   });

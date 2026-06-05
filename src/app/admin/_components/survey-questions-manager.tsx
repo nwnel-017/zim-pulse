@@ -2,6 +2,7 @@ import { createSurveyQuestion } from "@/app/admin/actions";
 import { DeleteSurveyQuestionForm } from "@/app/admin/_components/delete-survey-question-form";
 import { SurveyQuestionCreator } from "@/app/admin/_components/survey-question-creator";
 import { SurveyQuestionEditor } from "@/app/admin/_components/survey-question-editor";
+import { SurveyResponseMode } from "@/generated/prisma/enums";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
 import type { getSurveyQuestions } from "@/lib/survey/survey";
 
@@ -46,6 +47,9 @@ export function SurveyQuestionsManager({
                 <p className="admin-question-prompt">{question.prompt}</p>
                 <div className="admin-question-actions">
                   <SurveyQuestionEditor
+                    allowMultipleAnswers={
+                      question.responseMode === SurveyResponseMode.MULTI_SELECT
+                    }
                     comboOptions={question.comboOptions.map((option) => ({
                       id: option.id,
                       label: option.label,

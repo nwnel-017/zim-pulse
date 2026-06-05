@@ -1,6 +1,7 @@
 import {
   SurveyQuestionDataSource,
   SurveyQuestionType,
+  SurveyResponseMode,
 } from "@/generated/prisma/enums";
 
 export type SurveyQuestionOption = {
@@ -14,10 +15,15 @@ export type FrontendSurveyQuestion = {
   id: string;
   prompt: string;
   required: boolean;
+  responseMode: SurveyResponseMode;
   type: SurveyQuestionType;
 };
 
-export type SurveyAnswerValue = string | string[] | SearchSelectAnswer;
+export type SurveyAnswerValue =
+  | string
+  | string[]
+  | SearchSelectAnswer
+  | SearchSelectAnswer[];
 
 export type SearchSelectAnswer = {
   label: string;

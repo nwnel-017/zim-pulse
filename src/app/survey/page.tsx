@@ -23,6 +23,7 @@ export default async function SurveyPage() {
       id: question.id,
       prompt: question.prompt,
       required: question.required,
+      responseMode: question.responseMode,
       type: question.type,
     }),
   );
