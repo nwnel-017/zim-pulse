@@ -12,7 +12,10 @@ import {
 import { SurveyQuestionType } from "@/generated/prisma/enums";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
-import { getResponseModeForQuestionType } from "@/lib/survey/response-mode";
+import {
+  getResponseModeForQuestionType,
+  questionTypeSupportsResponseMode,
+} from "@/lib/survey/response-mode";
 import { getFirstZodIssueMessage } from "@/utils/validation/zod-helpers";
 
 function createQuestionError(message: string) {
@@ -76,7 +79,9 @@ export async function createSurveyQuestion(
         datasource:
           type === SurveyQuestionType.SEARCH_SELECT ? datasource : null,
         prompt,
-        responseMode: getResponseModeForQuestionType(type, allowMultipleAnswers),
+        responseMode: questionTypeSupportsResponseMode(type)
+          ? getResponseModeForQuestionType(type, allowMultipleAnswers)
+          : null,
         sortOrder,
         type,
       },
@@ -124,7 +129,9 @@ export async function updateSurveyQuestion(
     data: {
       prompt,
       required,
-      responseMode: getResponseModeForQuestionType(type, allowMultipleAnswers),
+      responseMode: questionTypeSupportsResponseMode(type)
+        ? getResponseModeForQuestionType(type, allowMultipleAnswers)
+        : null,
       sortOrder,
     },
   });

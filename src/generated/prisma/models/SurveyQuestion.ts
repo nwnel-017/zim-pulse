@@ -209,7 +209,7 @@ export type SurveyQuestionGroupByOutputType = {
   required: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode: $Enums.SurveyResponseMode
+  responseMode: $Enums.SurveyResponseMode | null
   datasource: $Enums.SurveyQuestionDataSource | null
   createdAt: Date
   updatedAt: Date
@@ -244,7 +244,7 @@ export type SurveyQuestionWhereInput = {
   required?: Prisma.BoolFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode
+  responseMode?: Prisma.EnumSurveyResponseModeNullableFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode | null
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFilter<"SurveyQuestion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyQuestion"> | Date | string
@@ -258,7 +258,7 @@ export type SurveyQuestionOrderByWithRelationInput = {
   required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  responseMode?: Prisma.SortOrder
+  responseMode?: Prisma.SortOrderInput | Prisma.SortOrder
   datasource?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -275,7 +275,7 @@ export type SurveyQuestionWhereUniqueInput = Prisma.AtLeast<{
   required?: Prisma.BoolFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode
+  responseMode?: Prisma.EnumSurveyResponseModeNullableFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode | null
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFilter<"SurveyQuestion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SurveyQuestion"> | Date | string
@@ -289,7 +289,7 @@ export type SurveyQuestionOrderByWithAggregationInput = {
   required?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  responseMode?: Prisma.SortOrder
+  responseMode?: Prisma.SortOrderInput | Prisma.SortOrder
   datasource?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -309,7 +309,7 @@ export type SurveyQuestionScalarWhereWithAggregatesInput = {
   required?: Prisma.BoolWithAggregatesFilter<"SurveyQuestion"> | boolean
   prompt?: Prisma.StringWithAggregatesFilter<"SurveyQuestion"> | string
   type?: Prisma.EnumSurveyQuestionTypeWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode
+  responseMode?: Prisma.EnumSurveyResponseModeNullableWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyResponseMode | null
   datasource?: Prisma.EnumSurveyQuestionDataSourceNullableWithAggregatesFilter<"SurveyQuestion"> | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyQuestion"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SurveyQuestion"> | Date | string
@@ -321,7 +321,7 @@ export type SurveyQuestionCreateInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -335,7 +335,7 @@ export type SurveyQuestionUncheckedCreateInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -349,7 +349,7 @@ export type SurveyQuestionUpdateInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -363,7 +363,7 @@ export type SurveyQuestionUncheckedUpdateInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,7 +377,7 @@ export type SurveyQuestionCreateManyInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -389,7 +389,7 @@ export type SurveyQuestionUpdateManyMutationInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -401,7 +401,7 @@ export type SurveyQuestionUncheckedUpdateManyInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,8 +468,8 @@ export type EnumSurveyQuestionTypeFieldUpdateOperationsInput = {
   set?: $Enums.SurveyQuestionType
 }
 
-export type EnumSurveyResponseModeFieldUpdateOperationsInput = {
-  set?: $Enums.SurveyResponseMode
+export type NullableEnumSurveyResponseModeFieldUpdateOperationsInput = {
+  set?: $Enums.SurveyResponseMode | null
 }
 
 export type NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput = {
@@ -510,7 +510,7 @@ export type SurveyQuestionCreateWithoutComboOptionsInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -523,7 +523,7 @@ export type SurveyQuestionUncheckedCreateWithoutComboOptionsInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -552,7 +552,7 @@ export type SurveyQuestionUpdateWithoutComboOptionsInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -565,7 +565,7 @@ export type SurveyQuestionUncheckedUpdateWithoutComboOptionsInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -578,7 +578,7 @@ export type SurveyQuestionCreateWithoutSurveyAnswersInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -591,7 +591,7 @@ export type SurveyQuestionUncheckedCreateWithoutSurveyAnswersInput = {
   required?: boolean
   prompt: string
   type: $Enums.SurveyQuestionType
-  responseMode?: $Enums.SurveyResponseMode
+  responseMode?: $Enums.SurveyResponseMode | null
   datasource?: $Enums.SurveyQuestionDataSource | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -620,7 +620,7 @@ export type SurveyQuestionUpdateWithoutSurveyAnswersInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -633,7 +633,7 @@ export type SurveyQuestionUncheckedUpdateWithoutSurveyAnswersInput = {
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
-  responseMode?: Prisma.EnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode
+  responseMode?: Prisma.NullableEnumSurveyResponseModeFieldUpdateOperationsInput | $Enums.SurveyResponseMode | null
   datasource?: Prisma.NullableEnumSurveyQuestionDataSourceFieldUpdateOperationsInput | $Enums.SurveyQuestionDataSource | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -752,7 +752,7 @@ export type $SurveyQuestionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     required: boolean
     prompt: string
     type: $Enums.SurveyQuestionType
-    responseMode: $Enums.SurveyResponseMode
+    responseMode: $Enums.SurveyResponseMode | null
     datasource: $Enums.SurveyQuestionDataSource | null
     createdAt: Date
     updatedAt: Date

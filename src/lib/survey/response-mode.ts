@@ -8,27 +8,44 @@ export const responseModes = {
 export type ResponseModeValue =
   (typeof responseModes)[keyof typeof responseModes];
 
+const questionTypesWithResponseMode: ReadonlySet<SurveyQuestionType> = new Set([
+  SurveyQuestionType.DROPDOWN,
+  SurveyQuestionType.RADIO,
+  SurveyQuestionType.CHECKBOX,
+  SurveyQuestionType.SEARCH_SELECT,
+]);
+
 type QuestionWithOptionalResponseMode = {
   responseMode?: ResponseModeValue | null;
   type: SurveyQuestionType;
 };
 
+export function questionTypeSupportsResponseMode(questionType: SurveyQuestionType) {
+  return questionTypesWithResponseMode.has(questionType);
+}
+
 export function getResponseMode(
   question: QuestionWithOptionalResponseMode,
-): ResponseModeValue {
+): ResponseModeValue | null {
+  if (!questionTypeSupportsResponseMode(question.type)) {
+    return null;
+  }
+
   if (question.responseMode) {
     return question.responseMode;
   }
 
-  return question.type === SurveyQuestionType.CHECKBOX
-    ? responseModes.MULTIPLE
-    : responseModes.SINGLE;
+  return getResponseModeForQuestionType(question.type);
 }
 
 export function getResponseModeForQuestionType(
   questionType: SurveyQuestionType,
   allowMultipleAnswers = false,
-): ResponseModeValue {
+): ResponseModeValue | null {
+  if (!questionTypeSupportsResponseMode(questionType)) {
+    return null;
+  }
+
   return ((questionType === SurveyQuestionType.CHECKBOX
       || questionType === SurveyQuestionType.SEARCH_SELECT) && allowMultipleAnswers)
     ? responseModes.MULTIPLE

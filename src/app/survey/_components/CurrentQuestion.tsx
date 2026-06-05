@@ -1,5 +1,6 @@
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import { SurveyResponseMode } from "@/generated/prisma/enums";
+import { questionTypeSupportsResponseMode } from "@/lib/survey/response-mode";
 import type {
   AddSurveyResponse,
   FrontendSurveyQuestion,
@@ -20,7 +21,8 @@ export function CurrentQuestion({
   answer,
 }: CurrentQuestionProps) {
   const isRequired = question.required;
-  const isMultiSelect = question.responseMode === SurveyResponseMode.MULTI_SELECT;
+  const isMultiSelect = questionTypeSupportsResponseMode(question.type)
+    && question.responseMode === SurveyResponseMode.MULTI_SELECT;
   const searchSelectAnswer = isSearchSelectAnswer(answer)
     ? answer
     : {

@@ -5,6 +5,7 @@ import type { SurveyActionState } from "@/app/survey/action-state";
 import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import { SurveyResponseMode } from "@/generated/prisma/enums";
+import { questionTypeSupportsResponseMode } from "@/lib/survey/response-mode";
 import {
   type FrontendSurveyQuestion,
   type SearchSelectAnswer,
@@ -24,7 +25,10 @@ function createInitialSurveyAnswer(question: FrontendSurveyQuestion) {
   }
 
   if (question.type === "SEARCH_SELECT") {
-    if (question.responseMode === SurveyResponseMode.MULTI_SELECT) {
+    if (
+      questionTypeSupportsResponseMode(question.type)
+      && question.responseMode === SurveyResponseMode.MULTI_SELECT
+    ) {
       return [];
     }
 
@@ -41,7 +45,6 @@ export function SurveyFlow({
   action,
   questionCount,
   questions,
-  userName,
 }: SurveyFlowProps) {
   const [pending, startTransition] = useTransition();
   const [currentStep, setCurrentStep] = useState(0);

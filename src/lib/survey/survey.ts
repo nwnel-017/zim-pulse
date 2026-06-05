@@ -87,14 +87,14 @@ export async function getIncompleteSurveyQuestions(userId: string) {
 
 function deserializeSurveyAnswer(
   datasource: SurveyQuestionDataSource | null,
-  responseMode: ResponseModeValue,
+  responseMode: ResponseModeValue | null,
   questionType: SurveyQuestionType,
   answers: StoredSurveyAnswer[] = [],
 ): SurveyAnswerValue {
   const firstAnswer = answers[0];
 
   if (questionType === SurveyQuestionType.SEARCH_SELECT) {
-    if (responseMode === responseModes.MULTIPLE) {
+    if (responseMode && responseMode === responseModes.MULTIPLE) {
       return answers.flatMap((answer) => {
         if (!answer.textValue) {
           return [];

@@ -112,7 +112,7 @@ model SurveyQuestion {
   required        Boolean                     @default(false)
   prompt          String
   type            SurveyQuestionType
-  responseMode    SurveyResponseMode          @default(SINGLE_SELECT)
+  responseMode    SurveyResponseMode?
   datasource      SurveyQuestionDataSource?
   createdAt       DateTime                    @default(now())
   updatedAt       DateTime                    @updatedAt

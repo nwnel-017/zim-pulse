@@ -15,7 +15,7 @@ export type FrontendSurveyQuestion = {
   id: string;
   prompt: string;
   required: boolean;
-  responseMode: SurveyResponseMode;
+  responseMode?: SurveyResponseMode | null;
   type: SurveyQuestionType;
 };
 
