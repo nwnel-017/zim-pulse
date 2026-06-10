@@ -120,6 +120,10 @@ export function SurveyFlow({
   function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (!isLastStep) {
+      return;
+    }
+
     if (!canLeaveQuestion(currentQuestion)) {
       setError("Complete this question before submitting the survey.");
       return;
@@ -175,6 +179,7 @@ export function SurveyFlow({
         <CurrentQuestion
           addResponse={addResponse}
           answer={surveyResponses[currentQuestion.id]}
+          key={currentQuestion.id}
           question={currentQuestion}
         />
       </div>
