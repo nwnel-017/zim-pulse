@@ -48,7 +48,7 @@ export default async function DashboardPage() {
         )}
         <div>
           <Link href="/dashboard/user-insights" className="link">
-            View User Insights
+            View User Map
           </Link>
         </div>
         <SignOutButton redirectTo="/sign-in" />

@@ -50,6 +50,13 @@ export default async function AdminPage() {
               View or edit questions
             </Link>
           </article>
+          <article className="admin-stat-card">
+            <p className="admin-stat-label">User globe</p>
+            <strong className="admin-stat-value">Insights</strong>
+            <Link className="auth-link-button ghost-button" href="/admin/globe">
+              View globe
+            </Link>
+          </article>
         </section>
         <dl className="session-list">
           <div>

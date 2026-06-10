@@ -210,11 +210,7 @@ export function SurveyFlow({
           </button>
         ) : null}
 
-        {isLastStep ? (
-          <button className="auth-button" disabled={pending} type="submit">
-            {pending ? "Submitting..." : "Submit survey"}
-          </button>
-        ) : (
+        {!isLastStep ? (
           <button
             className="auth-button"
             disabled={pending}
@@ -223,8 +219,16 @@ export function SurveyFlow({
           >
             Next question
           </button>
-        )}
+        ) : null}
       </div>
+
+      {isLastStep ? (
+        <div className={styles.submitAction}>
+          <button className="auth-button" disabled={pending} type="submit">
+            {pending ? "Submitting..." : "Submit survey"}
+          </button>
+        </div>
+      ) : null}
     </form>
   );
 }

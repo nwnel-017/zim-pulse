@@ -16,10 +16,7 @@ function isSearchSelectAnswer(
   return !Array.isArray(value);
 }
 
-function isSameSelection(
-  left: SearchSelectAnswer,
-  right: SearchSelectAnswer,
-) {
+function isSameSelection(left: SearchSelectAnswer, right: SearchSelectAnswer) {
   if (left.selectedId && right.selectedId) {
     return left.selectedId === right.selectedId;
   }
@@ -59,7 +56,9 @@ export default function SearchSelection({
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const selectedAnswers = allowMultiple
-    ? (Array.isArray(answer) ? answer : [])
+    ? Array.isArray(answer)
+      ? answer
+      : []
     : [];
 
   useEffect(() => {
@@ -86,7 +85,9 @@ export default function SearchSelection({
         const payload = (await response.json()) as SurveySearchResponse;
 
         if (!response.ok) {
-          throw new Error(payload.message || `Unable to search ${searchLabel.toLowerCase()}.`);
+          throw new Error(
+            payload.message || `Unable to search ${searchLabel.toLowerCase()}.`,
+          );
         }
 
         setResults(payload.results || []);
@@ -182,8 +183,13 @@ export default function SearchSelection({
       {allowMultiple && selectedAnswers.length ? (
         <ul className={styles.selectedList}>
           {selectedAnswers.map((selectedAnswer, index) => (
-            <li className={styles.selectedItem} key={`${selectedAnswer.selectedId ?? selectedAnswer.label}:${index}`}>
-              <span className={styles.selectedText}>{selectedAnswer.label}</span>
+            <li
+              className={styles.selectedItem}
+              key={`${selectedAnswer.selectedId ?? selectedAnswer.label}:${index}`}
+            >
+              <span className={styles.selectedText}>
+                {selectedAnswer.label}
+              </span>
               <button
                 className={styles.removeSelectedButton}
                 onClick={() => handleRemoveSelection(selectedAnswer)}
@@ -226,9 +232,6 @@ export default function SearchSelection({
                 type="button"
               >
                 <span>{result.label}</span>
-                {showMeta && result.meta ? (
-                  <span className={styles.resultMeta}>{result.meta}</span>
-                ) : null}
               </button>
             </li>
           ))}

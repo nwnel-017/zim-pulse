@@ -3,8 +3,10 @@ import {
   SurveyQuestionDataSource,
   SurveyQuestionType,
 } from "@/generated/prisma/enums";
-import { requireUserSession } from "@/lib/auth/middleware";
+import { getSession } from "@/lib/auth/middleware";
 import { prisma } from "@/lib/prisma/prisma";
+import { redirect } from "next/navigation";
+import { userNeedsSurvey } from "@/lib/survey/survey";
 import type { GlobeCityPoint } from "@/types/survey";
 
 function comparePoints(left: GlobeCityPoint, right: GlobeCityPoint) {
@@ -16,7 +18,15 @@ function comparePoints(left: GlobeCityPoint, right: GlobeCityPoint) {
 }
 
 export async function GET() {
-  await requireUserSession();
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  if (session.user.role !== "admin" && (await userNeedsSurvey(session.user.id))) {
+    redirect("/survey");
+  }
 
   const answers = await prisma.surveyAnswer.findMany({
     select: {

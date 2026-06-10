@@ -117,6 +117,12 @@
   gap: 0.75rem;
 }
 
+.submitAction {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .secondaryAction {
   border: 0;
   border-radius: 999rem;
@@ -149,5 +155,9 @@
   .actions {
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  .submitAction {
+    align-items: flex-end;
   }
 }
