@@ -1,0 +1,13 @@
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.widget {
+  min-height: 4.875rem;
+}
+
+.helpText {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

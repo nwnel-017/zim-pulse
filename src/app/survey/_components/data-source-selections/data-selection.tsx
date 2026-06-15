@@ -10,6 +10,7 @@ type DataSelectionProps = {
   answer: SearchSelectAnswer | SearchSelectAnswer[];
   addResponse: AddSurveyResponse;
   questionId: string;
+  selectedCountryId?: string | null;
   source: SurveyQuestionDataSource;
 };
 
@@ -18,6 +19,7 @@ export default function DataSelection({
   answer,
   addResponse,
   questionId,
+  selectedCountryId = null,
   source,
 }: DataSelectionProps) {
   switch (source) {
@@ -43,12 +45,14 @@ export default function DataSelection({
           answer={answer}
           addResponse={addResponse}
           emptyStateText="No cities matched your search."
+          isDisabled={!selectedCountryId}
           loadingText="Searching cities..."
           placeholder="Start typing a city name"
           questionId={questionId}
           searchLabel="Search for a city"
           showMeta
           source={source}
+          sourceContextId={selectedCountryId}
         />
       );
     case SurveyQuestionDataSource.LANGUAGE:

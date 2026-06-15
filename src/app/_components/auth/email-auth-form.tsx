@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { TurnstileField } from "@/app/_components/auth/turnstile-field";
 import { authClient } from "@/lib/auth/auth-client";
 
 type EmailAuthFormProps = {
@@ -18,6 +19,35 @@ type UserSignUpResponse = {
 
 const isProduction =
   process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
+const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+declare global {
+  interface Window {
+    turnstile?: {
+      reset: () => void;
+    };
+  }
+}
+
+async function verifyTurnstileToken(token: string) {
+  const response = await fetch("/api/turnstile/verify", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const result = (await response.json().catch(() => null)) as {
+    success?: unknown;
+  } | null;
+
+  return result?.success === true;
+}
 
 export function EmailAuthForm({
   callbackPath = "/dashboard",
@@ -38,6 +68,41 @@ export function EmailAuthForm({
     setError(null);
     setNotice(null);
     setPending(true);
+
+    if (!turnstileSiteKey) {
+      setError("Verification is not configured.");
+      setPending(false);
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    const turnstileToken = formData.get("cf-turnstile-response");
+
+    if (typeof turnstileToken !== "string" || !turnstileToken) {
+      setError("Complete the verification before continuing.");
+      setPending(false);
+      return;
+    }
+
+    try {
+      const verified = await verifyTurnstileToken(turnstileToken);
+
+      if (!verified) {
+        window.turnstile?.reset();
+        setError("Verification failed. Try again.");
+        setPending(false);
+        return;
+      }
+    } catch (error) {
+      window.turnstile?.reset();
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Verification failed. Try again.",
+      );
+      setPending(false);
+      return;
+    }
 
     if (mode === "sign-up") {
       if (!isProduction) {
@@ -162,6 +227,8 @@ export function EmailAuthForm({
             />
           </label>
         ) : null}
+
+        <TurnstileField siteKey={turnstileSiteKey} />
 
         <button className="auth-button" disabled={pending} type="submit">
           {pending

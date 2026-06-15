@@ -29,12 +29,14 @@ type SearchSelectionProps = {
   answer: SearchSelectAnswer | SearchSelectAnswer[];
   addResponse: AddSurveyResponse;
   emptyStateText: string;
+  isDisabled?: boolean;
   loadingText: string;
   placeholder: string;
   questionId: string;
   searchLabel: string;
   showMeta: boolean;
   source: SurveyQuestionDataSource;
+  sourceContextId?: string | null;
 };
 
 export default function SearchSelection({
@@ -42,12 +44,14 @@ export default function SearchSelection({
   answer,
   addResponse,
   emptyStateText,
+  isDisabled = false,
   loadingText,
   placeholder,
   questionId,
   searchLabel,
   showMeta,
   source,
+  sourceContextId = null,
 }: SearchSelectionProps) {
   const [query, setQuery] = useState(
     !allowMultiple && isSearchSelectAnswer(answer) ? answer.label : "",
@@ -64,7 +68,7 @@ export default function SearchSelection({
   useEffect(() => {
     const trimmedQuery = query.trim();
 
-    if (trimmedQuery.length < 2) {
+    if (isDisabled || trimmedQuery.length < 2) {
       return;
     }
 
@@ -74,13 +78,19 @@ export default function SearchSelection({
       setSearchError(null);
 
       try {
-        const response = await fetch(
-          `/api/survey-search?source=${source}&q=${encodeURIComponent(trimmedQuery)}`,
-          {
-            method: "GET",
-            signal: controller.signal,
-          },
-        );
+        const params = new URLSearchParams({
+          q: trimmedQuery,
+          source,
+        });
+
+        if (sourceContextId) {
+          params.set("countryId", sourceContextId);
+        }
+
+        const response = await fetch(`/api/survey-search?${params}`, {
+          method: "GET",
+          signal: controller.signal,
+        });
 
         const payload = (await response.json()) as SurveySearchResponse;
 
@@ -113,7 +123,7 @@ export default function SearchSelection({
       controller.abort();
       window.clearTimeout(timeoutId);
     };
-  }, [query, searchLabel, source]);
+  }, [isDisabled, query, searchLabel, source, sourceContextId]);
 
   function handleSelect(result: SurveySearchResult) {
     const nextAnswer = {
@@ -160,6 +170,7 @@ export default function SearchSelection({
         <input
           autoComplete="off"
           className={styles.searchInput}
+          disabled={isDisabled}
           onChange={(event) => {
             const nextQuery = event.target.value;
             setQuery(nextQuery);
@@ -179,6 +190,10 @@ export default function SearchSelection({
           value={query}
         />
       </label>
+
+      {isDisabled ? (
+        <p className={styles.statusText}>Select a country before searching cities.</p>
+      ) : null}
 
       {allowMultiple && selectedAnswers.length ? (
         <ul className={styles.selectedList}>
@@ -208,6 +223,7 @@ export default function SearchSelection({
 
       {!isLoading &&
       !searchError &&
+      !isDisabled &&
       query.trim().length > 0 &&
       query.trim().length < 2 ? (
         <p className={styles.statusText}>
@@ -217,6 +233,7 @@ export default function SearchSelection({
 
       {!isLoading &&
       !searchError &&
+      !isDisabled &&
       query.trim().length >= 2 &&
       !results.length ? (
         <p className={styles.statusText}>{emptyStateText}</p>
@@ -232,6 +249,9 @@ export default function SearchSelection({
                 type="button"
               >
                 <span>{result.label}</span>
+                {showMeta && result.meta ? (
+                  <span className={styles.resultMeta}>{result.meta}</span>
+                ) : null}
               </button>
             </li>
           ))}

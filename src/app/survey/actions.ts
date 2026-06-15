@@ -79,6 +79,27 @@ function getSearchSelectAnswers(
   return isSearchSelectAnswer(answer) ? [answer] : null;
 }
 
+function getSubmittedCountryId(
+  questions: Awaited<ReturnType<typeof getIncompleteSurveyQuestions>>,
+  surveyResponses: SurveyAnswers,
+) {
+  const countryQuestion = questions.find(
+    (question) => question.datasource === SurveyQuestionDataSource.COUNTRY,
+  );
+
+  if (!countryQuestion) {
+    return null;
+  }
+
+  const countryAnswer = surveyResponses[countryQuestion.id];
+
+  if (!isSearchSelectAnswer(countryAnswer)) {
+    return null;
+  }
+
+  return countryAnswer.selectedId;
+}
+
 function formatCityAnswer(city: {
   country: {
     name: string;
@@ -115,6 +136,7 @@ export async function submitSurveyResponses(
     textValue: string | null;
   }>;
   try {
+    const submittedCountryId = getSubmittedCountryId(questions, surveyResponses);
     const answerGroups = await Promise.all(
       questions.map(async (question) => {
         const submittedAnswer = surveyResponses[question.id];
@@ -211,6 +233,12 @@ export async function submitSurveyResponses(
                 if (!city) {
                   throw new Error(
                     `A valid city must be selected for "${question.prompt}".`,
+                  );
+                }
+
+                if (submittedCountryId && city.countryId !== submittedCountryId) {
+                  throw new Error(
+                    `Select a city in the selected country for "${question.prompt}".`,
                   );
                 }
 

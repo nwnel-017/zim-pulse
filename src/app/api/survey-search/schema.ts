@@ -10,6 +10,10 @@ const surveyQuestionDataSourceValues = Object.values(
 ) as [SurveyQuestionDataSource, ...SurveyQuestionDataSource[]];
 
 export const surveySearchSchema = z.object({
+  countryId: normalizedText({
+    invalidTypeError: "Invalid country.",
+    max: 100,
+  }).optional(),
   q: normalizedText({
     emptyError: "Enter at least 2 characters to search.",
     invalidTypeError: "Enter at least 2 characters to search.",

@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { SurveyActionState } from "@/app/survey/action-state";
 import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
 import styles from "@/app/survey/_components/survey-flow.module.css";
-import { SurveyResponseMode } from "@/generated/prisma/enums";
+import {
+  SurveyQuestionDataSource,
+  SurveyResponseMode,
+} from "@/generated/prisma/enums";
 import { questionTypeSupportsResponseMode } from "@/lib/survey/response-mode";
 import {
   type FrontendSurveyQuestion,
@@ -41,6 +44,19 @@ function createInitialSurveyAnswer(question: FrontendSurveyQuestion) {
   return "";
 }
 
+function getSearchSelectAnswerSelectedId(answer: SurveyAnswers[string]) {
+  if (
+    typeof answer === "object"
+    && answer !== null
+    && !Array.isArray(answer)
+    && "selectedId" in answer
+  ) {
+    return answer.selectedId;
+  }
+
+  return null;
+}
+
 export function SurveyFlow({
   action,
   questionCount,
@@ -62,9 +78,35 @@ export function SurveyFlow({
   });
   const [error, setError] = useState<string | null>(null);
 
+  const countryQuestion = questions.find(
+    (question) => question.datasource === SurveyQuestionDataSource.COUNTRY,
+  );
+  const selectedCountryId = countryQuestion
+    ? getSearchSelectAnswerSelectedId(surveyResponses[countryQuestion.id])
+    : null;
+  const previousSelectedCountryId = useRef<string | null>(selectedCountryId);
   const currentQuestion = questions[currentStep];
   const isLastStep = currentStep === questions.length - 1;
   const progress = ((currentStep + 1) / questionCount) * 100;
+
+  useEffect(() => {
+    if (previousSelectedCountryId.current === selectedCountryId) {
+      return;
+    }
+
+    previousSelectedCountryId.current = selectedCountryId;
+
+    setSurveyResponses((currentResponses) => ({
+      ...currentResponses,
+      ...Object.fromEntries(
+        questions
+          .filter(
+            (question) => question.datasource === SurveyQuestionDataSource.CITY,
+          )
+          .map((question) => [question.id, createInitialSurveyAnswer(question)]),
+      ),
+    }));
+  }, [questions, selectedCountryId]);
 
   if (!currentQuestion) {
     return null;
@@ -181,6 +223,7 @@ export function SurveyFlow({
           answer={surveyResponses[currentQuestion.id]}
           key={currentQuestion.id}
           question={currentQuestion}
+          selectedCountryId={selectedCountryId}
         />
       </div>
 

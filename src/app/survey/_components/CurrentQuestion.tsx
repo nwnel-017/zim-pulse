@@ -13,12 +13,14 @@ type CurrentQuestionProps = {
   addResponse: AddSurveyResponse;
   answer: SurveyAnswerValue;
   question: FrontendSurveyQuestion;
+  selectedCountryId?: string | null;
 };
 
 export function CurrentQuestion({
   addResponse,
   question,
   answer,
+  selectedCountryId = null,
 }: CurrentQuestionProps) {
   const isRequired = question.required;
   const isMultiSelect = questionTypeSupportsResponseMode(question.type)
@@ -207,6 +209,7 @@ export function CurrentQuestion({
             answer={isMultiSelect ? searchSelectAnswers : searchSelectAnswer}
             addResponse={addResponse}
             questionId={question.id}
+            selectedCountryId={selectedCountryId}
             source={question.datasource}
           />
         );

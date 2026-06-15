@@ -18,6 +18,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const validationResult = surveySearchSchema.safeParse({
+    countryId: searchParams.get("countryId") ?? undefined,
     q: searchParams.get("q"),
     source: searchParams.get("source"),
   });
@@ -26,7 +27,7 @@ export async function GET(request: Request) {
     return createBadRequest(getFirstZodIssueMessage(validationResult.error));
   }
 
-  const { q: query, source } = validationResult.data;
+  const { countryId, q: query, source } = validationResult.data;
 
   switch (source) {
     case SurveyQuestionDataSource.COUNTRY: {
@@ -89,6 +90,7 @@ export async function GET(request: Request) {
         ],
         take: RESULT_LIMIT,
         where: {
+          ...(countryId ? { countryId } : {}),
           name: {
             contains: query,
             mode: "insensitive",
