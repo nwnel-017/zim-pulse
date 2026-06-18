@@ -3,55 +3,55 @@ import { requireUserSession } from "@/lib/auth/middleware";
 import { getSurveyQuestions } from "@/lib/survey/survey";
 import SurveyResponse from "./_components/survey-response";
 import Link from "next/link";
+import { AppHeader } from "@/components/ui/AppHeader";
+import { Bebas_Neue, Caveat, Inter } from "next/font/google";
+import styles from "./page.module.css";
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas-neue",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export default async function DashboardPage() {
   const session = await requireUserSession();
   const surveyQuestions = await getSurveyQuestions();
 
   return (
-    <main className="app-shell">
-      <section className="panel">
-        <p className="eyebrow">User Dashboard</p>
-        <h1>Welcome back</h1>
-        <p className="lead">Thank you for participating.</p>
-        <dl className="session-list">
-          <div>
-            <dt>Name</dt>
-            <dd>{session.user.name}</dd>
-          </div>
-          <div>
-            <dt>Email</dt>
-            <dd>{session.user.email}</dd>
-          </div>
-          <div>
-            <dt>Role</dt>
-            <dd>{session.user.role}</dd>
-          </div>
-        </dl>
+    <main className={`${styles.page} ${bebasNeue.variable} ${caveat.variable} ${inter.variable}`}>
+      <AppHeader activeItem="project" ariaLabel="Dashboard navigation" />
+
+      <section className={styles.dashboard} aria-labelledby="dashboard-heading">
+        <div className={styles.banner}>
+          <p className={styles.eyebrow}>thank you for participating!</p>
+          <span className={styles.rule} aria-hidden="true" />
+        </div>
+
+        <div className={styles.greeting}>
+          <p>
+            Hi <strong>{session.user.email}</strong>,
+          </p>
+          <p>thank you for participating.</p>
+        </div>
+
         {surveyQuestions.length > 0 ? (
           <SurveyResponse userId={session.user.id} />
-        ) : (
-          <dl className="session-list">
-            <div>
-              <dt>Name</dt>
-              <dd>{session.user.name}</dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd>{session.user.email}</dd>
-            </div>
-            <div>
-              <dt>Role</dt>
-              <dd>{session.user.role}</dd>
-            </div>
-          </dl>
-        )}
-        <div>
-          <Link href="/dashboard/user-insights" className="link">
-            View User Map
-          </Link>
+        ) : null}
+
+        <div className={styles.actions}>
+          <Link href="/dashboard/user-insights">View user map</Link>
+          <SignOutButton redirectTo="/sign-in" />
         </div>
-        <SignOutButton redirectTo="/sign-in" />
       </section>
     </main>
   );

@@ -140,11 +140,11 @@ export default function SurveyResponseEditor({
     return (
       <div className={styles.closeButton}>
         <button
-          className="auth-button ghost-button"
+          className={styles.primaryButton}
           onClick={() => setIsEditing(true)}
           type="button"
         >
-          Edit response
+          VIEW SUBMISSION
         </button>
       </div>
     );
@@ -169,7 +169,7 @@ export default function SurveyResponseEditor({
       </ul>
 
       <button
-        className={`auth-button ghost-button ${styles.closeButton}`}
+        className={`${styles.primaryButton} ${styles.closeButton}`}
         onClick={() => setIsEditing(false)}
         type="button"
       >

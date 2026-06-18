@@ -7,9 +7,15 @@ import { authClient } from "@/lib/auth/auth-client";
 
 type EmailAuthFormProps = {
   callbackPath?: string;
+  className?: string;
   description: string;
   eyebrow: string;
+  inputLabel?: string;
+  inputPlaceholder?: string;
   mode: "sign-in" | "sign-up";
+  showCopy?: boolean;
+  showEmailIcon?: boolean;
+  submitLabel?: string;
   title: string;
 };
 
@@ -51,9 +57,15 @@ async function verifyTurnstileToken(token: string) {
 
 export function EmailAuthForm({
   callbackPath = "/dashboard",
+  className,
   description,
   eyebrow,
+  inputLabel = "Email",
+  inputPlaceholder = "you@example.com",
   mode,
+  showCopy = true,
+  showEmailIcon = false,
+  submitLabel,
   title,
 }: EmailAuthFormProps) {
   const router = useRouter();
@@ -193,25 +205,32 @@ export function EmailAuthForm({
   }
 
   return (
-    <div className="auth-card">
-      <div className="auth-copy">
-        <p className="eyebrow">{eyebrow}</p>
-        <h1>{title}</h1>
-        <p>{description}</p>
-      </div>
+    <div className={className ? `auth-card ${className}` : "auth-card"}>
+      {showCopy ? (
+        <div className="auth-copy">
+          <p className="eyebrow">{eyebrow}</p>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
+      ) : null}
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <label className="auth-field">
-          <span>Email</span>
-          <input
-            autoComplete="email"
-            name="email"
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="you@example.com"
-            required
-            type="email"
-            value={email}
-          />
+          <span>{inputLabel}</span>
+          <span className="auth-input-row">
+            {showEmailIcon ? (
+              <span className="auth-mail-icon" aria-hidden="true" />
+            ) : null}
+            <input
+              autoComplete="email"
+              name="email"
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder={inputPlaceholder}
+              required
+              type="email"
+              value={email}
+            />
+          </span>
         </label>
 
         {(mode === "sign-up" || mode === "sign-in") && !isProduction ? (
@@ -231,10 +250,12 @@ export function EmailAuthForm({
         <TurnstileField siteKey={turnstileSiteKey} />
 
         <button className="auth-button" disabled={pending} type="submit">
-          {pending
-            ? mode === "sign-up"
-              ? isProduction
-                ? "Sending link..."
+          {!pending && submitLabel
+            ? submitLabel
+            : pending
+              ? mode === "sign-up"
+                ? isProduction
+                  ? "Sending link..."
                 : "Creating account..."
               : isProduction
                 ? "Sending link..."

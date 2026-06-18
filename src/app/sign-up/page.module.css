@@ -1,0 +1,226 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  color: var(--theme-ink);
+  background: #faf8f2;
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+.heading,
+.formCard :global(.auth-field > span:first-child),
+.formCard :global(.auth-button) {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.0625rem;
+}
+
+.authLayout {
+  width: min(100%, 90rem);
+  display: grid;
+  align-content: center;
+  gap: clamp(1rem, 2.6dvh, 2rem);
+  margin: 0 auto;
+  padding: clamp(1rem, 2.8dvh, 2.2rem) clamp(1rem, 13.4dvw, 18.8rem)
+    clamp(1rem, 3dvh, 2.4rem);
+}
+
+.copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(0.35rem, 1.2dvh, 0.9rem);
+}
+
+.heading {
+  font-size: clamp(2.65rem, 8.4dvw, 4rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.headingRule {
+  width: clamp(3.5rem, 10dvw, 5.5rem);
+  border-block-start: 0.12rem solid var(--theme-accent-gold);
+}
+
+.lead {
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 2.2dvw, 1.15rem);
+  line-height: 1.4;
+  letter-spacing: 0.03125rem;
+}
+
+.formCard {
+  width: min(100%, 53.375rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding: 0;
+}
+
+.formCard :global(.auth-form) {
+  display: grid;
+  gap: clamp(0.9rem, 2.2dvh, 1.8rem);
+}
+
+.formCard :global(.auth-field) {
+  display: grid;
+  gap: clamp(0.55rem, 1.5dvh, 1rem);
+  font-size: inherit;
+}
+
+.formCard :global(.auth-field > span:first-child) {
+  color: var(--theme-ink);
+  font-size: clamp(1.15rem, 3.4dvw, 1.45rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.formCard :global(.auth-input-row) {
+  width: min(100%, 34rem);
+  min-height: clamp(2.9rem, 6dvh, 3.9rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 2dvw, 1rem);
+  border: 0.0625rem solid rgba(58, 58, 58, 0.36);
+  border-radius: 0.5rem;
+  padding: clamp(0.65rem, 1.3dvh, 0.85rem) clamp(0.9rem, 1.8dvw, 1.35rem);
+  color: #3a3a3a;
+}
+
+.formCard :global(.auth-mail-icon) {
+  position: relative;
+  width: clamp(1.15rem, 3.4dvw, 1.45rem);
+  aspect-ratio: 1.16;
+  flex: 0 0 auto;
+  border: 0.12rem solid currentColor;
+  border-radius: 0.15rem;
+}
+
+.formCard :global(.auth-mail-icon)::before,
+.formCard :global(.auth-mail-icon)::after {
+  content: "";
+  position: absolute;
+  top: 16%;
+  width: 0.12rem;
+  height: 70%;
+  background: currentColor;
+  transform-origin: top;
+}
+
+.formCard :global(.auth-mail-icon)::before {
+  left: 8%;
+  transform: rotate(-58deg);
+}
+
+.formCard :global(.auth-mail-icon)::after {
+  right: 8%;
+  transform: rotate(58deg);
+}
+
+.formCard :global(.auth-field input) {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #3a3a3a;
+  padding: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.82rem, 1.8dvw, 0.95rem);
+  line-height: 1.4;
+  letter-spacing: clamp(0.08rem, 0.75dvw, 0.22rem);
+}
+
+.formCard :global(.auth-field input::placeholder) {
+  color: #3a3a3a;
+  opacity: 1;
+}
+
+.formCard :global(.auth-field input:focus) {
+  outline: 0;
+}
+
+.formCard :global(.auth-input-row:focus-within) {
+  outline: 0.14rem solid rgba(237, 189, 44, 0.5);
+  outline-offset: 0.2rem;
+}
+
+.formCard :global(.auth-field input:-webkit-autofill) {
+  box-shadow: 0 0 0 100rem #faf8f2 inset;
+  -webkit-text-fill-color: #3a3a3a;
+}
+
+.formCard :global(.auth-field:has(input[name="appPassword"])) {
+  max-width: min(100%, 34rem);
+}
+
+.formCard :global(.auth-field > input) {
+  min-height: clamp(2.9rem, 6dvh, 3.9rem);
+  border: 0.0625rem solid rgba(58, 58, 58, 0.36);
+  border-radius: 0.5rem;
+  padding: clamp(0.65rem, 1.3dvh, 0.85rem) clamp(0.9rem, 1.8dvw, 1.35rem);
+}
+
+.formCard :global(.auth-field > input:focus) {
+  outline: 0.14rem solid rgba(237, 189, 44, 0.5);
+  outline-offset: 0.2rem;
+}
+
+.formCard :global(.auth-button) {
+  width: min(100%, 25rem);
+  min-height: clamp(3rem, 6dvh, 3.9rem);
+  border-radius: 0.5rem;
+  background: var(--theme-accent-gold);
+  color: #3a3a3a;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.85rem, 1.7dvw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.125rem;
+}
+
+.formCard :global(.auth-button:hover) {
+  background: #e5b422;
+}
+
+.formCard :global(.auth-error),
+.formCard > p {
+  max-width: min(100%, 34rem);
+  color: var(--theme-ink);
+  font-size: clamp(0.85rem, 1.8dvw, 0.95rem);
+  line-height: 1.5;
+}
+
+.formCard :global(.auth-error) {
+  color: var(--error);
+}
+
+.secondaryLink {
+  color: #3a3a3a;
+  font-size: clamp(0.82rem, 1.8dvw, 0.95rem);
+  line-height: 1.5;
+}
+
+.secondaryLink a {
+  color: var(--theme-accent-gold);
+  font-weight: 700;
+}
+
+.secondaryLink a:focus-visible,
+.formCard :global(.auth-button:focus-visible) {
+  outline: 0.18rem solid currentColor;
+  outline-offset: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .secondaryLink {
+    margin-top: calc(clamp(0.9rem, 2.2dvh, 1.8rem) * -0.35);
+  }
+}
+
+@media (min-width: 1024px) {
+  .authLayout {
+    padding-top: clamp(1rem, 3dvh, 2.5rem);
+  }
+}

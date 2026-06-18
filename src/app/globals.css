@@ -9,6 +9,12 @@
   --muted: #5d6a80;
   --error: #b42318;
   --shadow: 0 24px 70px rgba(20, 33, 61, 0.14);
+  --theme-ink: #111;
+  --theme-ink-soft: #1b1b1b;
+  --theme-ink-muted: #3a3a3a;
+  --theme-canvas: #f7f6f1;
+  --theme-accent-gold: #edbd2c;
+  --theme-rule: rgba(17, 17, 17, 0.86);
 }
 
 html {

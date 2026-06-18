@@ -28,7 +28,7 @@ export default async function SurveyResponse({
   return (
     <section className={styles.surveyResponse}>
       <div className={styles.copy}>
-        <p className="eyebrow">Survey Response</p>
+        <p className={styles.kicker}>Survey Response</p>
         <h2 className={styles.title}>Your survey has been submitted.</h2>
         <p className={styles.description}>
           Your profile answers are stored on your account and available from
