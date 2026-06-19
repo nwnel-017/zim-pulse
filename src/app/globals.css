@@ -65,6 +65,16 @@ a {
   font-weight: 600;
 }
 
+.page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow-x: hidden;
+  color: var(--theme-ink);
+  background: var(--theme-canvas);
+  font-family: var(--font-inter), sans-serif;
+}
+
 .app-shell,
 .auth-shell {
   width: min(100%, 1120px);

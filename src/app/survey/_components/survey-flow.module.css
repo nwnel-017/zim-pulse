@@ -1,14 +1,8 @@
-.surveyShell {
-  width: 100%;
-  min-height: 100dvh;
-  background: var(--theme-canvas);
-  color: var(--theme-ink);
-  font-family: var(--font-inter), sans-serif;
-}
-
 .surveyPanel {
-  width: min(100%, 90rem);
-  min-height: 100dvh;
+  /* width: min(100%, 90rem); */
+  width: 100%;
+  display: grid;
+  min-height: 0;
   margin: 0 auto;
   padding: clamp(0.75rem, 2.5dvh, 1.5rem) clamp(1rem, 5dvw, 6.5rem)
     clamp(1rem, 2.5dvh, 1.75rem);
@@ -17,7 +11,7 @@
 .surveyFlow {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  min-height: inherit;
+  min-height: 100%;
   color: var(--theme-ink);
 }
 
@@ -229,7 +223,7 @@
   width: min(100%, 18.75rem);
   min-height: clamp(3.25rem, 7dvh, 4.625rem);
   border: 0;
-  border-radius: 999rem;
+  border-radius: 0.75rem;
   padding-inline: 1.25rem;
   cursor: pointer;
   font-family: var(--font-inter), sans-serif;
@@ -250,7 +244,8 @@
 }
 
 .secondaryAction {
-  background: var(--theme-accent-gold);
+  background: var(--theme-canvas);
+  border: 1px solid var(--muted);
   color: var(--theme-ink-muted);
 }
 

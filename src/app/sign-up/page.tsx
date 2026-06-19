@@ -1,30 +1,13 @@
 import Link from "next/link";
-import { Bebas_Neue, Caveat, Inter } from "next/font/google";
 import { EmailAuthForm } from "@/app/_components/auth/email-auth-form";
 import { AppHeader } from "@/components/ui/AppHeader";
 import styles from "./page.module.css";
 
 const isProduction = process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
 
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-bebas-neue",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
 export default function UserSignUpPage() {
   return (
-    <main className={`${styles.page} ${bebasNeue.variable} ${caveat.variable} ${inter.variable}`}>
+    <main className="page">
       <AppHeader activeItem="home" />
 
       <section className={styles.authLayout} aria-labelledby="sign-up-heading">

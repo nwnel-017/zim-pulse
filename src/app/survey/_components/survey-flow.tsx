@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { SurveyActionState } from "@/app/survey/action-state";
 import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
-import { AppHeader } from "@/components/ui/AppHeader";
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import {
   SurveyQuestionDataSource,
@@ -184,8 +183,6 @@ export function SurveyFlow({
 
   return (
     <form className={styles.surveyFlow} onSubmit={handleSubmit}>
-      <AppHeader ariaLabel="Survey navigation" />
-
       <div className={styles.surveyContent}>
         <div className={styles.questionArea}>
           <p className={styles.kicker}>survey</p>

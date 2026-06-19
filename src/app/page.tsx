@@ -1,27 +1,10 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/ui/AppHeader";
-import { Bebas_Neue, Caveat, Inter } from "next/font/google";
 import styles from "./page.module.css";
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-bebas-neue",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 export default function Home() {
   return (
-    <main className={`${styles.page} ${bebasNeue.variable} ${caveat.variable} ${inter.variable}`}>
+    <main className="page">
       <AppHeader activeItem="home" />
 
       <section className={styles.hero} aria-labelledby="landing-heading">

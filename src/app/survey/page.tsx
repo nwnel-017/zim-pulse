@@ -1,27 +1,11 @@
 import { redirect } from "next/navigation";
-import { Bebas_Neue, Caveat, Inter } from "next/font/google";
 import { submitSurveyResponses } from "@/app/survey/actions";
 import { SurveyFlow } from "@/app/survey/_components/survey-flow";
+import { AppHeader } from "@/components/ui/AppHeader";
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import { requireSurveySession } from "@/lib/auth/middleware";
 import { getIncompleteSurveyQuestions } from "@/lib/survey/survey";
 import type { FrontendSurveyQuestion } from "@/types/survey";
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-bebas-neue",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 export default async function SurveyPage() {
   const session = await requireSurveySession();
@@ -47,9 +31,9 @@ export default async function SurveyPage() {
   );
 
   return (
-    <main
-      className={`${styles.surveyShell} ${bebasNeue.variable} ${caveat.variable} ${inter.variable}`}
-    >
+    <main className="page">
+      <AppHeader ariaLabel="Survey navigation" />
+
       <section className={styles.surveyPanel}>
         <SurveyFlow
           action={submitSurveyResponses}
