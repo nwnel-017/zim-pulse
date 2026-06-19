@@ -50,7 +50,6 @@ export function CurrentQuestion({
     case "TEXTAREA":
       return (
         <label className={styles.field}>
-          <span>Type your answer</span>
           <textarea
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -61,7 +60,6 @@ export function CurrentQuestion({
     case "NUMBER":
       return (
         <label className={styles.field}>
-          <span>Enter a number</span>
           <input
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -74,7 +72,6 @@ export function CurrentQuestion({
     case "EMAIL":
       return (
         <label className={styles.field}>
-          <span>Email address</span>
           <input
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -86,7 +83,6 @@ export function CurrentQuestion({
     case "DATE":
       return (
         <label className={styles.field}>
-          <span>Select a date</span>
           <input
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -98,7 +94,6 @@ export function CurrentQuestion({
     case "DROPDOWN":
       return question.comboOptions.length ? (
         <label className={styles.field}>
-          <span>Select one option</span>
           <select
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -121,7 +116,6 @@ export function CurrentQuestion({
     case "BOOLEAN":
       return (
         <label className={styles.field}>
-          <span>Select one option</span>
           <select
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
@@ -218,7 +212,6 @@ export function CurrentQuestion({
     default:
       return (
         <label className={styles.field}>
-          <span>Type your answer</span>
           <input
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}

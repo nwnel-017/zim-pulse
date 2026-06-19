@@ -1,90 +1,189 @@
+.surveyShell {
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--theme-canvas);
+  color: var(--theme-ink);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.surveyPanel {
+  width: min(100%, 90rem);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(0.75rem, 2.5dvh, 1.5rem) clamp(1rem, 5dvw, 6.5rem)
+    clamp(1rem, 2.5dvh, 1.75rem);
+}
+
 .surveyFlow {
   display: grid;
-  gap: 1.5rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: inherit;
+  color: var(--theme-ink);
 }
 
-.copy {
+.surveyContent {
   display: grid;
-  gap: 0.75rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3dvh, 2rem);
+  min-height: 0;
+  padding-block: clamp(0.85rem, 3dvh, 2rem) 0;
 }
 
-.copy h1 {
-  max-width: 16ch;
+.questionArea {
+  display: grid;
+  align-content: center;
+  gap: clamp(0.9rem, 3dvh, 2rem);
+  width: min(100%, 64rem);
+  margin-inline: auto;
+  min-height: 0;
 }
 
-.meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.kicker,
+.stepLabel,
+.questionPrompt,
+.questionHelp,
+.progressLabel {
+  font-weight: 700;
+  line-height: 1.04;
+  text-transform: lowercase;
+}
+
+.kicker,
+.stepLabel,
+.questionPrompt,
+.progressLabel {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03125rem;
+}
+
+.kicker {
+  color: var(--theme-accent-gold);
+}
+
+.kicker,
+.stepLabel,
+.questionPrompt,
+.progressLabel {
+  font-size: clamp(1.8rem, min(7dvw, 6dvh), 3.125rem);
+}
+
+.stepGroup {
+  display: grid;
+  gap: clamp(0.55rem, 1.6dvh, 1rem);
+  justify-items: start;
+}
+
+.stepRule {
+  width: 5.5rem;
+  height: 0.075rem;
+  background: var(--theme-accent-gold);
+}
+
+.questionCard {
+  display: grid;
+  gap: clamp(0.85rem, 2.5dvh, 1.75rem);
+}
+
+.questionPrompt {
+  max-width: 24ch;
+}
+
+.questionHelp {
+  color: var(--theme-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1rem, 3dvw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+.footerArea {
+  align-self: end;
+  display: grid;
+  gap: clamp(0.8rem, 2.4dvh, 1.5rem);
+  width: min(100%, 64rem);
+  margin-inline: auto;
+  padding-block: clamp(0.8rem, 2.4dvh, 1.5rem) 0;
 }
 
 .progressRow {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.45rem, 1.4dvh, 0.8rem);
 }
 
 .progressLabel {
-  color: var(--muted);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: clamp(1.5rem, min(5dvw, 4.8dvh), 2.6rem);
 }
 
 .progressTrack {
   width: 100%;
-  height: 0.5rem;
+  height: clamp(0.5rem, 1.5dvh, 0.85rem);
   border-radius: 999rem;
-  background: rgba(20, 33, 61, 0.08);
+  background: rgba(17, 17, 17, 0.13);
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent) 0%, #ff935f 100%);
+  background: var(--theme-accent-gold);
   transition: width 180ms ease;
-}
-
-.questionCard {
-  display: grid;
-  gap: 1rem;
-  padding: 1.5rem;
-  border: 1px solid rgba(20, 33, 61, 0.08);
-  border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.52);
-}
-
-.questionPrompt {
-  font-size: clamp(1.4rem, 5vw, 2.2rem);
-  line-height: 1.05;
 }
 
 .field,
 .optionList {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+  width: min(100%, 53.375rem);
+}
+
+.field span {
+  font-size: clamp(0.85rem, 2.3dvw, 1rem);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .field input,
 .field textarea,
 .field select {
   width: 100%;
-  border: 1px solid rgba(20, 33, 61, 0.16);
-  border-radius: 1rem;
-  background: var(--surface-strong);
-  color: var(--foreground);
-  padding: 0.95rem 1rem;
-  font: inherit;
+  min-height: clamp(3.75rem, 9dvh, 5.0625rem);
+  border: 0.075rem solid var(--theme-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--theme-ink);
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1.75rem, 4dvw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.3125rem;
+}
+
+.field select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--theme-ink) 50%),
+    linear-gradient(135deg, var(--theme-ink) 50%, transparent 50%);
+  background-position:
+    calc(100% - 2rem) 50%,
+    calc(100% - 1.55rem) 50%;
+  background-repeat: no-repeat;
+  background-size: 0.45rem 0.45rem;
+  padding-right: 4rem;
 }
 
 .field textarea {
-  min-height: 9rem;
+  min-height: clamp(6rem, 18dvh, 9rem);
   resize: vertical;
 }
 
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  outline: 0.125rem solid rgba(255, 107, 53, 0.26);
+  outline: 0.125rem solid var(--theme-accent-gold);
   outline-offset: 0.125rem;
 }
 
@@ -92,72 +191,88 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid rgba(20, 33, 61, 0.1);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.68);
+  padding: 1rem 1.25rem;
+  border: 0.075rem solid var(--theme-rule);
+  background: transparent;
+  color: var(--theme-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1.1rem, 3dvw, 1.5rem);
+  font-weight: 700;
 }
 
 .optionLabel input {
   flex: none;
+  width: 1.2em;
+  height: 1.2em;
+  accent-color: var(--theme-ink);
 }
 
 .emptyState,
 .error {
   color: var(--muted);
+  font-family: var(--font-inter), sans-serif;
 }
 
 .error {
   color: var(--error);
+  font-weight: 700;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: clamp(0.75rem, 2dvh, 1rem);
 }
 
-.submitAction {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.primaryAction,
+.secondaryAction {
+  width: min(100%, 18.75rem);
+  min-height: clamp(3.25rem, 7dvh, 4.625rem);
+  border: 0;
+  border-radius: 999rem;
+  padding-inline: 1.25rem;
+  cursor: pointer;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1rem, 2.4dvw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.03125rem;
+  line-height: 1;
+  text-transform: uppercase;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.primaryAction {
+  align-self: flex-end;
+  background: var(--theme-accent-gold);
+  color: var(--theme-ink-muted);
 }
 
 .secondaryAction {
-  border: 0;
-  border-radius: 999rem;
-  min-height: 3rem;
-  padding: 0 1.375rem;
-  background: rgba(20, 33, 61, 0.08);
-  color: var(--foreground);
-  cursor: pointer;
-  font: inherit;
-  font-weight: 700;
+  background: var(--theme-accent-gold);
+  color: var(--theme-ink-muted);
 }
 
+.primaryAction:hover,
+.secondaryAction:hover {
+  transform: translateY(-0.0625rem);
+}
+
+.primaryAction:disabled,
 .secondaryAction:disabled {
-  opacity: 0.6;
+  opacity: 0.45;
   cursor: not-allowed;
+  transform: none;
 }
 
 @media (min-width: 768px) {
-  .meta {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: end;
-    gap: 1rem;
-  }
-
-  .progressRow {
-    min-width: 40%;
+  .surveyContent {
+    padding-inline: clamp(2rem, 10dvw, 9rem);
   }
 
   .actions {
     flex-direction: row;
     justify-content: space-between;
-  }
-
-  .submitAction {
-    align-items: flex-end;
   }
 }

@@ -1,31 +1,43 @@
 .selectionField {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+  width: min(100%, 53.375rem);
 }
 
 .searchField {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+}
+
+.searchField span {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.85rem, 2.3dvw, 1rem);
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .searchInput {
   width: 100%;
-  border: 1px solid rgba(20, 33, 61, 0.16);
-  border-radius: 1rem;
-  background: var(--surface-strong);
-  color: var(--foreground);
-  padding: 0.95rem 1rem;
-  font: inherit;
+  min-height: clamp(3.75rem, 9dvh, 5.0625rem);
+  border: 0.075rem solid var(--theme-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--theme-ink);
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1.75rem, 4dvw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.3125rem;
 }
 
 .searchInput:focus {
-  outline: 0.125rem solid rgba(255, 107, 53, 0.26);
+  outline: 0.125rem solid var(--theme-accent-gold);
   outline-offset: 0.125rem;
 }
 
 .resultsList {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -33,7 +45,7 @@
 
 .selectedList {
   display: grid;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -41,9 +53,9 @@
 
 .selectedItem {
   align-items: center;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(20, 33, 61, 0.1);
-  border-radius: 1rem;
+  background: transparent;
+  border: 0.075rem solid var(--theme-rule);
+  border-radius: 0;
   display: flex;
   gap: 0.75rem;
   justify-content: space-between;
@@ -54,45 +66,49 @@
   display: grid;
   gap: 0.25rem;
   width: 100%;
-  border: 1px solid rgba(20, 33, 61, 0.1);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.68);
-  color: var(--foreground);
+  border: 0.075rem solid var(--theme-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--theme-ink);
   cursor: pointer;
-  font: inherit;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
   padding: 0.95rem 1rem;
   text-align: left;
 }
 
 .resultButton:hover,
 .resultButton:focus-visible {
-  border-color: rgba(255, 107, 53, 0.38);
+  border-color: var(--theme-accent-gold);
   outline: none;
 }
 
 .resultMeta,
 .statusText,
 .selectedText {
-  color: var(--muted);
+  color: var(--theme-ink-muted);
+  font-family: var(--font-inter), sans-serif;
   font-size: 0.95rem;
 }
 
 .selectedText {
-  color: var(--foreground);
+  color: var(--theme-ink);
+  font-weight: 700;
 }
 
 .removeSelectedButton {
   background: transparent;
   border: none;
-  color: var(--foreground);
+  color: var(--theme-ink);
   cursor: pointer;
-  font: inherit;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
   padding: 0;
   text-decoration: underline;
 }
 
 .removeSelectedButton:hover,
 .removeSelectedButton:focus-visible {
-  color: var(--muted);
+  color: var(--theme-ink-muted);
   outline: none;
 }

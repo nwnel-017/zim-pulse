@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { SurveyActionState } from "@/app/survey/action-state";
 import { CurrentQuestion } from "@/app/survey/_components/CurrentQuestion";
+import { AppHeader } from "@/components/ui/AppHeader";
 import styles from "@/app/survey/_components/survey-flow.module.css";
 import {
   SurveyQuestionDataSource,
@@ -162,116 +163,103 @@ export function SurveyFlow({
   function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!isLastStep) {
-      return;
-    }
-
     if (!canLeaveQuestion(currentQuestion)) {
-      setError("Complete this question before submitting the survey.");
+      setError(
+        isLastStep
+          ? "Complete this question before submitting the survey."
+          : "Complete this question before moving to the next step.",
+      );
       return;
     }
 
     setError(null);
+
+    if (!isLastStep) {
+      setCurrentStep((step) => step + 1);
+      return;
+    }
+
     submitResponses(surveyResponses);
-  }
-
-  function handleSkipQuestion() {
-    if (currentQuestion.required) {
-      return;
-    }
-
-    setError(null);
-
-    if (isLastStep) {
-      submitResponses(surveyResponses);
-      return;
-    }
-
-    setCurrentStep((step) => step + 1);
   }
 
   return (
     <form className={styles.surveyFlow} onSubmit={handleSubmit}>
-      <div className={styles.copy}>
-        <p className="eyebrow">Survey</p>
-        <h1>Thank you for joining ZimPulse!</h1>
-        <p className="lead">
-          Answer each question step by step. Your responses will be saved when
-          you submit the final step.
-        </p>
-      </div>
+      <AppHeader ariaLabel="Survey navigation" />
 
-      <div className={styles.meta}>
-        <p className="lead">
-          Question {currentStep + 1} of {questionCount}
-        </p>
-        <div className={styles.progressRow}>
-          <p className={styles.progressLabel}>Progress</p>
-          <div aria-hidden="true" className={styles.progressTrack}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${progress}%` }}
+      <div className={styles.surveyContent}>
+        <div className={styles.questionArea}>
+          <p className={styles.kicker}>survey</p>
+
+          <div className={styles.stepGroup}>
+            <p className={styles.stepLabel}>
+              question {currentStep + 1} of {questionCount}
+            </p>
+            <span aria-hidden="true" className={styles.stepRule} />
+          </div>
+
+          <section aria-labelledby="survey-question" className={styles.questionCard}>
+            <h1 className={styles.questionPrompt} id="survey-question">
+              {currentQuestion.prompt}
+            </h1>
+            <p className={styles.questionHelp}>
+              Select one of the options below
+            </p>
+            <CurrentQuestion
+              addResponse={addResponse}
+              answer={surveyResponses[currentQuestion.id]}
+              key={currentQuestion.id}
+              question={currentQuestion}
+              selectedCountryId={selectedCountryId}
             />
+          </section>
+        </div>
+
+        <div className={styles.footerArea}>
+          <div className={styles.progressRow}>
+            <p className={styles.progressLabel}>
+              {currentStep + 1} / {questionCount}
+            </p>
+            <div
+              aria-label={`Survey progress: ${currentStep + 1} of ${questionCount}`}
+              aria-valuemax={questionCount}
+              aria-valuemin={1}
+              aria-valuenow={currentStep + 1}
+              className={styles.progressTrack}
+              role="progressbar"
+            >
+              <div
+                className={styles.progressFill}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+
+          {error ? <p className={styles.error}>{error}</p> : null}
+          {!error && state.error ? (
+            <p className={styles.error}>{state.error}</p>
+          ) : null}
+
+          <div className={styles.actions}>
+            <button
+              className={styles.secondaryAction}
+              disabled={currentStep === 0 || pending}
+              onClick={moveToPreviousStep}
+              type="button"
+            >
+              PREVIOUS
+            </button>
+
+            <button
+              className={styles.primaryAction}
+              disabled={pending}
+              onClick={isLastStep ? undefined : moveToNextStep}
+              type={isLastStep ? "submit" : "button"}
+            >
+              {isLastStep ? (pending ? "SUBMITTING..." : "SUBMIT") : "NEXT"}
+            </button>
           </div>
         </div>
       </div>
-
-      <div className={styles.questionCard}>
-        <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
-        <CurrentQuestion
-          addResponse={addResponse}
-          answer={surveyResponses[currentQuestion.id]}
-          key={currentQuestion.id}
-          question={currentQuestion}
-          selectedCountryId={selectedCountryId}
-        />
-      </div>
-
-      {error ? <p className={styles.error}>{error}</p> : null}
-      {!error && state.error ? (
-        <p className={styles.error}>{state.error}</p>
-      ) : null}
-
-      <div className={styles.actions}>
-        <button
-          className={styles.secondaryAction}
-          disabled={currentStep === 0 || pending}
-          onClick={moveToPreviousStep}
-          type="button"
-        >
-          Previous
-        </button>
-
-        {!currentQuestion.required && !isLastStep ? (
-          <button
-            className={styles.secondaryAction}
-            disabled={pending}
-            onClick={handleSkipQuestion}
-            type="button"
-          >
-            Skip
-          </button>
-        ) : null}
-
-        {!isLastStep ? (
-          <button
-            className="auth-button"
-            disabled={pending}
-            onClick={moveToNextStep}
-            type="button"
-          >
-            Next question
-          </button>
-        ) : null}
-      </div>
-
-      {isLastStep ? (
-        <div className={styles.submitAction}>
-          <button className="auth-button" disabled={pending} type="submit">
-            {pending ? "Submitting..." : "Submit survey"}
-          </button>
-        </div>
-      ) : null}
     </form>
   );
 }
