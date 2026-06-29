@@ -248,10 +248,6 @@ export default function Globe() {
           </div>
         ) : null}
       </div>
-
-      <p className={`${styles.hint} type-body-small`}>
-        Hover a marker to see the city, country, and user count.
-      </p>
     </section>
   );
 }

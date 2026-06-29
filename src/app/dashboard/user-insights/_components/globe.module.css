@@ -94,10 +94,6 @@
   color: var(--theme-canvas);
 }
 
-.hint {
-  color: var(--theme-ink-muted);
-}
-
 @media (min-width: 768px) {
   .shell {
     gap: 1.25rem;
