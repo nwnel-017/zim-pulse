@@ -185,20 +185,27 @@ export function SurveyFlow({
     <form className={styles.surveyFlow} onSubmit={handleSubmit}>
       <div className={styles.surveyContent}>
         <div className={styles.questionArea}>
-          <p className={styles.kicker}>survey</p>
+          <p className={`${styles.kicker} type-action-display type-display-survey`}>
+            survey
+          </p>
 
           <div className={styles.stepGroup}>
-            <p className={styles.stepLabel}>
+            <p
+              className={`${styles.stepLabel} type-action-display type-display-survey`}
+            >
               question {currentStep + 1} of {questionCount}
             </p>
             <span aria-hidden="true" className={styles.stepRule} />
           </div>
 
           <section aria-labelledby="survey-question" className={styles.questionCard}>
-            <h1 className={styles.questionPrompt} id="survey-question">
+            <h1
+              className={`${styles.questionPrompt} type-display-base type-display-survey`}
+              id="survey-question"
+            >
               {currentQuestion.prompt}
             </h1>
-            <p className={styles.questionHelp}>
+            <p className={`${styles.questionHelp} type-lead`}>
               Select one of the options below
             </p>
             <CurrentQuestion
@@ -213,7 +220,9 @@ export function SurveyFlow({
 
         <div className={styles.footerArea}>
           <div className={styles.progressRow}>
-            <p className={styles.progressLabel}>
+            <p
+              className={`${styles.progressLabel} type-action-display type-display-progress`}
+            >
               {currentStep + 1} / {questionCount}
             </p>
             <div
@@ -231,14 +240,16 @@ export function SurveyFlow({
             </div>
           </div>
 
-          {error ? <p className={styles.error}>{error}</p> : null}
+          {error ? (
+            <p className={`${styles.error} type-form-message`}>{error}</p>
+          ) : null}
           {!error && state.error ? (
-            <p className={styles.error}>{state.error}</p>
+            <p className={`${styles.error} type-form-message`}>{state.error}</p>
           ) : null}
 
           <div className={styles.actions}>
             <button
-              className={styles.secondaryAction}
+              className={`${styles.secondaryAction} type-button-label`}
               disabled={currentStep === 0 || pending}
               onClick={moveToPreviousStep}
               type="button"
@@ -247,7 +258,7 @@ export function SurveyFlow({
             </button>
 
             <button
-              className={styles.primaryAction}
+              className={`${styles.primaryAction} type-button-label`}
               disabled={pending}
               onClick={isLastStep ? undefined : moveToNextStep}
               type={isLastStep ? "submit" : "button"}

@@ -28,9 +28,13 @@ export default async function SurveyResponse({
   return (
     <section className={styles.surveyResponse}>
       <div className={styles.copy}>
-        <p className={styles.kicker}>Survey Response</p>
-        <h2 className={styles.title}>Your survey has been submitted.</h2>
-        <p className={styles.description}>
+        <p className={`${styles.kicker} type-action-display`}>
+          Survey Response
+        </p>
+        <h2 className={`${styles.title} type-section-title`}>
+          Your survey has been submitted.
+        </h2>
+        <p className={`${styles.description} type-lead`}>
           Your profile answers are stored on your account and available from
           this dashboard.
         </p>
@@ -38,15 +42,19 @@ export default async function SurveyResponse({
 
       <dl className={styles.metaList}>
         <div className={styles.metaItem}>
-          <dt className={styles.metaLabel}>Date Submitted</dt>
-          <dd className={styles.metaValue}>
+          <dt className={`${styles.metaLabel} type-action-display`}>
+            Date Submitted
+          </dt>
+          <dd className={`${styles.metaValue} type-lead`}>
             {submittedDateFormatter.format(surveyResponseSummary.submittedAt)}
           </dd>
         </div>
 
         <div className={styles.metaItem}>
-          <dt className={styles.metaLabel}>Responses Saved</dt>
-          <dd className={styles.metaValue}>
+          <dt className={`${styles.metaLabel} type-action-display`}>
+            Responses Saved
+          </dt>
+          <dd className={`${styles.metaValue} type-lead`}>
             {surveyResponseSummary.responseCount}
           </dd>
         </div>

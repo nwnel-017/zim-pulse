@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { EmailAuthForm } from "@/app/_components/auth/email-auth-form";
 import { AppHeader } from "@/components/ui/AppHeader";
-import styles from "./page.module.css";
+import styles from "@/app/_components/auth/auth-page.module.css";
 
 const isProduction = process.env.NEXT_PUBLIC_PRODUCTION_ENVIRONMENT === "true";
 
@@ -12,11 +12,16 @@ export default function UserSignUpPage() {
 
       <section className={styles.authLayout} aria-labelledby="sign-up-heading">
         <div className={styles.copy}>
-          <h1 className={styles.heading} id="sign-up-heading">
-            WELCOME
+          <h1
+            className="type-display-base type-display-page-title"
+            id="sign-up-heading"
+          >
+            SIGN UP
           </h1>
           <span className={styles.headingRule} aria-hidden="true" />
-          <p className={styles.lead}>Verify your email to get started</p>
+          <p className={`${styles.lead} type-lead`}>
+            Verify your email to get started
+          </p>
         </div>
 
         <EmailAuthForm
@@ -36,8 +41,9 @@ export default function UserSignUpPage() {
           title="Sign up with email"
         />
 
-        <p className={styles.secondaryLink}>
-          Already registered? <Link href="/sign-in">Sign in with your email</Link>.
+        <p className={`${styles.secondaryLink} type-body-small`}>
+          Already registered?{" "}
+          <Link href="/sign-in">Sign in with your email</Link>.
         </p>
       </section>
     </main>

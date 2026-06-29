@@ -36,10 +36,10 @@ export function AppHeader({
 }: AppHeaderProps) {
   return (
     <header className={styles.header} aria-label={ariaLabel}>
-      <Link className={styles.brand} href="/">
+      <Link className={`${styles.brand} type-brand`} href="/">
         Zim Pulse
       </Link>
-      <nav className={styles.nav}>
+      <nav className={`${styles.nav} type-action-display type-nav-display`}>
         {navItems.map((item) => {
           const isActive = activeItem === item.id;
 

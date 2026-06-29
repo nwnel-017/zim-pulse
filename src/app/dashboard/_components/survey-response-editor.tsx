@@ -75,8 +75,8 @@ function SurveyResponseEditorRow({ question }: SurveyResponseEditorRowProps) {
 
   return (
     <li className={styles.questionCard}>
-      <p className={styles.questionPrompt}>{question.prompt}</p>
-      <p className={styles.answerPreview}>
+      <p className="type-lead">{question.prompt}</p>
+      <p className={`${styles.answerPreview} type-body-small`}>
         Current response:{" "}
         <span
           className={
@@ -94,7 +94,7 @@ function SurveyResponseEditorRow({ question }: SurveyResponseEditorRowProps) {
         onToggle={(event) => setIsOpen(event.currentTarget.open)}
         open={isOpen}
       >
-        <summary className="auth-button ghost-button admin-inline-button">
+        <summary className="auth-button ghost-button admin-inline-button type-button-label">
           Edit response
         </summary>
 
@@ -107,7 +107,7 @@ function SurveyResponseEditorRow({ question }: SurveyResponseEditorRowProps) {
 
           <div className="admin-inline-actions">
             <button
-              className="auth-button"
+              className="auth-button type-button-label"
               disabled={isPending}
               onClick={handleSave}
               type="button"
@@ -115,7 +115,7 @@ function SurveyResponseEditorRow({ question }: SurveyResponseEditorRowProps) {
               {isPending ? "Saving..." : "Save changes"}
             </button>
             <button
-              className="auth-button ghost-button"
+              className="auth-button ghost-button type-button-label"
               disabled={isPending}
               onClick={handleCancel}
               type="button"
@@ -124,7 +124,9 @@ function SurveyResponseEditorRow({ question }: SurveyResponseEditorRowProps) {
             </button>
           </div>
 
-          {state.error ? <p className="auth-error">{state.error}</p> : null}
+          {state.error ? (
+            <p className="auth-error type-form-message">{state.error}</p>
+          ) : null}
         </div>
       </details>
     </li>
@@ -140,7 +142,7 @@ export default function SurveyResponseEditor({
     return (
       <div className={styles.closeButton}>
         <button
-          className={styles.primaryButton}
+          className={`${styles.primaryButton} type-button-label`}
           onClick={() => setIsEditing(true)}
           type="button"
         >
@@ -153,8 +155,10 @@ export default function SurveyResponseEditor({
   return (
     <section className={styles.editorSection}>
       <div className={styles.editorCopy}>
-        <h3 className={styles.editorTitle}>Edit your saved responses</h3>
-        <p className={styles.editorDescription}>
+        <h3 className="type-section-title">
+          Edit your saved responses
+        </h3>
+        <p className={`${styles.editorDescription} type-body-small`}>
           Update any answer below and save each question individually.
         </p>
       </div>
@@ -169,7 +173,7 @@ export default function SurveyResponseEditor({
       </ul>
 
       <button
-        className={`${styles.primaryButton} ${styles.closeButton}`}
+        className={`${styles.primaryButton} ${styles.closeButton} type-button-label`}
         onClick={() => setIsEditing(false)}
         type="button"
       >

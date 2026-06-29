@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TurnstileField } from "@/app/_components/auth/turnstile-field";
 import { authClient } from "@/lib/auth/auth-client";
+import EmailIcon from "@/components/ui/icons/Email";
 
 type EmailAuthFormProps = {
   callbackPath?: string;
@@ -216,13 +217,16 @@ export function EmailAuthForm({
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <label className="auth-field">
-          <span>{inputLabel}</span>
+          <span className="type-label-display">{inputLabel}</span>
           <span className="auth-input-row">
             {showEmailIcon ? (
-              <span className="auth-mail-icon" aria-hidden="true" />
+              <span className="auth-mail-icon" aria-hidden="true">
+                <EmailIcon />
+              </span>
             ) : null}
             <input
               autoComplete="email"
+              className="type-input-text"
               name="email"
               onChange={(event) => setEmail(event.target.value)}
               placeholder={inputPlaceholder}
@@ -235,9 +239,10 @@ export function EmailAuthForm({
 
         {(mode === "sign-up" || mode === "sign-in") && !isProduction ? (
           <label className="auth-field">
-            <span>App password</span>
+            <span className="type-label-display">App password</span>
             <input
               autoComplete="current-password"
+              className="type-input-text"
               name="appPassword"
               onChange={(event) => setAppPassword(event.target.value)}
               required
@@ -249,7 +254,11 @@ export function EmailAuthForm({
 
         <TurnstileField siteKey={turnstileSiteKey} />
 
-        <button className="auth-button" disabled={pending} type="submit">
+        <button
+          className="auth-button type-button-label"
+          disabled={pending}
+          type="submit"
+        >
           {!pending && submitLabel
             ? submitLabel
             : pending
@@ -270,8 +279,8 @@ export function EmailAuthForm({
         </button>
       </form>
 
-      {notice ? <p>{notice}</p> : null}
-      {error ? <p className="auth-error">{error}</p> : null}
+      {notice ? <p className="type-form-message">{notice}</p> : null}
+      {error ? <p className="auth-error type-form-message">{error}</p> : null}
     </div>
   );
 }

@@ -1,33 +1,22 @@
 .selectionField {
   display: grid;
-  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+  gap: 0.5rem;
   width: min(100%, 53.375rem);
 }
 
 .searchField {
   display: grid;
-  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
-}
-
-.searchField span {
-  font-family: var(--font-inter), sans-serif;
-  font-size: clamp(0.85rem, 2.3dvw, 1rem);
-  font-weight: 700;
-  text-transform: uppercase;
+  gap: 0.5rem;
 }
 
 .searchInput {
   width: 100%;
-  min-height: clamp(3.75rem, 9dvh, 5.0625rem);
+  min-height: var(--control-height);
   border: 0.075rem solid var(--theme-rule);
   border-radius: 0;
   background: transparent;
   color: var(--theme-ink);
-  padding: 0.85rem 1.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: clamp(1.75rem, 4dvw, 2rem);
-  font-weight: 400;
-  letter-spacing: 0.3125rem;
+  padding: var(--space-control-block) var(--space-control-inline);
 }
 
 .searchInput:focus {
@@ -37,7 +26,7 @@
 
 .resultsList {
   display: grid;
-  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+  gap: 0.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -45,7 +34,7 @@
 
 .selectedList {
   display: grid;
-  gap: clamp(0.5rem, 1.4dvh, 0.9rem);
+  gap: 0.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -71,8 +60,6 @@
   background: transparent;
   color: var(--theme-ink);
   cursor: pointer;
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 700;
   padding: 0.95rem 1rem;
   text-align: left;
 }
@@ -87,13 +74,10 @@
 .statusText,
 .selectedText {
   color: var(--theme-ink-muted);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
 }
 
 .selectedText {
   color: var(--theme-ink);
-  font-weight: 700;
 }
 
 .removeSelectedButton {
@@ -101,8 +85,6 @@
   border: none;
   color: var(--theme-ink);
   cursor: pointer;
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 700;
   padding: 0;
   text-decoration: underline;
 }
@@ -111,4 +93,22 @@
 .removeSelectedButton:focus-visible {
   color: var(--theme-ink-muted);
   outline: none;
+}
+
+@media (min-width: 768px) {
+  .selectionField,
+  .searchField,
+  .resultsList,
+  .selectedList {
+    gap: 0.7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .selectionField,
+  .searchField,
+  .resultsList,
+  .selectedList {
+    gap: 0.9rem;
+  }
 }

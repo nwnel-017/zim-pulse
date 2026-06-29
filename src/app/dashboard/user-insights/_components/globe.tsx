@@ -137,107 +137,121 @@ export default function Globe() {
   }
 
   return (
-    <main className={styles.shell}>
-      <section className={styles.panel}>
-        <div className={styles.copy}>
-          <p className="eyebrow">User Insights</p>
-          <h1>See where other users are located</h1>
-          <p className={styles.description}>
-            Each point marks a city with at least one saved user response.
-            Taller markers indicate cities with more users.
-          </p>
-        </div>
-
-        <div className={styles.stats}>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>Cities</span>
-            <strong className={styles.statValue}>{points.length}</strong>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>Mapped Users</span>
-            <strong className={styles.statValue}>{totalUsers}</strong>
-          </div>
-        </div>
-
-        <div className={styles.frame} ref={containerRef}>
-          {!isLoading &&
-          !error &&
-          points.length > 0 &&
-          dimensions.width > 0 &&
-          dimensions.height > 0 ? (
-            <div className={styles.canvas}>
-              <GlobeRenderer
-                ref={globeRef}
-                atmosphereAltitude={0.18}
-                atmosphereColor="#8db8ff"
-                backgroundColor="rgba(0,0,0,0)"
-                bumpImageUrl={bumpImageUrl}
-                globeImageUrl={globeImageUrl}
-                height={dimensions.height}
-                onGlobeReady={handleGlobeReady}
-                pointAltitude={(point) =>
-                  getPointAltitude(point as GlobeCityPoint, maxUserCount)
-                }
-                pointColor={() => "#ff8a5b"}
-                pointLabel={(point) => formatTooltip(point as GlobeCityPoint)}
-                pointLat="lat"
-                pointLng="lng"
-                pointRadius={0.32}
-                pointResolution={14}
-                pointsData={points}
-                pointsMerge={false}
-                pointsTransitionDuration={600}
-                showAtmosphere
-                showGraticules={false}
-                width={dimensions.width}
-              />
-            </div>
-          ) : null}
-
-          {isLoading ? (
-            <div className={styles.overlay}>
-              <div>
-                <h2>Loading globe</h2>
-                <p>Fetching city data and preparing the 3D view.</p>
-              </div>
-            </div>
-          ) : null}
-
-          {!isLoading && error ? (
-            <div className={styles.overlay}>
-              <div>
-                <h2>Unable to load the globe</h2>
-                <p>{error}</p>
-              </div>
-            </div>
-          ) : null}
-
-          {!isLoading && !error && !points.length ? (
-            <div className={styles.overlay}>
-              <div>
-                <h2>No city points available</h2>
-                <p>
-                  The globe will populate after users save survey responses with
-                  valid city records.
-                </p>
-              </div>
-            </div>
-          ) : null}
-
-          {!isLoading && !error && points.length > 0 && !isGlobeReady ? (
-            <div className={styles.overlay}>
-              <div>
-                <h2>Rendering globe</h2>
-                <p>Plotting city markers on the 3D map.</p>
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        <p className={styles.hint}>
-          Hover a marker to see the city, country, and user count.
+    <section className={styles.shell} aria-labelledby="user-insights-heading">
+      <div className={styles.copy}>
+        <h1
+          className={`${styles.heading} type-display-base type-display-page-title`}
+          id="user-insights-heading"
+        >
+          WHERE ARE USERS LOCATED?
+        </h1>
+        <span className={styles.rule} aria-hidden="true" />
+        <p className={`${styles.description} type-lead`}>
+          A city-level view of saved survey responses.
         </p>
-      </section>
-    </main>
+      </div>
+
+      <div className={styles.stats} aria-label="User insights statistics">
+        <div className={styles.statCard}>
+          <strong className={`${styles.statValue} type-display-base type-display-value`}>
+            {points.length}
+          </strong>
+          <span className={`${styles.statLabel} type-action-display type-stat-label`}>
+            CITIES
+          </span>
+        </div>
+        <div className={styles.statCard}>
+          <strong className={`${styles.statValue} type-display-base type-display-value`}>
+            {totalUsers}
+          </strong>
+          <span className={`${styles.statLabel} type-action-display type-stat-label`}>
+            MAPPED USERS
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.frame} ref={containerRef}>
+        {!isLoading &&
+        !error &&
+        points.length > 0 &&
+        dimensions.width > 0 &&
+        dimensions.height > 0 ? (
+          <div className={styles.canvas}>
+            <GlobeRenderer
+              ref={globeRef}
+              atmosphereAltitude={0.12}
+              atmosphereColor="#edbd2c"
+              backgroundColor="rgba(0,0,0,0)"
+              bumpImageUrl={bumpImageUrl}
+              globeImageUrl={globeImageUrl}
+              height={dimensions.height}
+              onGlobeReady={handleGlobeReady}
+              pointAltitude={(point) =>
+                getPointAltitude(point as GlobeCityPoint, maxUserCount)
+              }
+              pointColor={() => "#edbd2c"}
+              pointLabel={(point) => formatTooltip(point as GlobeCityPoint)}
+              pointLat="lat"
+              pointLng="lng"
+              pointRadius={0.32}
+              pointResolution={14}
+              pointsData={points}
+              pointsMerge={false}
+              pointsTransitionDuration={600}
+              showAtmosphere
+              showGraticules={false}
+              width={dimensions.width}
+            />
+          </div>
+        ) : null}
+
+        {isLoading ? (
+          <div className={styles.overlay}>
+            <div>
+              <h2 className="type-display-base type-display-value">LOADING GLOBE</h2>
+              <p className="type-lead">Fetching city data and preparing the 3D view.</p>
+            </div>
+          </div>
+        ) : null}
+
+        {!isLoading && error ? (
+          <div className={styles.overlay}>
+            <div>
+              <h2 className="type-display-base type-display-value">
+                UNABLE TO LOAD THE GLOBE
+              </h2>
+              <p className="type-lead">{error}</p>
+            </div>
+          </div>
+        ) : null}
+
+        {!isLoading && !error && !points.length ? (
+          <div className={styles.overlay}>
+            <div>
+              <h2 className="type-display-base type-display-value">
+                NO CITY POINTS AVAILABLE
+              </h2>
+              <p className="type-lead">
+                The globe will populate after users save survey responses with
+                valid city records.
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        {!isLoading && !error && points.length > 0 && !isGlobeReady ? (
+          <div className={styles.overlay}>
+            <div>
+              <h2 className="type-display-base type-display-value">RENDERING GLOBE</h2>
+              <p className="type-lead">Plotting city markers on the 3D map.</p>
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <p className={`${styles.hint} type-body-small`}>
+        Hover a marker to see the city, country, and user count.
+      </p>
+    </section>
   );
 }

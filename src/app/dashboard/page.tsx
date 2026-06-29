@@ -16,11 +16,13 @@ export default async function DashboardPage() {
 
       <section className={styles.dashboard} aria-labelledby="dashboard-heading">
         <div className={styles.banner}>
-          <p className={styles.eyebrow}>thank you for participating!</p>
+          <p className={`${styles.eyebrow} type-display-base`}>
+            thank you for participating!
+          </p>
           <span className={styles.rule} aria-hidden="true" />
         </div>
 
-        <div className={styles.greeting}>
+        <div className={`${styles.greeting} type-lead`}>
           <p>
             Hi <strong>{session.user.email}</strong>,
           </p>
@@ -31,7 +33,7 @@ export default async function DashboardPage() {
           <SurveyResponse userId={session.user.id} />
         ) : null}
 
-        <div className={styles.actions}>
+        <div className={`${styles.actions} type-button-label`}>
           <Link href="/dashboard/user-insights">View user map</Link>
           <SignOutButton redirectTo="/sign-in" />
         </div>

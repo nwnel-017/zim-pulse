@@ -166,10 +166,10 @@ export default function SearchSelection({
   return (
     <div className={styles.selectionField}>
       <label className={styles.searchField}>
-        <span>{searchLabel}</span>
+        <span className="type-field-label">{searchLabel}</span>
         <input
           autoComplete="off"
-          className={styles.searchInput}
+          className={`${styles.searchInput} type-survey-input`}
           disabled={isDisabled}
           onChange={(event) => {
             const nextQuery = event.target.value;
@@ -192,7 +192,9 @@ export default function SearchSelection({
       </label>
 
       {isDisabled ? (
-        <p className={styles.statusText}>Select a country before searching cities.</p>
+        <p className={`${styles.statusText} type-form-message`}>
+          Select a country before searching cities.
+        </p>
       ) : null}
 
       {allowMultiple && selectedAnswers.length ? (
@@ -202,11 +204,11 @@ export default function SearchSelection({
               className={styles.selectedItem}
               key={`${selectedAnswer.selectedId ?? selectedAnswer.label}:${index}`}
             >
-              <span className={styles.selectedText}>
+              <span className={`${styles.selectedText} type-option-text`}>
                 {selectedAnswer.label}
               </span>
               <button
-                className={styles.removeSelectedButton}
+                className={`${styles.removeSelectedButton} type-button-label`}
                 onClick={() => handleRemoveSelection(selectedAnswer)}
                 type="button"
               >
@@ -217,16 +219,20 @@ export default function SearchSelection({
         </ul>
       ) : null}
 
-      {isLoading ? <p className={styles.statusText}>{loadingText}</p> : null}
+      {isLoading ? (
+        <p className={`${styles.statusText} type-form-message`}>{loadingText}</p>
+      ) : null}
 
-      {searchError ? <p className={styles.statusText}>{searchError}</p> : null}
+      {searchError ? (
+        <p className={`${styles.statusText} type-form-message`}>{searchError}</p>
+      ) : null}
 
       {!isLoading &&
       !searchError &&
       !isDisabled &&
       query.trim().length > 0 &&
       query.trim().length < 2 ? (
-        <p className={styles.statusText}>
+        <p className={`${styles.statusText} type-form-message`}>
           Enter at least 2 characters to search.
         </p>
       ) : null}
@@ -236,7 +242,9 @@ export default function SearchSelection({
       !isDisabled &&
       query.trim().length >= 2 &&
       !results.length ? (
-        <p className={styles.statusText}>{emptyStateText}</p>
+        <p className={`${styles.statusText} type-form-message`}>
+          {emptyStateText}
+        </p>
       ) : null}
 
       {results.length ? (
@@ -244,13 +252,15 @@ export default function SearchSelection({
           {results.map((result) => (
             <li key={result.id}>
               <button
-                className={styles.resultButton}
+                className={`${styles.resultButton} type-option-text`}
                 onClick={() => handleSelect(result)}
                 type="button"
               >
                 <span>{result.label}</span>
                 {showMeta && result.meta ? (
-                  <span className={styles.resultMeta}>{result.meta}</span>
+                  <span className={`${styles.resultMeta} type-body-small`}>
+                    {result.meta}
+                  </span>
                 ) : null}
               </button>
             </li>
@@ -259,7 +269,9 @@ export default function SearchSelection({
       ) : null}
 
       {!allowMultiple && isSearchSelectAnswer(answer) && answer.label ? (
-        <p className={styles.selectedText}>Selected: {answer.label}</p>
+        <p className={`${styles.selectedText} type-form-message`}>
+          Selected: {answer.label}
+        </p>
       ) : null}
     </div>
   );

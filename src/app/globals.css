@@ -15,6 +15,37 @@
   --theme-canvas: #f7f6f1;
   --theme-accent-gold: #edbd2c;
   --theme-rule: rgba(17, 17, 17, 0.86);
+  --space-page-inline: 0.8rem;
+  --space-section-block: 1rem;
+  --space-card: 1rem;
+  --space-control-block: 0.65rem;
+  --space-control-inline: 0.9rem;
+  --control-height: 2.9rem;
+  --type-brand: 2.25rem;
+  --type-display-hero: 2.55rem;
+  --type-display-page-title: 2.65rem;
+  --type-display-value: 1.35rem;
+  --type-display-survey: 1.8rem;
+  --type-display-progress: 1.5rem;
+  --type-action-link: 1.25rem;
+  --type-nav: 1.15rem;
+  --type-footer: 1.1rem;
+  --type-label: 1.15rem;
+  --type-field-label: 0.85rem;
+  --type-stat-label: 0.9rem;
+  --type-lead: 0.95rem;
+  --type-lead-compact: 0.95rem;
+  --type-body-small: 0.82rem;
+  --type-form-message: 0.85rem;
+  --type-input: 0.82rem;
+  --type-survey-input: 0.95rem;
+  --type-option: 1rem;
+  --type-section-title: 1.2rem;
+  --type-button: 0.85rem;
+  --type-page-h1: 2.25rem;
+  --type-admin-stat: 2rem;
+  --type-admin-section: 1.4rem;
+  --type-input-tracking: 0.08rem;
 }
 
 html {
@@ -75,6 +106,146 @@ a {
   font-family: var(--font-inter), sans-serif;
 }
 
+.type-brand {
+  font-family: var(--font-caveat), cursive;
+  font-size: var(--type-brand);
+  line-height: 0.55;
+  letter-spacing: 0.03125rem;
+}
+
+.type-display-base {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.0625rem;
+}
+
+.type-display-hero {
+  font-size: var(--type-display-hero);
+  line-height: 0.8;
+  text-transform: uppercase;
+}
+
+.type-display-page-title {
+  font-size: var(--type-display-page-title);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.type-display-value {
+  font-size: var(--type-display-value);
+  line-height: 0.95;
+}
+
+.type-display-survey {
+  font-size: var(--type-display-survey);
+  line-height: 1.04;
+  text-transform: lowercase;
+}
+
+.type-display-progress {
+  font-size: var(--type-display-progress);
+  line-height: 1.04;
+  text-transform: lowercase;
+}
+
+.type-action-display {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.0625rem;
+  line-height: 1;
+}
+
+.type-action-link {
+  font-size: var(--type-action-link);
+  text-transform: lowercase;
+}
+
+.type-nav-display {
+  font-size: var(--type-nav);
+  letter-spacing: 0.03125rem;
+  text-transform: uppercase;
+}
+
+.type-footer-display {
+  font-size: var(--type-footer);
+}
+
+.type-label-display {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-size: var(--type-label);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+}
+
+.type-field-label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-field-label);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.type-stat-label {
+  font-size: var(--type-stat-label);
+}
+
+.type-lead {
+  font-size: var(--type-lead);
+  line-height: 1.4;
+  letter-spacing: 0.03125rem;
+}
+
+.type-lead-compact {
+  font-size: var(--type-lead-compact);
+  line-height: 1.22;
+}
+
+.type-body-small {
+  font-size: var(--type-body-small);
+  line-height: 1.5;
+}
+
+.type-form-message {
+  font-size: var(--type-form-message);
+  line-height: 1.5;
+}
+
+.type-input-text {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-input);
+  line-height: 1.4;
+  letter-spacing: var(--type-input-tracking);
+}
+
+.type-survey-input {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-survey-input);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.03125rem;
+}
+
+.type-option-text {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-option);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.type-section-title {
+  font-size: var(--type-section-title);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.type-button-label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-button);
+  font-weight: 700;
+  letter-spacing: 0.125rem;
+}
+
 .app-shell,
 .auth-shell {
   width: min(100%, 1120px);
@@ -129,7 +300,7 @@ a {
 }
 
 h1 {
-  font-size: clamp(2.25rem, 6vw, 4.4rem);
+  font-size: var(--type-page-h1);
   line-height: 0.96;
   max-width: 12ch;
 }
@@ -250,6 +421,24 @@ h1 {
   font-size: 0.95rem;
 }
 
+.auth-field span.type-label-display {
+  font-weight: 400;
+}
+
+.auth-field input.type-input-text {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-input);
+  line-height: 1.4;
+  letter-spacing: var(--type-input-tracking);
+}
+
+.auth-button.type-button-label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--type-button);
+  font-weight: 700;
+  letter-spacing: 0.125rem;
+}
+
 .auth-secondary-link {
   text-align: center;
 }
@@ -318,7 +507,7 @@ code {
 }
 
 .admin-stat-value {
-  font-size: clamp(2rem, 10vw, 3.6rem);
+  font-size: var(--type-admin-stat);
   line-height: 1;
 }
 
@@ -344,7 +533,7 @@ code {
 }
 
 .admin-section h2 {
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-size: var(--type-admin-section);
   line-height: 1.05;
 }
 
@@ -397,6 +586,40 @@ code {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --space-page-inline: 1.5rem;
+    --space-section-block: 1.5rem;
+    --space-card: 1.25rem;
+    --space-control-block: 0.75rem;
+    --space-control-inline: 1.1rem;
+    --control-height: 3.4rem;
+    --type-brand: 3rem;
+    --type-display-hero: 4rem;
+    --type-display-page-title: 3.4rem;
+    --type-display-value: 2rem;
+    --type-display-survey: 2.4rem;
+    --type-display-progress: 2rem;
+    --type-action-link: 1.6rem;
+    --type-nav: 1.55rem;
+    --type-footer: 1.45rem;
+    --type-label: 1.3rem;
+    --type-field-label: 0.95rem;
+    --type-stat-label: 1.1rem;
+    --type-lead: 1.05rem;
+    --type-lead-compact: 1.15rem;
+    --type-body-small: 0.9rem;
+    --type-form-message: 0.9rem;
+    --type-input: 0.9rem;
+    --type-survey-input: 1.05rem;
+    --type-option: 1.12rem;
+    --type-section-title: 1.4rem;
+    --type-button: 0.92rem;
+    --type-page-h1: 3.3rem;
+    --type-admin-stat: 2.8rem;
+    --type-admin-section: 1.7rem;
+    --type-input-tracking: 0.15rem;
+  }
+
   .admin-stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -404,6 +627,42 @@ code {
   .admin-question-actions {
     grid-template-columns: auto auto;
     align-items: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --space-page-inline: 3rem;
+    --space-section-block: 2rem;
+    --space-card: 1.5rem;
+    --space-control-block: 0.85rem;
+    --space-control-inline: 1.35rem;
+    --control-height: 3.9rem;
+    --type-brand: 4rem;
+    --type-display-hero: 5.4rem;
+    --type-display-page-title: 4rem;
+    --type-display-value: 2.45rem;
+    --type-display-survey: 3.125rem;
+    --type-display-progress: 2.6rem;
+    --type-action-link: 1.95rem;
+    --type-nav: 2rem;
+    --type-footer: 1.85rem;
+    --type-label: 1.45rem;
+    --type-field-label: 1rem;
+    --type-stat-label: 1.35rem;
+    --type-lead: 1.15rem;
+    --type-lead-compact: 1.35rem;
+    --type-body-small: 0.95rem;
+    --type-form-message: 0.95rem;
+    --type-input: 0.95rem;
+    --type-survey-input: 1.15rem;
+    --type-option: 1.25rem;
+    --type-section-title: 1.6rem;
+    --type-button: 1rem;
+    --type-page-h1: 4.4rem;
+    --type-admin-stat: 3.6rem;
+    --type-admin-section: 2rem;
+    --type-input-tracking: 0.22rem;
   }
 }
 

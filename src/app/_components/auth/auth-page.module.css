@@ -60,33 +60,11 @@
 }
 
 .formCard :global(.auth-mail-icon) {
-  position: relative;
-  width: 1.15rem;
-  aspect-ratio: 1.16;
+  width: 1.25rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
   flex: 0 0 auto;
-  border: 0.12rem solid currentColor;
-  border-radius: 0.15rem;
-}
-
-.formCard :global(.auth-mail-icon)::before,
-.formCard :global(.auth-mail-icon)::after {
-  content: "";
-  position: absolute;
-  top: 16%;
-  width: 0.12rem;
-  height: 70%;
-  background: currentColor;
-  transform-origin: top;
-}
-
-.formCard :global(.auth-mail-icon)::before {
-  left: 8%;
-  transform: rotate(-58deg);
-}
-
-.formCard :global(.auth-mail-icon)::after {
-  right: 8%;
-  transform: rotate(58deg);
 }
 
 .formCard :global(.auth-field input) {
@@ -197,7 +175,7 @@
   }
 
   .formCard :global(.auth-mail-icon) {
-    width: 1.3rem;
+    width: 1.25rem;
   }
 
   .secondaryLink {
@@ -232,7 +210,7 @@
   }
 
   .formCard :global(.auth-mail-icon) {
-    width: 1.45rem;
+    width: 1.25rem;
   }
 
   .secondaryLink {

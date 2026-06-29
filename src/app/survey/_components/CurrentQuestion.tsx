@@ -51,6 +51,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <textarea
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             value={typeof answer === "string" ? answer : ""}
@@ -61,6 +62,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <input
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             step="any"
@@ -73,6 +75,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <input
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             type="email"
@@ -84,6 +87,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <input
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             type="date"
@@ -95,6 +99,7 @@ export function CurrentQuestion({
       return question.comboOptions.length ? (
         <label className={styles.field}>
           <select
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             value={typeof answer === "string" ? answer : ""}
@@ -108,7 +113,7 @@ export function CurrentQuestion({
           </select>
         </label>
       ) : (
-        <p className={styles.emptyState}>
+        <p className={`${styles.emptyState} type-form-message`}>
           This question has no options yet. Ask an admin to finish configuring
           it.
         </p>
@@ -117,6 +122,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <select
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             value={typeof answer === "string" ? answer : ""}
@@ -131,7 +137,10 @@ export function CurrentQuestion({
       return question.comboOptions.length ? (
         <div className={styles.optionList}>
           {question.comboOptions.map((option) => (
-            <label className={styles.optionLabel} key={option.id}>
+            <label
+              className={`${styles.optionLabel} type-option-text`}
+              key={option.id}
+            >
               <input
                 checked={answer === option.label}
                 onChange={(event) =>
@@ -146,7 +155,7 @@ export function CurrentQuestion({
           ))}
         </div>
       ) : (
-        <p className={styles.emptyState}>
+        <p className={`${styles.emptyState} type-form-message`}>
           This question has no options yet. Ask an admin to finish configuring
           it.
         </p>
@@ -161,7 +170,10 @@ export function CurrentQuestion({
               : [];
 
             return (
-              <label className={styles.optionLabel} key={option.id}>
+              <label
+                className={`${styles.optionLabel} type-option-text`}
+                key={option.id}
+              >
                 <input
                   checked={isMultiSelect
                     ? selectedValues.includes(option.label)
@@ -190,7 +202,7 @@ export function CurrentQuestion({
           })}
         </div>
       ) : (
-        <p className={styles.emptyState}>
+        <p className={`${styles.emptyState} type-form-message`}>
           This question has no options yet. Ask an admin to finish configuring
           it.
         </p>
@@ -213,6 +225,7 @@ export function CurrentQuestion({
       return (
         <label className={styles.field}>
           <input
+            className="type-survey-input"
             onChange={(event) => addResponse(question.id, event.target.value)}
             required={isRequired}
             type="text"
