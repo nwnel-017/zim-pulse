@@ -1,0 +1,197 @@
+.adminDashboard {
+  width: min(100% - calc(var(--space-page-inline) * 2), 64.125rem);
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  padding-block: 1.4rem 1rem;
+}
+
+.banner {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: start;
+}
+
+.eyebrow {
+  color: var(--theme-accent-gold);
+  font-size: 2rem;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.heading {
+  max-width: 10ch;
+}
+
+.rule {
+  width: 3.5rem;
+  height: 0.0625rem;
+  background: var(--theme-accent-gold);
+}
+
+.lead {
+  max-width: 42rem;
+  color: var(--theme-ink);
+}
+
+.statGrid {
+  display: grid;
+  gap: 0;
+  border-top: 0.1rem solid var(--theme-rule);
+  border-bottom: 0.1rem solid var(--theme-rule);
+}
+
+.statCard {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+  padding-block: 0.85rem;
+}
+
+.statCard + .statCard {
+  border-top: 0.1rem solid var(--theme-rule);
+}
+
+.statLabel {
+  color: var(--theme-ink-soft);
+  font-size: var(--type-stat-label);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.statValue {
+  color: var(--theme-ink);
+  font-size: var(--type-admin-stat);
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.actionLink {
+  width: fit-content;
+  color: var(--theme-accent-gold);
+  text-transform: uppercase;
+}
+
+.sessionList {
+  display: grid;
+  gap: 0;
+  border-top: 0.1rem solid var(--theme-rule);
+  border-bottom: 0.1rem solid var(--theme-rule);
+}
+
+.sessionList div {
+  display: grid;
+  gap: 0.2rem;
+  padding-block: 0.7rem;
+}
+
+.sessionList div + div {
+  border-top: 0.1rem solid var(--theme-rule);
+}
+
+.sessionList dt {
+  color: var(--theme-ink-soft);
+  font-size: var(--type-body-small);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sessionList dd {
+  color: var(--theme-ink);
+  font-size: var(--type-lead);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.actions {
+  display: grid;
+  justify-items: start;
+  color: var(--theme-accent-gold);
+}
+
+.actions :global(.auth-link-button) {
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  border: 0;
+}
+
+.actionLink:focus-visible,
+.actions :global(.auth-link-button:focus-visible) {
+  outline: 0.18rem solid currentColor;
+  outline-offset: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .adminDashboard {
+    gap: 1.35rem;
+    padding-block: 2.2rem 1.4rem;
+  }
+
+  .banner {
+    gap: 0.5rem;
+  }
+
+  .eyebrow {
+    font-size: 2.7rem;
+  }
+
+  .rule {
+    width: 4.5rem;
+  }
+
+  .statGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .statCard {
+    gap: 0.6rem;
+    padding-block: 1rem;
+    padding-inline: 0.9rem;
+  }
+
+  .statCard + .statCard {
+    border-top: 0;
+    border-left: 0.1rem solid var(--theme-rule);
+  }
+
+  .sessionList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sessionList div {
+    padding-block: 0.85rem;
+    padding-inline: 0.9rem;
+  }
+
+  .sessionList div + div {
+    border-top: 0;
+    border-left: 0.1rem solid var(--theme-rule);
+  }
+}
+
+@media (min-width: 1024px) {
+  .adminDashboard {
+    gap: 1.7rem;
+    padding-block: 3rem 1.75rem;
+  }
+
+  .banner {
+    gap: 0.65rem;
+  }
+
+  .eyebrow {
+    font-size: 3.35rem;
+  }
+
+  .rule {
+    width: 5.5rem;
+  }
+
+  .statCard {
+    gap: 0.75rem;
+    padding-block: 1.2rem;
+    padding-inline: 1rem;
+  }
+}

@@ -50,6 +50,7 @@
 
 html {
   height: 100%;
+  scrollbar-gutter: stable;
 }
 
 html,
@@ -63,18 +64,7 @@ body {
   display: flex;
   flex-direction: column;
   color: var(--foreground);
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(255, 107, 53, 0.24),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(20, 33, 61, 0.14),
-      transparent 35%
-    ),
-    linear-gradient(180deg, #f9f3ea 0%, #f1e5d4 100%);
+  background: var(--theme-canvas);
   font-family: var(--font-geist-sans), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -98,8 +88,8 @@ a {
 
 .page {
   min-height: 100dvh;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   color: var(--theme-ink);
   background: var(--theme-canvas);

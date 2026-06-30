@@ -37,7 +37,7 @@ export default function UserSignUpPage() {
           mode="sign-up"
           showCopy={false}
           showEmailIcon
-          submitLabel="LOGIN"
+          submitLabel="SIGN UP"
           title="Sign up with email"
         />
 

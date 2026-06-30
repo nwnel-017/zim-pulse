@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AppHeader } from "@/components/ui/AppHeader";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import {
   getAdminSurveyEntryByUserId,
@@ -8,6 +9,7 @@ import {
 } from "@/lib/survey/survey";
 import { surveyQuestionTypeLabels } from "@/lib/survey/question-types";
 import type { SurveyAnswerValue } from "@/types/survey";
+import styles from "./page.module.css";
 
 type AdminSurveyViewPageProps = {
   params: Promise<{
@@ -59,53 +61,72 @@ export default async function AdminSurveyViewPage({
   }
 
   return (
-    <main className="app-shell">
-      <section className="panel admin-panel">
-        <div className="admin-section-copy">
-          <p className="eyebrow">Admin Console</p>
-          <h1>Survey response</h1>
-          <p className="lead">
+    <main className="page">
+      <AppHeader activeItem="project" ariaLabel="Admin survey navigation" />
+
+      <section className={styles.surveyView} aria-labelledby="survey-heading">
+        <div className={styles.copy}>
+          <p className={`${styles.eyebrow} type-display-base`}>
+            admin console
+          </p>
+          <h1
+            className={`${styles.heading} type-display-base type-display-page-title`}
+            id="survey-heading"
+          >
+            Survey response
+          </h1>
+          <span className={styles.rule} aria-hidden="true" />
+          <p className={`${styles.lead} type-lead`}>
             Review every saved answer for this survey submission.
           </p>
         </div>
 
-        <div className="admin-inline-actions">
-          <Link className="auth-link-button ghost-button" href="/admin/surveys">
+        <div className={styles.actions}>
+          <Link
+            className={`${styles.actionLink} type-button-label`}
+            href="/admin/surveys"
+          >
             Back to surveys
           </Link>
         </div>
 
-        <section className="admin-section">
-          <div className="admin-section-copy">
-            <p className="eyebrow">Submission Details</p>
-            <h2>{surveyEntry.email}</h2>
-            <p className="admin-question-order">
+        <section className={styles.details}>
+          <div className={styles.detailsCopy}>
+            <p className={`${styles.sectionLabel} type-action-display`}>
+              Submission Details
+            </p>
+            <h2 className={`${styles.email} type-section-title`}>
+              {surveyEntry.email}
+            </h2>
+            <p className={`${styles.metaText} type-lead`}>
               Submitted{" "}
               {submittedDateFormatter.format(surveyResponseSummary.submittedAt)}
             </p>
-            <p className="admin-question-type">
+            <p className={`${styles.metaLabel} type-action-display`}>
               Responses saved: {surveyResponseSummary.responseCount}
             </p>
           </div>
 
           {questions.length ? (
-            <ol className="admin-question-list">
+            <ol className={styles.questionList}>
               {questions.map((question, index) => {
                 const formattedAnswer = formatAnswer(question.currentAnswer);
 
                 return (
-                  <li className="admin-question-card" key={question.id}>
-                    <p className="admin-question-order">
+                  <li className={styles.questionCard} key={question.id}>
+                    <p className={`${styles.questionOrder} type-body-small`}>
                       Question order: {index + 1}
                     </p>
-                    <p className="admin-question-type">
+                    <p className={`${styles.questionType} type-action-display`}>
                       {surveyQuestionTypeLabels[question.type]}
                     </p>
-                    <p className="admin-question-type">
+                    <p className={`${styles.questionType} type-action-display`}>
                       {question.required ? "Required question" : "Optional question"}
                     </p>
-                    <p className="admin-question-prompt">{question.prompt}</p>
-                    <p className="admin-question-type">
+                    <p className={`${styles.questionPrompt} type-lead`}>
+                      {question.prompt}
+                    </p>
+                    <p className={`${styles.response} type-body-small`}>
                       Response:{" "}
                       <span>{formattedAnswer}</span>
                     </p>
@@ -114,7 +135,7 @@ export default async function AdminSurveyViewPage({
               })}
             </ol>
           ) : (
-            <p className="admin-empty-state">
+            <p className={`${styles.emptyState} type-lead`}>
               No responses have been saved for this survey yet.
             </p>
           )}

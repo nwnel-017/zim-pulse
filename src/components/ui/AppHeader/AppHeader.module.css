@@ -1,9 +1,9 @@
 .header {
-  width: min(100% - calc(var(--space-page-inline) * 2), 86rem);
+  width: 100%;
   display: grid;
   gap: 0.55rem;
   margin: 0 auto;
-  padding: 0.9rem 0 0.55rem;
+  padding: 0.9rem var(--space-page-inline) 0.55rem;
   border-bottom: 0.0625rem solid var(--theme-rule);
 }
 

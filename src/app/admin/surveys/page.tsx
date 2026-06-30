@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { AppHeader } from "@/components/ui/AppHeader";
 import { requireAdminSession } from "@/lib/auth/middleware";
 import { getAdminSurveyEntries } from "@/lib/survey/survey";
+import styles from "./page.module.css";
 
 const submittedDateFormatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium",
@@ -13,39 +15,55 @@ export default async function AdminSurveysPage() {
   const surveyEntries = await getAdminSurveyEntries();
 
   return (
-    <main className="app-shell">
-      <section className="panel admin-panel">
-        <div className="admin-section-copy">
-          <p className="eyebrow">Admin Console</p>
-          <h1>Survey entries</h1>
-          <p className="lead">
+    <main className="page">
+      <AppHeader activeItem="project" ariaLabel="Admin surveys navigation" />
+
+      <section className={styles.surveysPage} aria-labelledby="surveys-heading">
+        <div className={styles.banner}>
+          <p className={`${styles.eyebrow} type-display-base`}>admin console</p>
+          <h1
+            className={`${styles.heading} type-display-base type-display-page-title`}
+            id="surveys-heading"
+          >
+            Survey entries
+          </h1>
+          <span className={styles.rule} aria-hidden="true" />
+          <p className={`${styles.lead} type-lead`}>
             Review submitted survey entries and when each user completed their
             submission.
           </p>
         </div>
 
-        <Link className="auth-link-button ghost-button" href="/admin">
+        <Link className={`${styles.actionLink} type-button-label`} href="/admin">
           Back to admin
         </Link>
 
-        <section className="admin-section">
-          <div className="admin-section-copy">
-            <p className="eyebrow">Submissions</p>
-            <h2>All survey entries</h2>
+        <section className={styles.section}>
+          <div className={styles.sectionCopy}>
+            <p className={`${styles.sectionEyebrow} type-action-display`}>
+              Submissions
+            </p>
+            <h2 className={`${styles.sectionHeading} type-display-base`}>
+              All survey entries
+            </h2>
           </div>
 
           {surveyEntries.length ? (
-            <ol className="admin-question-list">
+            <ol className={styles.entryList}>
               {surveyEntries.map((entry) => (
-                <li className="admin-question-card" key={entry.userId}>
-                  <p className="admin-question-type">Submitted survey</p>
-                  <p className="admin-survey-email">{entry.email}</p>
-                  <p className="admin-question-order">
+                <li className={styles.entryCard} key={entry.userId}>
+                  <p className={`${styles.entryType} type-action-display`}>
+                    Submitted survey
+                  </p>
+                  <p className={`${styles.entryEmail} type-lead`}>
+                    {entry.email}
+                  </p>
+                  <p className={styles.entryMeta}>
                     Submitted {submittedDateFormatter.format(entry.submittedAt)}
                   </p>
-                  <div className="admin-question-actions">
+                  <div className={styles.entryActions}>
                     <Link
-                      className="auth-link-button ghost-button"
+                      className={`${styles.actionLink} type-button-label`}
                       href={`/admin/surveys/view/${entry.userId}`}
                     >
                       View
@@ -55,7 +73,9 @@ export default async function AdminSurveysPage() {
               ))}
             </ol>
           ) : (
-            <p className="admin-empty-state">No survey entries have been submitted yet.</p>
+            <p className={`${styles.emptyState} type-lead`}>
+              No survey entries have been submitted yet.
+            </p>
           )}
         </section>
       </section>

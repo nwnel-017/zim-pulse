@@ -1,6 +1,7 @@
 .surveyPanel {
   /* width: min(100%, 90rem); */
   width: 100%;
+  flex: 1;
   display: grid;
   min-height: 0;
   margin: 0 auto;
