@@ -19,17 +19,17 @@ const GlobeRenderer = dynamic(() => import("react-globe.gl"), {
   ssr: false,
 }) as DynamicGlobeComponent;
 
-const globeImageUrl = "//unpkg.com/three-globe/example/img/earth-night.jpg";
+const globeImageUrl = "//unpkg.com/three-globe/example/img/earth-dark.jpg";
 const bumpImageUrl = "//unpkg.com/three-globe/example/img/earth-topology.png";
 
 function formatTooltip(point: GlobeCityPoint) {
   const userLabel = point.userCount === 1 ? "user" : "users";
 
-  return `<div><strong>${point.cityName}</strong><br />${point.countryName}<br />${point.userCount} ${userLabel}</div>`;
+  return `<div class="zim-globe-tooltip"><strong>${point.cityName}</strong><br />${point.countryName}<br />${point.userCount} ${userLabel}</div>`;
 }
 
 function getPointAltitude(point: GlobeCityPoint, maxUserCount: number) {
-  return 0.04 + (point.userCount / maxUserCount) * 0.22;
+  return 0.025 + (point.userCount / maxUserCount) * 0.13;
 }
 
 export default function Globe() {
@@ -179,8 +179,8 @@ export default function Globe() {
           <div className={styles.canvas}>
             <GlobeRenderer
               ref={globeRef}
-              atmosphereAltitude={0.12}
-              atmosphereColor="#edbd2c"
+              atmosphereAltitude={0.055}
+              atmosphereColor="#f0d06a"
               backgroundColor="rgba(0,0,0,0)"
               bumpImageUrl={bumpImageUrl}
               globeImageUrl={globeImageUrl}
@@ -193,8 +193,8 @@ export default function Globe() {
               pointLabel={(point) => formatTooltip(point as GlobeCityPoint)}
               pointLat="lat"
               pointLng="lng"
-              pointRadius={0.32}
-              pointResolution={14}
+              pointRadius={0.18}
+              pointResolution={10}
               pointsData={points}
               pointsMerge={false}
               pointsTransitionDuration={600}
