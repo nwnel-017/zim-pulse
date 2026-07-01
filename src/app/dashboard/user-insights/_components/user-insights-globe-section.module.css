@@ -54,58 +54,6 @@
   color: var(--theme-ink);
 }
 
-.frame {
-  position: relative;
-  min-height: 24rem;
-  height: 58dvh;
-  overflow: hidden;
-  border: 0.1rem solid var(--theme-rule);
-  border-radius: 0;
-  background: #111;
-}
-
-.canvas {
-  position: absolute;
-  inset: 0;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  text-align: center;
-  color: var(--theme-ink);
-  background: rgba(247, 246, 241, 0.92);
-}
-
-.overlay div {
-  display: grid;
-  gap: 0.5rem;
-  max-width: 32rem;
-}
-
-.overlay p {
-  color: var(--theme-ink);
-}
-
-.frame :global(.zim-globe-tooltip) {
-  border-top: 0.18rem solid var(--theme-accent-gold);
-  background: var(--theme-canvas);
-  color: var(--theme-ink);
-  padding: 0.55rem 0.7rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: var(--type-body-small);
-  line-height: 1.35;
-  box-shadow: 0 0.35rem 1rem rgba(17, 17, 17, 0.22);
-}
-
-.frame :global(.zim-globe-tooltip strong) {
-  color: var(--theme-ink);
-  font-weight: 700;
-}
-
 @media (min-width: 768px) {
   .shell {
     gap: 1.25rem;
@@ -134,11 +82,6 @@
   .rule {
     width: 4.5rem;
   }
-
-  .frame {
-    min-height: 28rem;
-    height: 62dvh;
-  }
 }
 
 @media (min-width: 1024px) {
@@ -159,10 +102,5 @@
     gap: 0.85rem;
     padding-block: 0.85rem;
     padding-inline: 1rem;
-  }
-
-  .frame {
-    min-height: 32rem;
-    height: 64dvh;
   }
 }

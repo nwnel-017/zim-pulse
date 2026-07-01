@@ -1,4 +1,4 @@
-import Globe from "@/app/dashboard/user-insights/_components/globe";
+import UserInsightsGlobeSection from "@/app/dashboard/user-insights/_components/UserInsightsGlobeSection";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { requireAdminSession } from "@/lib/auth/middleware";
 
@@ -8,7 +8,7 @@ export default async function AdminGlobePage() {
   return (
     <main className="page">
       <AppHeader activeItem="project" ariaLabel="Admin globe navigation" />
-      <Globe />
+      <UserInsightsGlobeSection />
     </main>
   );
 }

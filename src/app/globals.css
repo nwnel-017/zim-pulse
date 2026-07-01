@@ -55,7 +55,7 @@ html {
 
 html,
 body {
-  max-width: 100vw;
+  max-width: 100dvw;
   overflow-x: hidden;
 }
 
@@ -88,12 +88,15 @@ a {
 
 .page {
   min-height: 100dvh;
+  /* width: 100dvw; */
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   color: var(--theme-ink);
   background: var(--theme-canvas);
   font-family: var(--font-inter), sans-serif;
+  /* border: 1px solid red; */
 }
 
 .type-brand {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AppLogo from "@/components/ui/icons/AppLogo";
 import styles from "./AppHeader.module.css";
 
 type AppHeaderItem = "home" | "about" | "project";
@@ -37,7 +38,8 @@ export function AppHeader({
   return (
     <header className={styles.header} aria-label={ariaLabel}>
       <Link className={`${styles.brand} type-brand`} href="/">
-        Zim Pulse
+        <AppLogo alt="" className={styles.brandLogo} />
+        <span>Zim Pulse</span>
       </Link>
       <nav className={`${styles.nav} type-action-display type-nav-display`}>
         {navItems.map((item) => {

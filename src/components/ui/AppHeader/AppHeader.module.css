@@ -1,17 +1,41 @@
 .header {
   width: 100%;
-  display: grid;
+  /* display: grid; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 0.55rem;
   margin: 0 auto;
-  padding: 0.9rem var(--space-page-inline) 0.55rem;
+  /* padding: 0.9rem var(--space-page-inline) 0.55rem; */
+  padding: 0 var(--space-page-inline);
+
   border-bottom: 0.0625rem solid var(--theme-rule);
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: space-between;
+  align-items: center; */
+  /* border: 1px solid green; */
 }
 
 .brand {
   width: fit-content;
-  align-self: start;
-  padding-bottom: 0.18em;
+  display: inline-flex;
+  gap: 0.35rem;
+  /* align-items: baseline; */
+  align-items: center;
+  /* align-self: start; */
+  /* padding-bottom: 0.18em; */
   color: var(--theme-accent-gold);
+  /* border: 1px solid green; */
+}
+
+.brandLogo {
+  width: auto;
+  height: 3.125rem;
+  /* flex: 0 0 auto; */
+  /* transform: translateY(0.08em); */
+  /* margin: auto 0; */
+  /* border: 1px solid red; */
 }
 
 .nav {
@@ -20,6 +44,7 @@
   gap: 0.6rem 1rem;
   align-items: center;
   color: var(--theme-accent-gold);
+  /* border: 1px solid green; */
 }
 
 .navLinkActive {
@@ -34,9 +59,15 @@
 
 @media (min-width: 768px) {
   .header {
-    grid-template-columns: auto 1fr;
+    /* grid-template-columns: auto 1fr;
     align-items: start;
-    padding-top: 1.25rem;
+    padding-top: 1.25rem; */
+    flex-direction: row;
+    padding: 1rem;
+  }
+
+  .brand {
+    gap: 0.45rem;
   }
 
   .nav {
@@ -47,7 +78,8 @@
 
 @media (min-width: 1024px) {
   .header {
-    padding-top: 1.75rem;
+    /* padding: 1rem; */
+    /* flex-direction: row; */
   }
 
   .nav {
